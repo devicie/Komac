@@ -32,6 +32,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          submodules: true
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -53,6 +55,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          submodules: true
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -75,6 +79,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          submodules: true
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -89,6 +95,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          submodules: true
 
       - uses: Swatinem/rust-cache@v2
         with:
@@ -115,6 +123,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          submodules: true
 
       - name: Check for unused dependencies
         uses: bnjbvr/cargo-machete@main
