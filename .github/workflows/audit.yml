@@ -11,6 +11,9 @@ permissions:
 jobs:
   security_audit:
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
 
     steps:
       - name: Checkout repository
