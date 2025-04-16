@@ -5,6 +5,10 @@ on:
     - cron: "0 0 * * 0"
   release:
     types: [ released ]
+  push:
+    tags:
+      - nightly
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -40,6 +44,8 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v6
+        with:
+          submodules: true
 
       - uses: mlugg/setup-zig@v2
         if: contains(matrix.platform.bins, 'cargo-zigbuild')
@@ -205,6 +211,8 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v6
+        with:
+          submodules: true
 
       - uses: moonrepo/setup-rust@v1
         with:
