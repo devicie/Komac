@@ -2508,8 +2508,6 @@ dependencies = [
 [[package]]
 name = "inno"
 version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9160c92116c0e94f433e116cee3e1a56522f615c5a7cf6b84ef8a76d111dd193"
 dependencies = [
  "bitflags",
  "codepage",
@@ -2518,7 +2516,7 @@ dependencies = [
  "flate2",
  "itertools 0.14.0",
  "liblzma",
- "nt-time 0.12.1",
+ "nt-time",
  "thiserror 2.0.17",
  "zerocopy",
 ]
@@ -2732,7 +2730,7 @@ dependencies = [
  "memchr",
  "memmap2",
  "msi",
- "nt-time 0.13.0",
+ "nt-time",
  "num_cpus",
  "open",
  "ordinal",
@@ -3215,15 +3213,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df9761775871bdef83bee530e60050f7e54b1105350d6884eb0fb4f46c2f9405"
 dependencies = [
  "memchr",
-]
-
-[[package]]
-name = "nt-time"
-version = "0.12.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ad6fee094ffe35b67a67b9057d93492f8a2318edd22e1a731c545b8dbecb64e"
-dependencies = [
- "time",
 ]
 
 [[package]]
