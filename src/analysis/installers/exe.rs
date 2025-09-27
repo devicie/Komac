@@ -2,7 +2,8 @@ use std::io::{Read, Seek};
 
 use color_eyre::Result;
 use inno::{Inno, error::InnoError};
-use winget_types::installer::{Architecture, Installer, InstallerType};
+use tracing::debug;
+use winget_types::installer::{Architecture, Installer, InstallerSwitches, InstallerType};
 use yara_x::mods::PE;
 
 use super::{super::Installers, Burn, Nsis};
@@ -42,6 +43,59 @@ impl Exe {
             Err(error) => return Err(error.into()),
         }
 
+        let internal_name = pe
+            .version_info_list
+            .iter()
+            .find(|key_value| key_value.key() == "InternalName")
+            .and_then(|key_value| key_value.value.as_deref())
+            .map(str::to_ascii_lowercase)
+            .unwrap_or_default();
+        let mut silent = match internal_name.as_str() {
+            // Setup.exe is used by several installer types, so we can't determine its args
+            "sfxcab.exe" => "/quiet",
+            "7zs.sfx" | "7z.sfx" | "7zsd.sfx" => "/s",
+            "setup launcher" => "/s",
+            "wextract" => "/Q",
+            _ => "",
+        };
+
+        const INSTALLSHIELD_MAGICS: [&[u8]; 2] = [b"InstallShield", b"ISSetupStream"];
+        if let Some(offset) = pe.overlay.offset {
+            reader.seek(std::io::SeekFrom::Start(offset))?;
+
+            // Check for optional CV_INFO_PDB20 structure before magic
+            // 4 DWORDs: CvSignature, Offset, TimeDateStamp, Age, then null-terminated PdbFileName
+            let mut signature = [0u8; 4];
+            if reader.read_exact(&mut signature).is_ok() && signature == *b"NB10" {
+                reader.seek(std::io::SeekFrom::Current(12))?;
+                let mut byte = [0u8; 1];
+                while reader.read_exact(&mut byte).is_ok() && byte[0] != 0 {}
+            } else {
+                reader.seek(std::io::SeekFrom::Start(offset))?;
+            }
+
+            let mut magic = [0u8; 13];
+            if reader.read_exact(&mut magic).is_ok()
+                && INSTALLSHIELD_MAGICS.iter().any(|m| *m == magic)
+            {
+                debug!("Detected InstallShield exe");
+                silent = "/s /v/qn";
+            }
+        }
+
+        if pe
+            .version_info_list
+            .iter()
+            .any(|key_value| matches!(key_value.key(), "SquirrelAwareVersion"))
+        {
+            debug!("Detected Squirrel exe");
+            silent = "--silent";
+        }
+
+        if pe.sections.iter().any(|s| matches!(s.name(), b"UPX0")) {
+            debug!("Detected UPX packed exe");
+        }
+
         Ok(Self::Generic(Box::new(Installer {
             architecture: Architecture::from_machine(pe.machine()),
             r#type: if pe
@@ -57,6 +111,14 @@ impl Exe {
                 Some(InstallerType::Exe)
             } else {
                 Some(InstallerType::Portable)
+            },
+            switches: if silent != "" {
+                InstallerSwitches::builder()
+                    .silent(silent.parse().unwrap())
+                    .silent_with_progress(silent.parse().unwrap())
+                    .build()
+            } else {
+                InstallerSwitches::default()
             },
             ..Installer::default()
         })))
