@@ -2,7 +2,8 @@ use std::io::{Read, Seek};
 
 use color_eyre::Result;
 use inno::{Inno, error::InnoError};
-use winget_types::installer::{Architecture, Installer, InstallerType};
+use tracing::debug;
+use winget_types::installer::{Architecture, Installer, InstallerSwitches, InstallerType};
 use yara_x::mods::PE;
 
 use super::{super::Installers, Burn, Nsis};
@@ -42,6 +43,26 @@ impl Exe {
             Err(error) => return Err(error.into()),
         }
 
+        let internal_name = pe
+            .version_info_list
+            .iter()
+            .find(|key_value| key_value.key() == "InternalName")
+            .and_then(|key_value| key_value.value.as_deref())
+            .map(str::to_ascii_lowercase)
+            .unwrap_or_default();
+        let silent = match internal_name.as_str() {
+            // Setup.exe is used by several installer types, so we can't determine its args
+            "sfxcab.exe" => "/quiet",
+            "7zs.sfx" | "7z.sfx" | "7zsd.sfx" => "/s",
+            "setup launcher" => "/s",
+            "wextract" => "/Q",
+            _ => "",
+        };
+
+        if pe.sections.iter().any(|s| matches!(s.name(), b"UPX0")) {
+            debug!("Detected UPX packed exe");
+        }
+
         Ok(Self::Generic(Box::new(Installer {
             architecture: Architecture::from_machine(pe.machine()),
             r#type: if pe
@@ -57,6 +78,14 @@ impl Exe {
                 Some(InstallerType::Exe)
             } else {
                 Some(InstallerType::Portable)
+            },
+            switches: if !silent.is_empty() {
+                InstallerSwitches::builder()
+                    .silent(silent.parse().unwrap())
+                    .silent_with_progress(silent.parse().unwrap())
+                    .build()
+            } else {
+                InstallerSwitches::default()
             },
             ..Installer::default()
         })))
