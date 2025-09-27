@@ -2,7 +2,8 @@ use std::io::{Read, Seek};
 
 use color_eyre::Result;
 use inno::{Inno, error::InnoError};
-use winget_types::installer::{Installer, InstallerType};
+use tracing::debug;
+use winget_types::installer::{Installer, InstallerSwitches, InstallerType};
 
 use super::{super::Installers, Burn, Nsis, Squirrel};
 use crate::{
@@ -108,6 +109,24 @@ impl Exe {
             Err(error) => return Err(error.into()),
         }
 
+        let internal_name = string_table
+            .as_ref()
+            .and_then(|table| table.get("InternalName").copied())
+            .map(str::to_ascii_lowercase)
+            .unwrap_or_default();
+        let silent = match internal_name.as_str() {
+            // Setup.exe is used by several installer types, so we can't determine its args
+            "sfxcab.exe" => "/quiet",
+            "7zs.sfx" | "7z.sfx" | "7zsd.sfx" => "/s",
+            "setup launcher" => "/s",
+            "wextract" => "/Q",
+            _ => "",
+        };
+
+        if pe.find_section(*b"UPX0\0\0\0\0").is_some() {
+            debug!("Detected UPX packed exe");
+        }
+
         Ok(Self {
             r#type: ExeType::Generic(Box::new(Installer {
                 architecture: pe.winget_architecture(),
@@ -124,6 +143,14 @@ impl Exe {
                     Some(InstallerType::Exe)
                 } else {
                     Some(InstallerType::Portable)
+                },
+                switches: if !silent.is_empty() {
+                    InstallerSwitches::builder()
+                        .silent(silent.parse().unwrap())
+                        .silent_with_progress(silent.parse().unwrap())
+                        .build()
+                } else {
+                    InstallerSwitches::default()
                 },
                 ..Installer::default()
             })),
