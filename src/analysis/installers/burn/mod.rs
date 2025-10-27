@@ -18,7 +18,7 @@ use tracing::debug;
 use uuid::Uuid;
 use winget_types::installer::{
     AppsAndFeaturesEntries, AppsAndFeaturesEntry, Architecture, InstallationMetadata, Installer,
-    InstallerType, Scope,
+    InstallerSwitches, InstallerType, Scope,
 };
 use wix_burn_stub::WixBurnStub;
 
@@ -252,6 +252,29 @@ impl Installers for Burn {
                     ..InstallationMetadata::default()
                 })
                 .unwrap_or_default(),
+            switches: InstallerSwitches::builder()
+                .maybe_custom({
+                    let mut switches = manifest
+                        .variables
+                        .iter()
+                        .map(|variable| {
+                            format!(
+                                "{}=\"{}\"",
+                                variable.id(),
+                                variable
+                                    .resolved_value()
+                                    .unwrap_or_default()
+                                    .replace("NOT_SET", "")
+                            )
+                        })
+                        // Exclude some built-in variables
+                        // https://docs.firegiant.com/wix3/bundle/bundle_built_in_variables/
+                        .filter(|switch| !switch.starts_with("WixBundle"))
+                        .collect::<Vec<_>>();
+                    switches.sort();
+                    switches.join(" ").parse().ok()
+                })
+                .build(),
             ..Installer::default()
         }]
     }
