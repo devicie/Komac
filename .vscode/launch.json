@@ -21,7 +21,7 @@
       },
       "args": [
         "analyse",
-        "data/iTwinStudioSetup.exe"
+        ".idea/installshield/AllShare_2.1.0.12031_10.exe"
       ],
       "cwd": "${workspaceFolder}"
     },
