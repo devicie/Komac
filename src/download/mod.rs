@@ -144,6 +144,41 @@ impl Download {
         Ok(())
     }
 
+    /// Resolves `.appinstaller` URLs to the actual installer URL
+    /// 
+    /// If the URL ends with `.appinstaller`, this method will:
+    /// 1. Download the .appinstaller file
+    /// 2. Parse it as XML to extract the MainBundle or MainPackage Uri
+    /// 3. Replace the current URL with the extracted installer URL
+    pub async fn resolve_appinstaller(&mut self, client: &Client) -> Result<(), reqwest::Error> {
+        use crate::analysis::{extensions::APPINSTALLER, installers::msix_family::appinstaller};
+
+        // Check if this is an .appinstaller URL
+        let path = self.0.path();
+        if !path.ends_with(&format!(".{APPINSTALLER}")) {
+            return Ok(());
+        }
+
+        // Download the .appinstaller file
+        let response = client.get((**self.0).clone()).send().await?;
+        
+        if let Err(err) = response.error_for_status_ref() {
+            return Err(err.into());
+        }
+
+        let content = response.text().await?;
+
+        // Parse the XML and extract the installer URL
+        if let Ok(installer_url) = appinstaller::parse_appinstaller(&content) {
+            // Parse and set the new URL
+            if let Ok(new_url) = installer_url.parse() {
+                **self.0 = new_url;
+            }
+        }
+
+        Ok(())
+    }
+
     /// Returns the serialization of the download's URL.
     #[inline]
     pub fn as_str(&self) -> &str {
