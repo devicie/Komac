@@ -129,12 +129,18 @@ impl Downloader {
         mut download: Download,
         multi_progress: &MultiProgress,
     ) -> Result<DownloadedFile> {
+        use crate::analysis::installers::msix_family::appinstaller;
+
         download.convert_to_github_versioned().await?;
 
         download.upgrade_to_https(client).await;
 
         // Resolve .appinstaller files to actual installer URLs
-        download.resolve_appinstaller(client).await?;
+        if let Some(resolved_url) =
+            appinstaller::resolve_appinstaller_url(client, download.url()).await?
+        {
+            **download.0 = resolved_url;
+        }
 
         let res = client.get((***download.url()).clone()).send().await?;
 
