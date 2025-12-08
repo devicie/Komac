@@ -152,10 +152,11 @@ impl Download {
     /// 3. Replace the current URL with the extracted installer URL
     pub async fn resolve_appinstaller(&mut self, client: &Client) -> Result<(), reqwest::Error> {
         use crate::analysis::{extensions::APPINSTALLER, installers::msix_family::appinstaller};
+        use const_format::formatcp;
         use tracing::warn;
 
         // Check if this is an .appinstaller URL
-        const APPINSTALLER_EXT: &str = ".appinstaller";
+        const APPINSTALLER_EXT: &str = formatcp!(".{}", APPINSTALLER);
         let path = self.0.path();
         if !path.ends_with(APPINSTALLER_EXT) {
             return Ok(());
