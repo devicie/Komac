@@ -67,11 +67,10 @@ struct AppInstaller {
 }
 
 impl AppInstaller {
-    fn get_installer_url(&self) -> Option<String> {
+    fn get_installer_url(self) -> Option<String> {
         self.main_bundle
-            .as_ref()
-            .map(|bundle| bundle.uri.clone())
-            .or_else(|| self.main_package.as_ref().map(|package| package.uri.clone()))
+            .map(|bundle| bundle.uri)
+            .or_else(|| self.main_package.map(|package| package.uri))
     }
 }
 
