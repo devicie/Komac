@@ -152,10 +152,12 @@ impl Download {
     /// 3. Replace the current URL with the extracted installer URL
     pub async fn resolve_appinstaller(&mut self, client: &Client) -> Result<(), reqwest::Error> {
         use crate::analysis::{extensions::APPINSTALLER, installers::msix_family::appinstaller};
+        use tracing::warn;
 
         // Check if this is an .appinstaller URL
+        const APPINSTALLER_EXT: &str = ".appinstaller";
         let path = self.0.path();
-        if !path.ends_with(&format!(".{APPINSTALLER}")) {
+        if !path.ends_with(APPINSTALLER_EXT) {
             return Ok(());
         }
 
@@ -169,10 +171,19 @@ impl Download {
         let content = response.text().await?;
 
         // Parse the XML and extract the installer URL
-        if let Ok(installer_url) = appinstaller::parse_appinstaller(&content) {
-            // Parse and set the new URL
-            if let Ok(new_url) = installer_url.parse() {
-                **self.0 = new_url;
+        match appinstaller::parse_appinstaller(&content) {
+            Ok(installer_url) => {
+                match installer_url.parse() {
+                    Ok(new_url) => {
+                        **self.0 = new_url;
+                    }
+                    Err(e) => {
+                        warn!("Failed to parse extracted installer URL from .appinstaller: {}", e);
+                    }
+                }
+            }
+            Err(e) => {
+                warn!("Failed to parse .appinstaller file: {}", e);
             }
         }
 
