@@ -5,3 +5,4 @@ pub const APPX: &str = "appx";
 pub const MSIX_BUNDLE: &str = "msixbundle";
 pub const APPX_BUNDLE: &str = "appxbundle";
 pub const ZIP: &str = "zip";
+pub const APPINSTALLER: &str = "appinstaller";
