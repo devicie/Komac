@@ -1,3 +1,6 @@
 [submodule "vendor/inno"]
 	path = vendor/inno
 	url = https://github.com/devicie/inno
+[submodule "vendor/winget-types"]
+	path = vendor/winget-types
+	url = https://github.com/devicie/winget-types

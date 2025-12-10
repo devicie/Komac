@@ -6,7 +6,7 @@ use tracing::debug;
 use winget_types::installer::{Architecture, Installer, InstallerSwitches, InstallerType};
 use yara_x::mods::PE;
 
-use super::{super::Installers, Burn, Nsis};
+use super::{super::Installers, Burn, InstallShield, Nsis, installshield::InstallShieldError};
 use crate::{
     analysis::installers::{burn::BurnError, nsis::NsisError},
     traits::FromMachine,
@@ -19,6 +19,7 @@ const BASIC_INSTALLER_KEYWORDS: [&str; 4] = ["installer", "setup", "7zs.sfx", "7
 pub enum Exe {
     Burn(Box<Burn>),
     Inno(Box<Inno>),
+    InstallShield(Box<InstallShield>),
     Nsis(Nsis),
     Generic(Box<Installer>),
 }
@@ -34,6 +35,12 @@ impl Exe {
         match Inno::new(&mut reader) {
             Ok(inno) => return Ok(Self::Inno(Box::new(inno))),
             Err(InnoError::NotInnoFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        match InstallShield::new(&mut reader, pe) {
+            Ok(installshield) => return Ok(Self::InstallShield(Box::new(installshield))),
+            Err(InstallShieldError::NotInstallShieldFile) => {}
             Err(error) => return Err(error.into()),
         }
 
@@ -58,30 +65,6 @@ impl Exe {
             "wextract" => "/Q",
             _ => "",
         };
-
-        const INSTALLSHIELD_MAGICS: [&[u8]; 2] = [b"InstallShield", b"ISSetupStream"];
-        if let Some(offset) = pe.overlay.offset {
-            reader.seek(std::io::SeekFrom::Start(offset))?;
-
-            // Check for optional CV_INFO_PDB20 structure before magic
-            // 4 DWORDs: CvSignature, Offset, TimeDateStamp, Age, then null-terminated PdbFileName
-            let mut signature = [0u8; 4];
-            if reader.read_exact(&mut signature).is_ok() && signature == *b"NB10" {
-                reader.seek(std::io::SeekFrom::Current(12))?;
-                let mut byte = [0u8; 1];
-                while reader.read_exact(&mut byte).is_ok() && byte[0] != 0 {}
-            } else {
-                reader.seek(std::io::SeekFrom::Start(offset))?;
-            }
-
-            let mut magic = [0u8; 13];
-            if reader.read_exact(&mut magic).is_ok()
-                && INSTALLSHIELD_MAGICS.iter().any(|m| *m == magic)
-            {
-                debug!("Detected InstallShield exe");
-                silent = "/s /v/qn";
-            }
-        }
 
         if pe
             .version_info_list
@@ -130,6 +113,7 @@ impl Installers for Exe {
         match self {
             Self::Burn(burn) => burn.installers(),
             Self::Inno(inno) => inno.installers(),
+            Self::InstallShield(installshield) => installshield.installers(),
             Self::Nsis(nsis) => nsis.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
         }
