@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       tape:
-        description: 'Tape'
+        description: "Tape"
         required: true
-        default: 'all'
+        default: "all"
         type: choice
         options:
           - all
@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          submodules: true
 
       - name: Install Rust
         uses: moonrepo/setup-rust@v1
