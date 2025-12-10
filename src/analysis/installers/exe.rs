@@ -4,10 +4,11 @@ use color_eyre::Result;
 use inno::{Inno, error::InnoError};
 use winget_types::installer::{Installer, InstallerType};
 
-use super::{super::Installers, Burn, Nsis, Squirrel};
+use super::{super::Installers, Burn, InstallShield, Nsis, Squirrel};
 use crate::{
     analysis::installers::{
         burn::BurnError,
+        installshield::InstallShieldError,
         nsis::NsisError,
         pe::{PE, VSVersionInfo},
         squirrel::SquirrelError,
@@ -29,6 +30,7 @@ pub struct Exe {
 pub enum ExeType {
     Burn(Box<Burn>),
     Inno(Box<Inno>),
+    InstallShield(Box<InstallShield>),
     Nsis(Nsis),
     Squirrel(Squirrel),
     Generic(Box<Installer>),
@@ -79,6 +81,19 @@ impl Exe {
                 });
             }
             Err(InnoError::NotInnoFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        match InstallShield::new(&mut reader, &pe) {
+            Ok(installshield) => {
+                return Ok(Self {
+                    r#type: ExeType::InstallShield(Box::new(installshield)),
+                    legal_copyright,
+                    product_name,
+                    company_name,
+                });
+            }
+            Err(InstallShieldError::NotInstallShieldFile) => {}
             Err(error) => return Err(error.into()),
         }
 
@@ -139,6 +154,7 @@ impl Installers for Exe {
         match &self.r#type {
             ExeType::Burn(burn) => burn.installers(),
             ExeType::Inno(inno) => inno.installers(),
+            ExeType::InstallShield(installshield) => installshield.installers(),
             ExeType::Nsis(nsis) => nsis.installers(),
             ExeType::Squirrel(squirrel) => squirrel.installers(),
             ExeType::Generic(installer) => vec![*installer.clone()],
