@@ -39,7 +39,7 @@ impl<'data> Analyzer<'data> {
         let mut copyright = None;
         let mut package_name = None;
         let mut publisher = None;
-        let installers = match extension {
+        let installers = match extension.to_lowercase().as_str() {
             MSI => Msi::new(Cursor::new(data.as_ref()))?.installers(),
             MSIX | APPX => Msix::new(Cursor::new(data.as_ref()))?.installers(),
             MSIX_BUNDLE | APPX_BUNDLE => MsixBundle::new(Cursor::new(data.as_ref()))?.installers(),
