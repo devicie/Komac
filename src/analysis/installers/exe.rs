@@ -5,7 +5,7 @@ use inno::{Inno, error::InnoError};
 use winget_types::installer::{Architecture, Installer, InstallerType};
 use yara_x::mods::PE;
 
-use super::{super::Installers, Burn, Nsis};
+use super::{super::Installers, Burn, InstallShield, Nsis, installshield::InstallShieldError};
 use crate::{
     analysis::installers::{burn::BurnError, nsis::NsisError},
     traits::FromMachine,
@@ -18,6 +18,7 @@ const BASIC_INSTALLER_KEYWORDS: [&str; 4] = ["installer", "setup", "7zs.sfx", "7
 pub enum Exe {
     Burn(Box<Burn>),
     Inno(Box<Inno>),
+    InstallShield(Box<InstallShield>),
     Nsis(Nsis),
     Generic(Box<Installer>),
 }
@@ -33,6 +34,12 @@ impl Exe {
         match Inno::new(&mut reader) {
             Ok(inno) => return Ok(Self::Inno(Box::new(inno))),
             Err(InnoError::NotInnoFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        match InstallShield::new(&mut reader, pe) {
+            Ok(installshield) => return Ok(Self::InstallShield(Box::new(installshield))),
+            Err(InstallShieldError::NotInstallShieldFile) => {}
             Err(error) => return Err(error.into()),
         }
 
@@ -68,6 +75,7 @@ impl Installers for Exe {
         match self {
             Self::Burn(burn) => burn.installers(),
             Self::Inno(inno) => inno.installers(),
+            Self::InstallShield(installshield) => installshield.installers(),
             Self::Nsis(nsis) => nsis.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
         }

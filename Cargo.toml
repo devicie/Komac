@@ -72,6 +72,7 @@ serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.148"
 serde_with = "3.16.1"
 serde_yaml = "0.9.34"
+serini = "0.2.2"
 sha2 = "0.10.9"
 strsim = "0.11.1"
 strum = { version = "0.27.2", features = ["derive"] }
@@ -88,7 +89,7 @@ tui-textarea = { version = "0.7.0", features = ["search"] }
 url = { version = "2.5.7", features = ["serde"] }
 uuid = { version = "1.19.0", features = ["v4"] }
 walkdir = "2.5.0"
-winget-types = { version = "0.4.1", features = ["serde", "std", "chrono"] }
+winget-types = { version = "0.4.1", features = ["serde", "std", "chrono"], git = "https://github.com/russellbanks/winget-types", rev = "87426bdb7efa5344d42e4f087a4e36d0358d3451" }
 yara-x = { version = "1.8.1", default-features = false, features = ["pe-module"] }
 zerocopy = { version = "0.8.31", features = ["derive", "std"] }
 zip = { version = "7.0.0", default-features = false, features = ["deflate"] }
