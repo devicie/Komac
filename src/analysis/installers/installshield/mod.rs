@@ -1,22 +1,23 @@
 mod file;
+mod return_codes;
 mod setup_ini;
+mod setup_iss;
 
 use std::{
-    collections::BTreeSet,
     ffi::CStr,
     io::{Read, Seek, SeekFrom},
 };
 
 use byteorder::{LittleEndian, ReadBytesExt};
-use encoding_rs::{Encoding, UTF_16LE};
+use encoding_rs::UTF_16LE;
 use msi::Language;
 use thiserror::Error;
 use tracing::debug;
 use winget_types::{
     LanguageTag,
     installer::{
-        AppsAndFeaturesEntry, Architecture, ExpectedReturnCodes, InstallModes, Installer,
-        InstallerReturnCode, InstallerSwitches, InstallerType, ReturnResponse, Scope,
+        AppsAndFeaturesEntry, Architecture, InstallModes, Installer, InstallerSwitches,
+        InstallerType, Scope,
     },
 };
 use yara_x::mods::PE;
@@ -24,7 +25,7 @@ use yara_x::mods::PE;
 use crate::{
     analysis::{
         Installers,
-        installers::installshield::{file::File, setup_ini::SetupIni},
+        installers::installshield::{file::File, setup_ini::SetupIni, setup_iss::SetupIss},
     },
     traits::FromMachine,
 };
@@ -47,6 +48,7 @@ pub enum InstallShieldError {
 pub struct InstallShield {
     pub architecture: Architecture,
     pub setup_ini: SetupIni,
+    pub setup_iss: Option<SetupIss>,
 }
 
 impl InstallShield {
@@ -56,62 +58,97 @@ impl InstallShield {
             .offset
             .ok_or(InstallShieldError::NotInstallShieldFile)?;
 
-        // Seek to the header
         reader
             .seek(SeekFrom::Start(header_offset))
             .map_err(|_| InstallShieldError::NotInstallShieldFile)?;
 
-        let header = Header::read(&mut reader)?;
-
-        debug!(?header);
-
-        let files = match header.kind {
-            Kind::Plain => parse_plain_entries(&mut reader, header.num_files)?,
-            Kind::SetupStream => {
-                parse_stream_entries(&mut reader, header.num_files, header.header_type)?
-            }
+        let files = if pe
+            .version_info
+            .get("ISInternalDescription")
+            .is_some_and(|desc| desc.starts_with("InstallScript"))
+        {
+            parse_installscript_entries(&mut reader)?
+        } else {
+            let header = Header::read(&mut reader)?;
+            debug!(?header);
+            let files = match header.kind {
+                Kind::Plain => parse_plain_entries(&mut reader, header.num_files)?,
+                Kind::SetupStream => {
+                    parse_stream_entries(&mut reader, header.num_files, header.header_type)?
+                }
+            };
+            files
         };
 
-        let setup_ini = extract_setup_ini(&mut reader, &files)?;
+        let setup_ini = files
+            .iter()
+            .rev()
+            .find(|f| f.name.eq_ignore_ascii_case("setup.ini"))
+            .and_then(|f| {
+                let content = f.read_text(&mut reader).ok()??;
+                debug!("{}", content);
+                serini::from_str::<SetupIni>(&content).ok()
+            })
+            .ok_or(InstallShieldError::NotInstallShieldFile)?;
+
+        let setup_iss = files
+            .iter()
+            .rev()
+            .find(|f| f.name.eq_ignore_ascii_case("setup.iss"))
+            .and_then(|f| {
+                let content = f.read_text(&mut reader).ok()??;
+                debug!("{}", content);
+                serini::from_str::<SetupIss>(&content).ok()
+            });
 
         Ok(Self {
             architecture: Architecture::from_machine(pe.machine()),
             setup_ini,
+            setup_iss,
         })
     }
 }
 
 impl Installers for InstallShield {
     fn installers(&self) -> Vec<Installer> {
-        let product_code = format!(
-            "InstallShield_{}",
-            self.setup_ini.startup.product_code.clone()
-        );
-        let upgrade_code = self.setup_ini.startup.upgrade_code.clone();
-        let display_name = self.setup_ini.startup.product.clone();
-        let publisher = self.setup_ini.startup.company_name.clone();
-        let display_version = self.setup_ini.startup.product_version.clone();
-        let primary_language_id = u16::from_str_radix(
-            &self.setup_ini.languages.default.trim_start_matches("0x"),
+        let startup = &self.setup_ini.startup;
+        let publisher = startup
+            .company_name
+            .as_ref()
+            .or_else(|| self.setup_iss.as_ref().map(|iss| &iss.application.company));
+        let product_code = startup
+            .product_code
+            .as_ref()
+            .map(|code| format!("InstallShield_{code}"))
+            .or_else(|| {
+                startup
+                    .product_guid
+                    .as_ref()
+                    .map(|guid| format!("{{{guid}}}"))
+            });
+        let version = startup
+            .product_version
+            .as_ref()
+            .or_else(|| self.setup_iss.as_ref().map(|iss| &iss.application.version));
+        let locale = u16::from_str_radix(
+            self.setup_ini.languages.default.trim_start_matches("0x"),
             16,
         )
-        .unwrap();
+        .ok()
+        .and_then(|id| Language::from_code(id).tag().parse::<LanguageTag>().ok());
 
-        let installer = Installer {
-            locale: Language::from_code(primary_language_id)
-                .tag()
-                .parse::<LanguageTag>()
-                .ok(),
+        vec![Installer {
+            locale,
             architecture: self.architecture,
             r#type: Some(InstallerType::Exe),
             scope: Some(Scope::Machine),
-            product_code: Some(product_code.clone()),
+            product_code: product_code.clone(),
             apps_and_features_entries: AppsAndFeaturesEntry::builder()
-                .display_name(display_name)
+                .display_name(startup.product.clone())
                 .maybe_publisher(publisher)
-                .display_version(display_version)
-                .product_code(product_code.clone())
-                .maybe_upgrade_code(upgrade_code)
+                .maybe_display_version(version)
+                .maybe_product_code(product_code)
+                .maybe_upgrade_code(startup.upgrade_code.clone())
                 .build()
                 .into(),
             install_modes: InstallModes::all(),
@@ -121,122 +158,9 @@ impl Installers for InstallShield {
                 .install_location("/V\"INSTALLDIR=\"\"<INSTALLPATH>\"\"\"".parse().unwrap())
                 .log("/V\"/log \"\"<LOGPATH>\"\"\"".parse().unwrap())
                 .build(),
-            expected_return_codes: BTreeSet::from([
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(-1),
-                    return_response: ReturnResponse::CancelledByUser,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1),
-                    return_response: ReturnResponse::InvalidParameter,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1150),
-                    return_response: ReturnResponse::SystemNotSupported,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1201),
-                    return_response: ReturnResponse::DiskFull,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1203),
-                    return_response: ReturnResponse::InvalidParameter,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1601),
-                    return_response: ReturnResponse::ContactSupport,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1602),
-                    return_response: ReturnResponse::CancelledByUser,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1618),
-                    return_response: ReturnResponse::InstallInProgress,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1623),
-                    return_response: ReturnResponse::SystemNotSupported,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1625),
-                    return_response: ReturnResponse::BlockedByPolicy,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1628),
-                    return_response: ReturnResponse::InvalidParameter,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1633),
-                    return_response: ReturnResponse::SystemNotSupported,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1638),
-                    return_response: ReturnResponse::AlreadyInstalled,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1639),
-                    return_response: ReturnResponse::InvalidParameter,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1641),
-                    return_response: ReturnResponse::RebootInitiated,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1640),
-                    return_response: ReturnResponse::BlockedByPolicy,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1643),
-                    return_response: ReturnResponse::BlockedByPolicy,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1644),
-                    return_response: ReturnResponse::BlockedByPolicy,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1649),
-                    return_response: ReturnResponse::BlockedByPolicy,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1650),
-                    return_response: ReturnResponse::InvalidParameter,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(1654),
-                    return_response: ReturnResponse::SystemNotSupported,
-                    return_response_url: None,
-                },
-                ExpectedReturnCodes {
-                    installer_return_code: InstallerReturnCode::new(3010),
-                    return_response: ReturnResponse::RebootRequiredToFinish,
-                    return_response_url: None,
-                },
-            ]),
+            expected_return_codes: return_codes::expected_return_codes(),
             ..Installer::default()
-        };
-
-        vec![installer]
+        }]
     }
 }
 
@@ -353,26 +277,36 @@ fn parse_stream_entries<R: Read + Seek>(
     Ok(files)
 }
 
-fn extract_setup_ini<R: Read + Seek>(
+fn parse_installscript_entries<R: Read + Seek>(
     reader: &mut R,
-    files: &[File],
-) -> Result<SetupIni, InstallShieldError> {
-    for file in files.iter().rev() {
-        if !file.name.eq_ignore_ascii_case("setup.ini") {
-            continue;
+) -> Result<Vec<File>, InstallShieldError> {
+    (0..reader.read_u32::<LittleEndian>()?)
+        .map(|_| {
+            let name = read_utf16le_strz(reader)?;
+            for _ in 0..2 {
+                read_utf16le_strz(reader)?;
+            }
+            let size: u32 = read_utf16le_strz(reader)?.parse().unwrap_or(0);
+            let offset = reader.stream_position()?;
+            reader.seek(SeekFrom::Current(i64::from(size)))?;
+            Ok(File {
+                name,
+                encoded_flags: 0,
+                size,
+                offset,
+            })
+        })
+        .collect()
+}
+
+fn read_utf16le_strz<R: Read>(reader: &mut R) -> Result<String, std::io::Error> {
+    let mut buf = Vec::new();
+    loop {
+        let code_unit = reader.read_u16::<LittleEndian>()?;
+        if code_unit == 0 {
+            break;
         }
-        let Some(data) = file.decrypt(reader)? else {
-            continue;
-        };
-        let content = if let Some((encoding, bom_len)) = Encoding::for_bom(&data) {
-            encoding.decode(&data[bom_len..]).0.into_owned()
-        } else {
-            std::str::from_utf8(&data)
-                .map(String::from)
-                .unwrap_or_else(|_| UTF_16LE.decode(&data).0.into_owned())
-        };
-        debug!(content);
-        return Ok(serini::from_str::<SetupIni>(&content)?);
+        buf.extend_from_slice(&code_unit.to_le_bytes());
     }
-    Err(InstallShieldError::NotInstallShieldFile)
+    Ok(UTF_16LE.decode(&buf).0.into_owned())
 }

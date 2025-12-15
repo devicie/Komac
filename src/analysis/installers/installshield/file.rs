@@ -1,5 +1,6 @@
 use std::io::{Read, Seek, SeekFrom};
 
+use encoding_rs::{Encoding, UTF_16LE};
 use flate2::bufread::ZlibDecoder;
 use thiserror::Error;
 
@@ -18,19 +19,31 @@ pub struct File {
 }
 
 impl File {
-    pub fn decrypt<R: Read + Seek>(&self, reader: &mut R) -> Result<Option<Vec<u8>>, FileError> {
+    pub fn read_text<R: Read + Seek>(&self, reader: &mut R) -> Result<Option<String>, FileError> {
+        Ok(self.read(reader)?.map(|data| {
+            if let Some((encoding, bom_len)) = Encoding::for_bom(&data) {
+                encoding.decode(&data[bom_len..]).0.into_owned()
+            } else {
+                std::str::from_utf8(&data)
+                    .map(String::from)
+                    .unwrap_or_else(|_| UTF_16LE.decode(&data).0.into_owned())
+            }
+        }))
+    }
+
+    pub fn read<R: Read + Seek>(&self, reader: &mut R) -> Result<Option<Vec<u8>>, FileError> {
         const FLAG_ENCODED: u32 = 0x2;
         const FLAG_CHUNKED: u32 = 0x4;
         const XOR_MAGIC: [u8; 4] = [0x13, 0x35, 0x86, 0x07];
         const CHUNK_SIZE: usize = 1024;
 
-        if self.encoded_flags & (FLAG_ENCODED | FLAG_CHUNKED) == 0 {
-            return Ok(None);
-        }
-
         reader.seek(SeekFrom::Start(self.offset))?;
         let mut data = vec![0u8; self.size as usize];
         reader.read_exact(&mut data)?;
+
+        if self.encoded_flags & (FLAG_ENCODED | FLAG_CHUNKED) == 0 {
+            return Ok(Some(data));
+        }
 
         let key: Vec<u8> = self
             .name
