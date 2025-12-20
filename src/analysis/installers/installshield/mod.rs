@@ -2,6 +2,7 @@ mod file;
 mod return_codes;
 mod setup_ini;
 mod setup_iss;
+mod setup_xml;
 
 use std::{
     ffi::CStr,
@@ -16,8 +17,8 @@ use tracing::debug;
 use winget_types::{
     LanguageTag,
     installer::{
-        AppsAndFeaturesEntry, Architecture, InstallModes, Installer, InstallerSwitches,
-        InstallerType, Scope,
+        AppsAndFeaturesEntry, Architecture, InstallModes, InstallationMetadata, Installer,
+        InstallerSwitches, InstallerType, Scope,
     },
 };
 use yara_x::mods::PE;
@@ -25,7 +26,10 @@ use yara_x::mods::PE;
 use crate::{
     analysis::{
         Installers,
-        installers::installshield::{file::File, setup_ini::SetupIni, setup_iss::SetupIss},
+        installers::installshield::{
+            file::File, setup_ini::SetupIni, setup_iss::SetupIss, setup_xml::SetupXml,
+        },
+        installers::utils::RELATIVE_PROGRAM_FILES_64,
     },
     traits::FromMachine,
 };
@@ -47,8 +51,9 @@ pub enum InstallShieldError {
 #[derive(Debug)]
 pub struct InstallShield {
     pub architecture: Architecture,
-    pub setup_ini: SetupIni,
+    pub setup_ini: Option<SetupIni>,
     pub setup_iss: Option<SetupIss>,
+    pub setup_xml: Option<SetupXml>,
 }
 
 impl InstallShield {
@@ -77,9 +82,11 @@ impl InstallShield {
                     parse_stream_entries(&mut reader, header.num_files, header.header_type)?
                 }
             };
+            files.iter().for_each(|f| debug!(?f.name));
             files
         };
 
+        // Basic and InstallScript
         let setup_ini = files
             .iter()
             .rev()
@@ -88,9 +95,9 @@ impl InstallShield {
                 let content = f.read_text(&mut reader).ok()??;
                 debug!("{}", content);
                 serini::from_str::<SetupIni>(&content).ok()
-            })
-            .ok_or(InstallShieldError::NotInstallShieldFile)?;
+            });
 
+        // InstallScript
         let setup_iss = files
             .iter()
             .rev()
@@ -101,56 +108,134 @@ impl InstallShield {
                 serini::from_str::<SetupIss>(&content).ok()
             });
 
+        // Advanced UI. Also has SuiteSetup.ini, but it's mostly empty
+        let setup_xml = files
+            .iter()
+            .rev()
+            .find(|f| f.name.eq_ignore_ascii_case("Setup.xml"))
+            .and_then(|f| {
+                let content = f.read_text(&mut reader).ok()??;
+                debug!("{}", content);
+                match quick_xml::de::from_str::<SetupXml>(&content) {
+                    Ok(xml) => Some(xml),
+                    Err(e) => {
+                        debug!("Failed to deserialize Setup.xml: {}", e);
+                        None
+                    }
+                }
+            });
+
+        if setup_ini.is_none() && setup_iss.is_none() && setup_xml.is_none() {
+            return Err(InstallShieldError::NotInstallShieldFile);
+        }
+
         Ok(Self {
             architecture: Architecture::from_machine(pe.machine()),
             setup_ini,
             setup_iss,
+            setup_xml,
         })
     }
 }
 
 impl Installers for InstallShield {
     fn installers(&self) -> Vec<Installer> {
-        let startup = &self.setup_ini.startup;
+        let startup = self.setup_ini.as_ref().map(|ini| &ini.startup);
+        let xml = self.setup_xml.as_ref();
+        let iss = self.setup_iss.as_ref();
+
+        if xml.is_none()
+            && iss.is_none()
+            && !startup.is_some_and(|s| {
+                s.package_name
+                    .as_deref()
+                    .is_some_and(|p| p.ends_with(".msi"))
+            })
+        {
+            tracing::warn!(
+                "Detected InstallScript installer without embedded setup.iss. A separate setup.iss file may be require for silent installation, which isn't supported by winget: https://github.com/microsoft/winget-pkgs/issues/246"
+            )
+        }
+
         let publisher = startup
-            .company_name
-            .as_ref()
-            .or_else(|| self.setup_iss.as_ref().map(|iss| &iss.application.company));
+            .and_then(|s| s.company_name.as_deref())
+            .or_else(|| iss.map(|iss| iss.application.company.as_str()))
+            .or_else(|| {
+                xml.and_then(|xml| {
+                    xml.languages
+                        .language
+                        .iter()
+                        .find(|lang| lang.lcid == xml.language_selection.default)
+                        .and_then(|lang| {
+                            lang.strings
+                                .get(&xml.arp_info.publisher)
+                                .map(|s| s.as_str())
+                        })
+                        .or(Some(xml.arp_info.publisher.as_str()))
+                })
+            });
+
         let product_code = startup
-            .product_code
-            .as_ref()
+            .and_then(|s| s.product_code.as_ref())
             .map(|code| format!("InstallShield_{code}"))
             .or_else(|| {
                 startup
-                    .product_guid
-                    .as_ref()
+                    .and_then(|s| s.product_guid.as_ref())
                     .map(|guid| format!("{{{guid}}}"))
-            });
+            })
+            .or_else(|| xml.and_then(|xml| xml.get_property("UpgradeCode")));
+
         let version = startup
-            .product_version
+            .and_then(|s| s.product_version.as_deref())
+            .or_else(|| iss.map(|iss| iss.application.version.as_str()))
+            .or_else(|| xml.map(|xml| xml.arp_info.version.as_str()));
+
+        let locale = self
+            .setup_ini
             .as_ref()
-            .or_else(|| self.setup_iss.as_ref().map(|iss| &iss.application.version));
-        let locale = u16::from_str_radix(
-            self.setup_ini.languages.default.trim_start_matches("0x"),
-            16,
-        )
-        .ok()
-        .and_then(|id| Language::from_code(id).tag().parse::<LanguageTag>().ok());
+            .and_then(|ini| {
+                u16::from_str_radix(ini.languages.default.trim_start_matches("0x"), 16).ok()
+            })
+            .or_else(|| xml.and_then(|xml| xml.language_selection.default.parse().ok()))
+            .and_then(|id| Language::from_code(id).tag().parse::<LanguageTag>().ok());
+
+        let display_name = startup
+            .map(|s| s.product.clone())
+            .or_else(|| xml.map(|xml| xml.arp_info.display_name.clone()))
+            .or_else(|| xml.and_then(|xml| xml.get_property("ProductName")));
+
+        let upgrade_code = startup
+            .and_then(|s| s.upgrade_code.clone())
+            .or_else(|| xml.and_then(|xml| xml.get_property("UpgradeCode")));
+
+        // TODO are these MSI vars? could reuse logic from burn/manifest/variable.rs
+        let install_dir = xml
+            .and_then(|xml| xml.get_property("INSTALLDIR"))
+            .map(|v| v.replace("[ProgramFiles64Folder]", RELATIVE_PROGRAM_FILES_64));
+
+        let scope = install_dir
+            .as_deref()
+            .and_then(Scope::from_install_directory)
+            .or(Some(Scope::Machine));
 
         vec![Installer {
             locale,
             architecture: self.architecture,
             r#type: Some(InstallerType::Exe),
-            scope: Some(Scope::Machine),
+            scope,
             product_code: product_code.clone(),
             apps_and_features_entries: AppsAndFeaturesEntry::builder()
-                .display_name(startup.product.clone())
+                .maybe_display_name(display_name)
                 .maybe_publisher(publisher)
                 .maybe_display_version(version)
                 .maybe_product_code(product_code)
-                .maybe_upgrade_code(startup.upgrade_code.clone())
+                .maybe_upgrade_code(upgrade_code)
                 .build()
                 .into(),
+            installation_metadata: InstallationMetadata {
+                default_install_location: install_dir.map(camino::Utf8PathBuf::from),
+                ..InstallationMetadata::default()
+            },
             install_modes: InstallModes::all(),
             switches: InstallerSwitches::builder()
                 .silent("/S /V/quiet /V/norestart".parse().unwrap())
