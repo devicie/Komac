@@ -7,8 +7,8 @@ use winget_types::installer::{Architecture, Installer, InstallerSwitches, Instal
 use yara_x::mods::PE;
 
 use super::{
-    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis,
-    advanced::AdvancedInstallerError, installshield::InstallShieldError,
+    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Squirrel,
+    advanced::AdvancedInstallerError, installshield::InstallShieldError, squirrel::SquirrelError,
 };
 use crate::{
     analysis::installers::{burn::BurnError, nsis::NsisError},
@@ -25,6 +25,7 @@ pub enum Exe {
     Inno(Box<Inno>),
     InstallShield(Box<InstallShield>),
     Nsis(Nsis),
+    Squirrel(Squirrel),
     Generic(Box<Installer>),
 }
 
@@ -48,6 +49,7 @@ impl Exe {
             Err(error) => return Err(error.into()),
         }
 
+        // TODO? https://github.com/jte/installscript-decompiler
         match InstallShield::new(&mut reader, pe) {
             Ok(installshield) => return Ok(Self::InstallShield(Box::new(installshield))),
             Err(InstallShieldError::NotInstallShieldFile) => {}
@@ -59,6 +61,15 @@ impl Exe {
             Err(NsisError::NotNsisFile) => {}
             Err(error) => return Err(error.into()),
         }
+
+        match Squirrel::new(&mut reader, pe) {
+            Ok(squirrel) => return Ok(Self::Squirrel(squirrel)),
+            Err(SquirrelError::NotSquirrelFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        // TODO install4j and others: https://github.com/search?q=repo%3Amicrosoft%2Fwinget-pkgs%20%22InstallerType%3A%20exe%20%23%22&type=code
+        // prioritise by running https://github.com/horsicq/Detect-It-Easy against dataset
 
         let internal_name = pe
             .version_info_list
@@ -126,6 +137,7 @@ impl Installers for Exe {
             Self::Inno(inno) => inno.installers(),
             Self::InstallShield(installshield) => installshield.installers(),
             Self::Nsis(nsis) => nsis.installers(),
+            Self::Squirrel(squirrel) => squirrel.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
         }
     }
