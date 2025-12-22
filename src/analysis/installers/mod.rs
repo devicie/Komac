@@ -4,6 +4,7 @@ pub mod inno;
 mod msi;
 pub mod msix_family;
 pub mod nsis;
+pub mod squirrel;
 pub mod utils;
 mod zip;
 
@@ -11,4 +12,5 @@ pub use burn::Burn;
 pub use exe::Exe;
 pub use msi::Msi;
 pub use nsis::Nsis;
+pub use squirrel::Squirrel;
 pub use zip::Zip;
