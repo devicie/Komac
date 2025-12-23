@@ -13,7 +13,7 @@ use walkdir::WalkDir;
 use winget_types::{GenericManifest, ManifestType, ManifestVersion};
 
 use crate::{
-    commands::utils::{RateLimit, SPINNER_TICK_RATE, SubmitOption},
+    commands::utils::{RateLimit, SPINNER_TICK_RATE, SubmitOption, check_package_type},
     github::{
         client::GitHub,
         utils::{PackagePath, pull_request::pr_changes},
@@ -155,7 +155,14 @@ impl Submit {
                 locale_manifest.manifest_version = ManifestVersion::default();
             }
 
-            let package_path = PackagePath::new(identifier, Some(version), None);
+            manifest.default_locale.manifest_version = ManifestVersion::default();
+            manifest.version.manifest_version = ManifestVersion::default();
+            for locale_manifest in &mut manifest.locales {
+                locale_manifest.manifest_version = ManifestVersion::default();
+            }
+
+            let is_font = check_package_type(&manifest.installer)?;
+            let package_path = PackagePath::new(identifier, Some(version), None, is_font);
             let mut changes = pr_changes()
                 .package_identifier(identifier)
                 .manifests(&manifest)
@@ -174,7 +181,11 @@ impl Submit {
                 continue;
             }
 
-            let versions = github.get_versions(identifier).await.ok();
+            let (versions, _) = github
+                .get_versions(identifier, Some(is_font))
+                .await
+                .ok()
+                .unzip();
 
             rate_limit.wait().await;
 

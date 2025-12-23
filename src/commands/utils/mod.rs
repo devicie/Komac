@@ -7,18 +7,21 @@ use std::time::Duration;
 use anstream::println;
 use camino::Utf8Path;
 use chrono::Local;
-use color_eyre::Result;
+use color_eyre::{Result, eyre::bail};
 use futures_util::{StreamExt, TryStreamExt, stream};
 use inquire::error::InquireResult;
 use owo_colors::OwoColorize;
 pub use rate_limit::RateLimit;
 pub use submit_option::SubmitOption;
 use tokio::{fs, fs::File, io::AsyncWriteExt};
-use winget_types::{PackageIdentifier, PackageVersion};
+use winget_types::{
+    PackageIdentifier, PackageVersion,
+    installer::{InstallerManifest, InstallerType, NestedInstallerType},
+};
 
 use crate::{
     commands::utils::environment::CI, github::graphql::get_existing_pull_request::PullRequest,
-    prompts::text::confirm_prompt,
+    prompts::text::confirm_prompt, traits::InstallerManifestExt,
 };
 
 pub const SPINNER_TICK_RATE: Duration = Duration::from_millis(50);
@@ -80,4 +83,24 @@ pub async fn write_changes_to_dir(changes: &[(String, String)], output: &Utf8Pat
         .buffer_unordered(2)
         .try_collect()
         .await
+}
+
+pub fn check_package_type(manifest: &InstallerManifest) -> Result<bool> {
+    let (mut has_font, mut has_installer) = (false, false);
+
+    for installer in manifest.inherit_manifest_properties() {
+        if installer.r#type == Some(InstallerType::Font)
+            || installer.nested_installer_type == Some(NestedInstallerType::Font)
+        {
+            has_font = true;
+        } else {
+            has_installer = true;
+        }
+
+        if has_font && has_installer {
+            bail!("Application and font installers cannot be mixed in the same manifest");
+        }
+    }
+
+    Ok(has_font)
 }

@@ -38,7 +38,7 @@ use crate::{
     match_installers::match_installers,
     token::TokenManager,
     traits::{
-        LocaleExt,
+        InstallerManifestExt, LocaleExt,
         path::{LowercaseExtension, NormalizePath},
     },
 };
@@ -103,6 +103,10 @@ pub struct UpdateVersion {
     #[arg(long, env)]
     skip_pr_check: bool,
 
+    /// Look for the package under fonts instead of probing manifests first
+    #[arg(long)]
+    font: bool,
+
     /// GitHub personal access token with the `public_repo` scope
     #[arg(short, long, env = "GITHUB_TOKEN", hide_env_values = true)]
     token: Option<SecretString>,
@@ -113,9 +117,6 @@ impl UpdateVersion {
         let token_manager = TokenManager::handle(self.token.take()).await?;
         let github = GitHub::new(&token_manager)?;
 
-        let (versions, existing_pr) = try_join!(
-            github.get_versions(&self.package_identifier),
-            github.get_existing_pull_request(&self.package_identifier, &self.package_version),
         let ((versions, font), existing_pr) = try_join!(
             github.get_versions(&self.package_identifier, self.font.then_some(true)),
             github.get_existing_pull_request(
@@ -146,7 +147,7 @@ impl UpdateVersion {
         let downloader = Downloader::new_with_concurrent(self.concurrent_downloads)?;
         let (mut manifests, mut github_values, mut files) = try_join!(
             github
-                .get_manifests(&self.package_identifier, latest_version)
+                .get_manifests(&self.package_identifier, latest_version, font)
                 .map_err(Error::new),
             self.fetch_github_values(&github).map_err(Error::new),
             downloader.download(self.urls.iter().cloned()),
@@ -157,21 +158,11 @@ impl UpdateVersion {
             .iter_mut()
             .flat_map(|(_url, analyzer)| mem::take(&mut analyzer.installers))
             .collect::<Vec<_>>();
-        let previous_installers = mem::take(&mut manifests.installer.installers)
-            .into_iter()
-            .map(|mut installer| {
-                if manifests.installer.r#type.is_some() {
-                    installer.r#type = manifests.installer.r#type;
-                }
-                if manifests.installer.nested_installer_type.is_some() {
-                    installer.nested_installer_type = manifests.installer.nested_installer_type;
-                }
-                if manifests.installer.scope.is_some() {
-                    installer.scope = manifests.installer.scope;
-                }
-                installer
-            })
+        let previous_installers = manifests
+            .installer
+            .inherit_manifest_properties()
             .collect::<Vec<_>>();
+        manifests.installer.installers.clear();
 
         let duplicate_urls = previous_installers
             .iter()
@@ -262,8 +253,12 @@ impl UpdateVersion {
 
         manifests.version.update(&self.package_version);
 
-        let package_path =
-            PackagePath::new(&self.package_identifier, Some(&self.package_version), None);
+        let package_path = PackagePath::new(
+            &self.package_identifier,
+            Some(&self.package_version),
+            None,
+            font,
+        );
         let mut changes = pr_changes()
             .package_identifier(&self.package_identifier)
             .manifests(&manifests)

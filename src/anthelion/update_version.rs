@@ -124,8 +124,6 @@ pub async fn update_version(options: UpdateVersionOptions) -> napi::Result<Updat
         )
     })?;
 
-    let versions = github
-        .get_versions(&package_identifier)
     let (versions, font) = github
         .get_versions(&package_identifier, force_font.then_some(true))
         .await
@@ -153,7 +151,7 @@ pub async fn update_version(options: UpdateVersionOptions) -> napi::Result<Updat
 
     let (mut manifests, mut github_values, mut files) = try_join!(
         github
-            .get_manifests(&package_identifier, latest_version)
+            .get_manifests(&package_identifier, latest_version, font)
             .map_err(|e| Error::new(
                 Status::GenericFailure,
                 format!("Failed to get manifests: {e}")
@@ -410,7 +408,7 @@ pub async fn update_version(options: UpdateVersionOptions) -> napi::Result<Updat
 
     manifests.version.update(&package_version);
 
-    let package_path = PackagePath::new(&package_identifier, Some(&package_version), None);
+    let package_path = PackagePath::new(&package_identifier, Some(&package_version), None, font);
     let changes = pr_changes()
         .package_identifier(&package_identifier)
         .manifests(&manifests)
