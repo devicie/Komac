@@ -10,16 +10,14 @@ use color_eyre::eyre::Result;
 use inquire::{CustomType, MultiSelect, min_length};
 use regex::Regex;
 use tracing::debug;
-use winget_types::installer::{
-    Installer, InstallerType, NestedInstallerFiles, PortableCommandAlias,
+use winget_types::{
+    installer::{Installer, InstallerType, NestedInstallerFiles, PortableCommandAlias},
+    utils::ValidFileExtensions,
 };
 use zip::ZipArchive;
 
 use super::super::Analyzer;
 use crate::{prompts::handle_inquire_error, traits::path::LowercaseExtension};
-
-const VALID_NESTED_FILE_EXTENSIONS: [&str; 6] =
-    ["msix", "msi", "appx", "exe", "msixbundle", "appxbundle"];
 
 const IGNORABLE_FOLDERS: [&str; 2] = ["__MACOSX", "resources"];
 
@@ -116,11 +114,8 @@ impl<R: Read + Seek> Zip<R> {
             .file_names()
             .map(Utf8Path::new)
             .filter(|file_name| {
-                VALID_NESTED_FILE_EXTENSIONS.iter().any(|file_extension| {
-                    file_name
-                        .extension()
-                        .is_some_and(|extension| extension.eq_ignore_ascii_case(file_extension))
-                })
+                ValidFileExtensions::from_path(file_name)
+                    .is_ok_and(ValidFileExtensions::is_valid_nested_installer)
             })
             .filter(|file_name| {
                 // Ignore folders that the main executable is unlikely to be in
@@ -135,7 +130,7 @@ impl<R: Read + Seek> Zip<R> {
 
         debug!(?possible_installer_files);
 
-        let installer_type_counts = VALID_NESTED_FILE_EXTENSIONS
+        let installer_type_counts = ValidFileExtensions::ALL
             .iter()
             .map(|file_extension| {
                 (
@@ -144,7 +139,7 @@ impl<R: Read + Seek> Zip<R> {
                         .iter()
                         .filter(|file_name| {
                             file_name.extension().is_some_and(|extension| {
-                                extension.eq_ignore_ascii_case(file_extension)
+                                extension.eq_ignore_ascii_case(file_extension.as_str())
                             })
                         })
                         .count(),
