@@ -34,27 +34,45 @@ pub enum SquirrelError {
 pub struct Squirrel {
     pub architecture: Architecture,
     pub nuspec: NuSpec,
+    pub is_velopack: bool,
 }
 
 impl Squirrel {
     pub fn new<R: Read + Seek>(mut reader: R, pe: &PE) -> Result<Self, SquirrelError> {
         let resource = pe.resources.first().ok_or(SquirrelError::NotSquirrelFile)?;
-
         reader.seek(SeekFrom::Start(resource.offset().into()))?;
-        let mut zip_data = Vec::new();
-        reader
-            .take(resource.length().into())
-            .read_to_end(&mut zip_data)?;
-        let mut zip = ZipArchive::new(Cursor::new(zip_data))?;
+        let mut resource_data = vec![0; resource.length() as usize];
+        reader.read_exact(&mut resource_data)?;
 
-        let nupkg_name = zip
-            .file_names()
-            .find(|name| name.ends_with(".nupkg"))
-            .map(String::from)
-            .ok_or(SquirrelError::NoNupkgFound)?;
-        let mut nupkg_data = Vec::new();
-        zip.by_name(&nupkg_name)?.read_to_end(&mut nupkg_data)?;
-        let mut nupkg = ZipArchive::new(Cursor::new(nupkg_data))?;
+        let (mut nupkg, is_velopack) = match ZipArchive::new(Cursor::new(&resource_data)) {
+            // Squirrel
+            Ok(mut zip) => {
+                let nupkg_name = zip
+                    .file_names()
+                    .find(|name| name.ends_with(".nupkg"))
+                    .map(String::from)
+                    .ok_or(SquirrelError::NoNupkgFound)?;
+                let mut nupkg_data = Vec::new();
+                zip.by_name(&nupkg_name)?.read_to_end(&mut nupkg_data)?;
+                (
+                    ZipArchive::new(Cursor::new(nupkg_data))
+                        .or(Err(SquirrelError::NotSquirrelFile))?,
+                    false,
+                )
+            }
+            // Velopack (Squirrel fork)
+            Err(_) => {
+                let header_offset = pe.overlay.offset.ok_or(SquirrelError::NotSquirrelFile)?;
+                reader.seek(SeekFrom::Start(header_offset))?;
+                let mut overlay_data = Vec::new();
+                reader.read_to_end(&mut overlay_data)?;
+                (
+                    ZipArchive::new(Cursor::new(overlay_data))
+                        .or(Err(SquirrelError::NotSquirrelFile))?,
+                    true,
+                )
+            }
+        };
 
         let nuspec_name = nupkg
             .file_names()
@@ -73,7 +91,12 @@ impl Squirrel {
                     .next()
                     .and_then(|f| f.strip_suffix(".exe"))
                     .is_some_and(|stem| {
-                        stem.eq_ignore_ascii_case(&nuspec.metadata.id)
+                        nuspec
+                            .metadata
+                            .main_exe
+                            .as_ref()
+                            .is_some_and(|main_exe| stem.eq_ignore_ascii_case(main_exe))
+                            || stem.eq_ignore_ascii_case(&nuspec.metadata.id)
                             || stem.eq_ignore_ascii_case(&nuspec.metadata.title)
                     })
             })
@@ -90,6 +113,7 @@ impl Squirrel {
         Ok(Self {
             architecture,
             nuspec,
+            is_velopack,
         })
     }
 }
@@ -97,6 +121,20 @@ impl Squirrel {
 impl Installers for Squirrel {
     fn installers(&self) -> Vec<Installer> {
         let metadata = &self.nuspec.metadata;
+
+        let switches = if self.is_velopack {
+            InstallerSwitches::builder()
+                .silent("--silent".parse().unwrap())
+                .silent_with_progress("--silent".parse().unwrap())
+                .install_location("--installto \"<INSTALLPATH>\"".parse().unwrap())
+                .log("--log \"<LOGPATH>\"".parse().unwrap())
+                .build()
+        } else {
+            InstallerSwitches::builder()
+                .silent("--silent".parse().unwrap())
+                .silent_with_progress("--silent".parse().unwrap())
+                .build()
+        };
 
         vec![Installer {
             architecture: self.architecture,
@@ -110,10 +148,7 @@ impl Installers for Squirrel {
                 .product_code(metadata.id.clone())
                 .build()
                 .into(),
-            switches: InstallerSwitches::builder()
-                .silent("--silent".parse().unwrap())
-                .silent_with_progress("--silent".parse().unwrap())
-                .build(),
+            switches,
             installation_metadata: InstallationMetadata {
                 default_install_location: Some(camino::Utf8PathBuf::from(format!(
                     "%LocalAppData%\\{}",

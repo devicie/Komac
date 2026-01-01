@@ -1,5 +1,6 @@
 use serde::Deserialize;
 
+// https://learn.microsoft.com/en-us/nuget/reference/nuspec
 #[derive(Clone, Debug, PartialEq, Eq, Deserialize)]
 pub struct NuSpec {
     pub metadata: Metadata,
@@ -10,11 +11,12 @@ pub struct NuSpec {
 pub struct Metadata {
     pub id: String,
     pub version: String,
-    pub title: String,
-    pub authors: String,
-    pub owners: String,
-    pub icon_url: String,
-    pub require_license_acceptance: bool,
     pub description: String,
-    pub copyright: String,
+    pub authors: String,
+
+    // Optional in nuspec, required in Squirrel/Velopack
+    pub title: String,
+
+    // Velopack
+    pub main_exe: Option<String>,
 }
