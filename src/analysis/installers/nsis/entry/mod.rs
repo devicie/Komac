@@ -5,6 +5,7 @@ mod generic_access_rights;
 mod push_pop;
 mod seek_from;
 mod show_window;
+mod system;
 mod window_message;
 
 use std::{
@@ -24,7 +25,7 @@ use push_pop::PushPop;
 use seek_from::SeekFrom;
 use show_window::ShowWindow;
 use thiserror::Error;
-use tracing::debug;
+use tracing::{debug, warn};
 use window_message::WindowMessage;
 use zerocopy::{I32, Immutable, KnownLayout, LE, TryFromBytes, U16, U64, transmute};
 
@@ -1034,6 +1035,10 @@ impl Entry {
                         ""
                     }
                 );
+
+                if dll_file_name.ends_with("\\System.dll") {
+                    system::evaluate(state, &function_str_ptr);
+                }
             }
             Self::CreateShortcut {
                 link_file,
