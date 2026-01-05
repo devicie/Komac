@@ -7,8 +7,9 @@ use winget_types::installer::{Architecture, Installer, InstallerSwitches, Instal
 use yara_x::mods::PE;
 
 use super::{
-    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Squirrel,
-    advanced::AdvancedInstallerError, installshield::InstallShieldError, squirrel::SquirrelError,
+    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, SevenZipSfx, Squirrel,
+    advanced::AdvancedInstallerError, installshield::InstallShieldError,
+    sevenzip_sfx::SevenZipSfxError, squirrel::SquirrelError,
 };
 use crate::{
     analysis::installers::{burn::BurnError, nsis::NsisError},
@@ -25,6 +26,7 @@ pub enum Exe {
     Inno(Box<Inno>),
     InstallShield(Box<InstallShield>),
     Nsis(Nsis),
+    SevenZipSfx(Box<SevenZipSfx>),
     Squirrel(Squirrel),
     Generic(Box<Installer>),
 }
@@ -59,6 +61,14 @@ impl Exe {
         match Nsis::new(&mut reader, pe) {
             Ok(nsis) => return Ok(Self::Nsis(nsis)),
             Err(NsisError::NotNsisFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        match SevenZipSfx::new(&mut reader, pe) {
+            Ok(sfx) => return Ok(Self::SevenZipSfx(Box::new(sfx))),
+            Err(SevenZipSfxError::NotSevenZipSfx) => {}
+            Err(SevenZipSfxError::NoRunProgram) => {}
+            Err(SevenZipSfxError::RunProgramNotFound) => {}
             Err(error) => return Err(error.into()),
         }
 
@@ -128,6 +138,7 @@ impl Installers for Exe {
             Self::Inno(inno) => inno.installers(),
             Self::InstallShield(installshield) => installshield.installers(),
             Self::Nsis(nsis) => nsis.installers(),
+            Self::SevenZipSfx(sfx) => sfx.installers(),
             Self::Squirrel(squirrel) => squirrel.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
         }
