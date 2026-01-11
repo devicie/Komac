@@ -1045,6 +1045,14 @@ impl Entry {
                         // https://nsis.sourceforge.io/StdUtils_plug-in
                         plugins::std_utils::evaluate(state, &function_str_ptr);
                     }
+                    "Plugins\\UserInfo.dll" => match function_str_ptr.as_ref() {
+                        "GetAccountType" => {
+                            state.stack.push(Cow::Owned("admin".to_string()));
+                        }
+                        _ => {
+                            warn!("Unimplemented function {}", function_str_ptr);
+                        }
+                    },
                     "Plugins\\WinShell.dll" => {
                         // https://nsis.sourceforge.io/WinShell_plug-in
                         match function_str_ptr.as_ref() {
