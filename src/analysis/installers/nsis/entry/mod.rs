@@ -1036,9 +1036,14 @@ impl Entry {
                     }
                 );
 
-                if dll_file_name.ends_with("\\System.dll") {
-                    system::evaluate(state, &function_str_ptr);
-                }
+                match dll_file_name.as_ref() {
+                    "Plugins\\System.dll" => system::evaluate(state, &function_str_ptr),
+                    "Plugins\\NSISdl.dll" => {
+                        // https://nsis.sourceforge.io/Builtin_NSISdl_plug-in
+                        state.stack.push(Cow::Owned("success".to_string()));
+                    }
+                    _ => {}
+                };
             }
             Self::CreateShortcut {
                 link_file,
