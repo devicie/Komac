@@ -1065,6 +1065,18 @@ impl Entry {
                         plugins::std_utils::evaluate(state, &function);
                     }
 
+                    if dll_file_name.ends_with("UserInfo.dll") {
+                        // https://nsis.sourceforge.io/UserInfo_plug-in
+                        match function.as_ref() {
+                            "GetAccountType" => {
+                                state.stack.push(Cow::Borrowed("admin"));
+                            }
+                            _ => {
+                                warn!("Unimplemented function {}", function);
+                            }
+                        }
+                    }
+
                     if dll_file_name.ends_with("WinShell.dll") {
                         // https://nsis.sourceforge.io/WinShell_plug-in
                         match function.as_ref() {
