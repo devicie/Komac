@@ -5,13 +5,18 @@ use crate::analysis::installers::nsis::state::NsisState;
 /// https://github.com/NSIS-Dev/nsis/blob/v311/Contrib/System/Source/System.c#L444
 pub fn evaluate(state: &mut NsisState) -> String {
     let operation = state.stack.pop().unwrap_or_default();
-    debug!("System: evaluating Int64Op operation='{}'", operation);
+    let arg2_str = state.stack.pop().unwrap_or_default();
+    let arg1_str = state.stack.pop().unwrap_or_default();
 
-    // TODO use i64
-    let arg1 = state.get_int(0);
-    let arg2 = state.get_int(1);
+    debug!(
+        "System: evaluating Int64Op '{}' '{}' '{}'",
+        arg1_str, operation, arg2_str
+    );
 
-    evaluate_operation(&operation, arg1.into(), Some(arg2.into()))
+    let arg1 = parse_int64(&arg1_str).unwrap_or(0);
+    let arg2 = parse_int64(&arg2_str).unwrap_or(0);
+
+    evaluate_operation(&operation, arg1, Some(arg2))
 }
 
 /// Evaluate an Int64Op operation with given arguments
