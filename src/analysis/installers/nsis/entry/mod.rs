@@ -2,10 +2,10 @@ mod creation_disposition;
 mod del_flags;
 mod exec_flag;
 mod generic_access_rights;
+mod plugins;
 mod push_pop;
 mod seek_from;
 mod show_window;
-mod system;
 mod window_message;
 
 use std::{
@@ -1037,11 +1037,27 @@ impl Entry {
                 );
 
                 match dll_file_name.as_ref() {
-                    "Plugins\\System.dll" => system::evaluate(state, &function_str_ptr),
                     "Plugins\\NSISdl.dll" => {
                         // https://nsis.sourceforge.io/Builtin_NSISdl_plug-in
                         state.stack.push(Cow::Owned("success".to_string()));
                     }
+                    "Plugins\\StdUtils.dll" => {
+                        // https://nsis.sourceforge.io/StdUtils_plug-in
+                        plugins::std_utils::evaluate(state, &function_str_ptr);
+                    }
+                    "Plugins\\WinShell.dll" => {
+                        // https://nsis.sourceforge.io/WinShell_plug-in
+                        match function_str_ptr.as_ref() {
+                            "SetLnkAUMI" => {
+                                state.stack.pop();
+                                state.stack.pop();
+                            }
+                            _ => {
+                                warn!("Unimplemented function {}", function_str_ptr);
+                            }
+                        }
+                    }
+                    "Plugins\\System.dll" => plugins::system::evaluate(state, &function_str_ptr),
                     _ => {}
                 };
             }
