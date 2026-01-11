@@ -1053,6 +1053,12 @@ impl Entry {
                     {
                         state.mock_caller.call(&call);
                     }
+
+                    if dll_file_name.ends_with("NSISdl.dll") {
+                        // https://nsis.sourceforge.io/Builtin_NSISdl_plug-in
+                        state.stack.push(Cow::Borrowed("success"));
+                    }
+
                     debug!(
                         "CallInstDLL: {dll_file_name} {function}{}",
                         if no_unload.get() == 1 {
