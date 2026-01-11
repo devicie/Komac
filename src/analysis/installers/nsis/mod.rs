@@ -134,6 +134,14 @@ impl Nsis {
             }
         }
 
+        // https://nsis.sourceforge.io/Reference/.onInstSuccess
+        debug!("Simulating code execution for .onInstSuccess callback");
+        match state.execute_code_segment(header.code_on_inst_success()) {
+            Ok(Entry::Quit) => error!("Ignoring .onInstSuccess abort request"),
+            Err(invalid_entry) => error!(%invalid_entry),
+            _ => {}
+        }
+
         let mut architecture =
             Option::from(architecture).filter(|&architecture| architecture != Architecture::X86);
 
