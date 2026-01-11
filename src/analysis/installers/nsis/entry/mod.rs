@@ -3,6 +3,7 @@ mod del_flags;
 mod exec_flag;
 mod generic_access_rights;
 mod message_box;
+mod plugins;
 mod push_pop;
 mod seek_from;
 mod show_window;
@@ -27,7 +28,7 @@ use push_pop::PushPop;
 use seek_from::SeekFrom;
 use show_window::ShowWindow;
 use thiserror::Error;
-use tracing::debug;
+use tracing::{debug, warn};
 use window_message::WindowMessage;
 use zerocopy::{I32, Immutable, KnownLayout, LE, TryFromBytes, U16, U64, transmute};
 
@@ -1057,6 +1058,24 @@ impl Entry {
                     if dll_file_name.ends_with("NSISdl.dll") {
                         // https://nsis.sourceforge.io/Builtin_NSISdl_plug-in
                         state.stack.push(Cow::Borrowed("success"));
+                    }
+
+                    if dll_file_name.ends_with("StdUtils.dll") {
+                        // https://nsis.sourceforge.io/StdUtils_plug-in
+                        plugins::std_utils::evaluate(state, &function);
+                    }
+
+                    if dll_file_name.ends_with("WinShell.dll") {
+                        // https://nsis.sourceforge.io/WinShell_plug-in
+                        match function.as_ref() {
+                            "SetLnkAUMI" => {
+                                state.stack.pop();
+                                state.stack.pop();
+                            }
+                            _ => {
+                                warn!("Unimplemented function {}", function);
+                            }
+                        }
                     }
 
                     debug!(
