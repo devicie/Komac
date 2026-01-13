@@ -1041,6 +1041,37 @@ impl Entry {
                         // https://nsis.sourceforge.io/Builtin_NSISdl_plug-in
                         state.stack.push(Cow::Owned("success".to_string()));
                     }
+                    "Plugins\\nsExec.dll" => {
+                        // https://nsis.sourceforge.io/NsExec_plug-in
+                        match function_str_ptr.as_ref() {
+                            "Exec" | "ExecToLog" | "ExecToStack" => {
+                                let command = state.stack.pop();
+
+                                if function_str_ptr.as_ref() == "ExecToStack" {
+                                    state.stack.push(Cow::Owned("fake".to_string()));
+                                }
+
+                                match command {
+                                    Some(cmd) => {
+                                        if cmd.contains("sc.exe") {
+                                            state.stack.push(Cow::Owned("1060".to_string()));
+                                        } else {
+                                            state.stack.push(Cow::Owned("0".to_string()));
+                                        }
+                                    }
+                                    None => {
+                                        warn!(
+                                            "nsExec {} called with empty command",
+                                            function_str_ptr
+                                        );
+                                    }
+                                }
+                            }
+                            _ => {
+                                warn!("Unimplemented function {}", function_str_ptr);
+                            }
+                        }
+                    }
                     "Plugins\\StdUtils.dll" => {
                         // https://nsis.sourceforge.io/StdUtils_plug-in
                         plugins::std_utils::evaluate(state, &function_str_ptr);
