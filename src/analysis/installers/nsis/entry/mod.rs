@@ -1020,6 +1020,10 @@ impl Entry {
                 output_error_code,
             } => {
                 debug!("Execute: {complete_command_line} {wait_flag} {output_error_code}");
+                state.variables.insert(
+                    output_error_code.get().unsigned_abs() as usize,
+                    Cow::Owned("0".to_string()),
+                );
             }
             Self::GetFileTime {
                 file,
@@ -1048,16 +1052,41 @@ impl Entry {
                 let function = state.get_string(function.get());
 
                 if *display_text == I32::ZERO {
-                    if dll_file_name.ends_with("System.dll")
-                        && function == "Call"
-                        && let Some(call) = state.stack.pop()
-                    {
-                        state.mock_caller.call(&call);
+                    if dll_file_name.ends_with("System.dll") {
+                        match function.as_ref() {
+                            "Call" => {
+                                if let Some(call) = state.stack.pop() {
+                                    state.mock_caller.call(&call);
+                                }
+                            }
+                            "Int64Op" => {
+                                let result = system::int64op::evaluate(state);
+                                state.stack.push(result.into());
+                            }
+                            "Store" => {
+                                system::store(state);
+                            }
+                            _ => {
+                                warn!("Unimplemented function {}", function);
+                            }
+                        }
                     }
 
                     if dll_file_name.ends_with("NSISdl.dll") {
                         // https://nsis.sourceforge.io/Builtin_NSISdl_plug-in
                         state.stack.push(Cow::Borrowed("success"));
+                    }
+
+                    if dll_file_name.ends_with("nsis_tauri_utils.dll") {
+                        match function.as_ref() {
+                            "Download" => {
+                                state.stack.pop(); // URL
+                                state.stack.push(Cow::Borrowed("0"));
+                            }
+                            _ => {
+                                warn!("Unimplemented function {}", function);
+                            }
+                        }
                     }
 
                     if dll_file_name.ends_with("nsExec.dll") {
