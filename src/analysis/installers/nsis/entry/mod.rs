@@ -1060,6 +1060,35 @@ impl Entry {
                         state.stack.push(Cow::Borrowed("success"));
                     }
 
+                    if dll_file_name.ends_with("nsExec.dll") {
+                        // https://nsis.sourceforge.io/NsExec_plug-in
+                        match function.as_ref() {
+                            "Exec" | "ExecToLog" | "ExecToStack" => {
+                                let command = state.stack.pop();
+
+                                if function == "ExecToStack" {
+                                    state.stack.push(Cow::Borrowed("fake"));
+                                }
+
+                                match command {
+                                    Some(cmd) => {
+                                        if cmd.contains("sc.exe") {
+                                            state.stack.push(Cow::Borrowed("1060"));
+                                        } else {
+                                            state.stack.push(Cow::Borrowed("0"));
+                                        }
+                                    }
+                                    None => {
+                                        warn!("nsExec {} called with empty command", function);
+                                    }
+                                }
+                            }
+                            _ => {
+                                warn!("Unimplemented function {}", function);
+                            }
+                        }
+                    }
+
                     if dll_file_name.ends_with("StdUtils.dll") {
                         // https://nsis.sourceforge.io/StdUtils_plug-in
                         plugins::std_utils::evaluate(state, &function);
