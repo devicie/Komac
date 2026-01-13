@@ -60,9 +60,17 @@ impl fmt::Display for ExecFlag {
 pub struct ExecFlags([I32<LE>; ExecFlag::COUNT]);
 
 impl ExecFlags {
+    /// RegView flag value for 64-bit registry
+    pub const REGVIEW_64: i32 = 256;
+
     #[inline]
     pub fn new() -> Self {
         Self::new_zeroed()
+    }
+
+    /// Returns true if the RegView flag is set to 64-bit
+    pub fn is_reg_view_64(&self) -> bool {
+        self[ExecFlag::RegView].get() == Self::REGVIEW_64
     }
 }
 

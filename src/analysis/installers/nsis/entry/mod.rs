@@ -1000,6 +1000,10 @@ impl Entry {
                 output_error_code,
             } => {
                 debug!("Execute: {complete_command_line} {wait_flag} {output_error_code}");
+                state.variables.insert(
+                    output_error_code.get().unsigned_abs() as usize,
+                    Cow::Owned("0".to_string()),
+                );
             }
             Self::GetFileTime {
                 file,
@@ -1040,6 +1044,17 @@ impl Entry {
                     "Plugins\\NSISdl.dll" => {
                         // https://nsis.sourceforge.io/Builtin_NSISdl_plug-in
                         state.stack.push(Cow::Owned("success".to_string()));
+                    }
+                    "Plugins\\nsis_tauri_utils.dll" => {
+                        match function_str_ptr.as_ref() {
+                            "Download" => {
+                                state.stack.pop(); // url
+                                state.stack.push(Cow::Owned("0".to_string()));
+                            }
+                            _ => {
+                                warn!("Unimplemented function {}", function_str_ptr);
+                            }
+                        }
                     }
                     "Plugins\\nsExec.dll" => {
                         // https://nsis.sourceforge.io/NsExec_plug-in

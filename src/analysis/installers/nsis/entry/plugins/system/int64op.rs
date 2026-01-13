@@ -4,9 +4,11 @@ use crate::analysis::installers::nsis::state::NsisState;
 
 /// https://github.com/NSIS-Dev/nsis/blob/v311/Contrib/System/Source/System.c#L444
 pub fn evaluate(state: &mut NsisState) -> String {
+    // NSIS Int64Op pops in this order: num1, op, num2
+    // Stack layout: [num2, op, num1] (bottom to top) when called as "System::Int64Op num1 op num2"
+    let arg1_str = state.stack.pop().unwrap_or_default();
     let operation = state.stack.pop().unwrap_or_default();
     let arg2_str = state.stack.pop().unwrap_or_default();
-    let arg1_str = state.stack.pop().unwrap_or_default();
 
     debug!(
         "System: evaluating Int64Op '{}' '{}' '{}'",
@@ -144,7 +146,7 @@ mod tests {
     fn test_modulo() {
         assert_eq!(
             evaluate_operation("%", 619736053874048620, Some(157)),
-            "118"
+            "41"
         );
     }
 
@@ -163,7 +165,7 @@ mod tests {
     fn test_bitwise() {
         assert_eq!(
             evaluate_operation("&", 305419896, Some(4042322160)),
-            "271581296"
+            "271601776"
         );
         assert_eq!(evaluate_operation("^", 1, Some(0)), "1");
     }
