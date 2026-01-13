@@ -5,7 +5,7 @@ use tracing::warn;
 pub fn evaluate(state: &mut NsisState, function_str: &str) {
     match function_str {
         "TestParameter" => {
-            state.stack.push(std::borrow::Cow::Borrowed("false").into());
+            state.stack.push(std::borrow::Cow::Borrowed("false"));
         }
         "GetParentPath" => {
             let path = state.get_string(0);
@@ -16,7 +16,7 @@ pub fn evaluate(state: &mut NsisState, function_str: &str) {
                 .to_string();
             state
                 .stack
-                .push(std::borrow::Cow::<str>::Owned(parent).into());
+                .push(std::borrow::Cow::<str>::Owned(parent));
         }
         _ => {
             warn!("Unimplemented function {}", function_str);

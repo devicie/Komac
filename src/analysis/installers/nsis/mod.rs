@@ -167,6 +167,13 @@ impl Nsis {
                     .then_some(Architecture::X64)
             })
             .or_else(|| {
+                // If RegView is set to 64, the installer targets x64
+                state
+                    .exec_flags
+                    .is_reg_view_64()
+                    .then_some(Architecture::X64)
+            })
+            .or_else(|| {
                 let app_name = state.get_string(state.language_table.name_offset()?);
                 state
                     .file_system
