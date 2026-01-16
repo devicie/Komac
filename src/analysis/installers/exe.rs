@@ -6,11 +6,13 @@ use tracing::debug;
 use winget_types::installer::{Architecture, Installer, InstallerSwitches, InstallerType};
 use yara_x::mods::PE;
 
-use super::{super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Squirrel};
+use super::{
+    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, SevenZipSfx, Squirrel,
+};
 use crate::{
     analysis::installers::{
         advanced::AdvancedInstallerError, burn::BurnError, installshield::InstallShieldError,
-        nsis::NsisError, squirrel::SquirrelError,
+        nsis::NsisError, sevenzip_sfx::SevenZipSfxError, squirrel::SquirrelError,
     },
     traits::FromMachine,
 };
@@ -26,6 +28,7 @@ pub enum Exe {
     InstallShield(Box<InstallShield>),
     Nsis(Nsis),
     Squirrel(Squirrel),
+    SevenZipSfx(Box<SevenZipSfx>),
     Generic(Box<Installer>),
 }
 
@@ -58,6 +61,13 @@ impl Exe {
         match Nsis::new(&mut reader, pe) {
             Ok(nsis) => return Ok(Self::Nsis(nsis)),
             Err(NsisError::NotNsisFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        match SevenZipSfx::new(&mut reader, pe) {
+            Ok(sfx) => return Ok(Self::SevenZipSfx(Box::new(sfx))),
+            Err(SevenZipSfxError::NotSevenZipSfx) => {}
+            Err(SevenZipSfxError::NoRunProgram) => {}
             Err(error) => return Err(error.into()),
         }
 
@@ -125,6 +135,7 @@ impl Installers for Exe {
             Self::InstallShield(installshield) => installshield.installers(),
             Self::Nsis(nsis) => nsis.installers(),
             Self::Squirrel(squirrel) => squirrel.installers(),
+            Self::SevenZipSfx(sfx) => sfx.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
         }
     }
