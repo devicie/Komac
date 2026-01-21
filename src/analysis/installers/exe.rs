@@ -7,13 +7,13 @@ use winget_types::installer::{Architecture, Installer, InstallerSwitches, Instal
 use yara_x::mods::PE;
 
 use super::{
-    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, SevenZipSfx,
+    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, SevenZipSfx, Squirrel,
     installshield::InstallShieldError,
 };
 use crate::{
     analysis::installers::{
         advanced::AdvancedInstallerError, burn::BurnError, nsis::NsisError,
-        sevenzip_sfx::SevenZipSfxError,
+        sevenzip_sfx::SevenZipSfxError, squirrel::SquirrelError,
     },
     traits::FromMachine,
 };
@@ -29,6 +29,7 @@ pub enum Exe {
     InstallShield(Box<InstallShield>),
     Nsis(Nsis),
     SevenZipSfx(Box<SevenZipSfx>),
+    Squirrel(Squirrel),
     Generic(Box<Installer>),
 }
 
@@ -68,6 +69,12 @@ impl Exe {
             Ok(sfx) => return Ok(Self::SevenZipSfx(Box::new(sfx))),
             Err(SevenZipSfxError::NotSevenZipSfx) => {}
             Err(SevenZipSfxError::NoRunProgram) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        match Squirrel::new(&mut reader, pe) {
+            Ok(squirrel) => return Ok(Self::Squirrel(squirrel)),
+            Err(SquirrelError::NotSquirrelFile) => {}
             Err(error) => return Err(error.into()),
         }
 
@@ -129,6 +136,7 @@ impl Installers for Exe {
             Self::InstallShield(installshield) => installshield.installers(),
             Self::Nsis(nsis) => nsis.installers(),
             Self::SevenZipSfx(sfx) => sfx.installers(),
+            Self::Squirrel(squirrel) => squirrel.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
         }
     }
