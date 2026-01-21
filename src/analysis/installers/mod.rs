@@ -7,6 +7,7 @@ mod msi;
 pub mod msix_family;
 pub mod nsis;
 mod sevenzip_sfx;
+pub mod squirrel;
 pub mod utils;
 mod zip;
 
@@ -17,4 +18,5 @@ pub use installshield::InstallShield;
 pub use msi::Msi;
 pub use nsis::Nsis;
 pub use sevenzip_sfx::SevenZipSfx;
+pub use squirrel::Squirrel;
 pub use zip::Zip;
