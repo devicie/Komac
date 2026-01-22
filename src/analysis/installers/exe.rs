@@ -5,9 +5,9 @@ use inno::{Inno, error::InnoError};
 use winget_types::installer::{Architecture, Installer, InstallerType};
 use yara_x::mods::PE;
 
-use super::{super::Installers, Burn, Nsis};
+use super::{super::Installers, Burn, Nsis, SevenZipSfx};
 use crate::{
-    analysis::installers::{burn::BurnError, nsis::NsisError},
+    analysis::installers::{burn::BurnError, nsis::NsisError, sevenzip_sfx::SevenZipSfxError},
     traits::FromMachine,
 };
 
@@ -19,6 +19,7 @@ pub enum Exe {
     Burn(Box<Burn>),
     Inno(Box<Inno>),
     Nsis(Nsis),
+    SevenZipSfx(Box<SevenZipSfx>),
     Generic(Box<Installer>),
 }
 
@@ -39,6 +40,13 @@ impl Exe {
         match Nsis::new(&mut reader, pe) {
             Ok(nsis) => return Ok(Self::Nsis(nsis)),
             Err(NsisError::NotNsisFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        match SevenZipSfx::new(&mut reader, pe) {
+            Ok(sfx) => return Ok(Self::SevenZipSfx(Box::new(sfx))),
+            Err(SevenZipSfxError::NotSevenZipSfx) => {}
+            Err(SevenZipSfxError::NoRunProgram) => {}
             Err(error) => return Err(error.into()),
         }
 
@@ -69,6 +77,7 @@ impl Installers for Exe {
             Self::Burn(burn) => burn.installers(),
             Self::Inno(inno) => inno.installers(),
             Self::Nsis(nsis) => nsis.installers(),
+            Self::SevenZipSfx(sfx) => sfx.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
         }
     }
