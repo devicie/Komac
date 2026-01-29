@@ -7,12 +7,12 @@ use winget_types::installer::{Architecture, Installer, InstallerSwitches, Instal
 use yara_x::mods::PE;
 
 use super::{
-    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, SevenZipSfx, Squirrel,
+    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Qt, SevenZipSfx, Squirrel,
     installshield::InstallShieldError,
 };
 use crate::{
     analysis::installers::{
-        advanced::AdvancedInstallerError, burn::BurnError, nsis::NsisError,
+        advanced::AdvancedInstallerError, burn::BurnError, nsis::NsisError, qt::QtError,
         sevenzip_sfx::SevenZipSfxError, squirrel::SquirrelError,
     },
     traits::FromMachine,
@@ -28,6 +28,7 @@ pub enum Exe {
     Inno(Box<Inno>),
     InstallShield(Box<InstallShield>),
     Nsis(Nsis),
+    Qt(Qt),
     SevenZipSfx(Box<SevenZipSfx>),
     Squirrel(Squirrel),
     Generic(Box<Installer>),
@@ -62,6 +63,12 @@ impl Exe {
         match Nsis::new(&mut reader, pe) {
             Ok(nsis) => return Ok(Self::Nsis(nsis)),
             Err(NsisError::NotNsisFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        match Qt::new(&mut reader, pe) {
+            Ok(qt) => return Ok(Self::Qt(qt)),
+            Err(QtError::NotQtFile) => {}
             Err(error) => return Err(error.into()),
         }
 
@@ -135,6 +142,7 @@ impl Installers for Exe {
             Self::Inno(inno) => inno.installers(),
             Self::InstallShield(installshield) => installshield.installers(),
             Self::Nsis(nsis) => nsis.installers(),
+            Self::Qt(qt) => qt.installers(),
             Self::SevenZipSfx(sfx) => sfx.installers(),
             Self::Squirrel(squirrel) => squirrel.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
