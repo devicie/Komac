@@ -5,9 +5,9 @@ use inno::{Inno, error::InnoError};
 use winget_types::installer::{Architecture, Installer, InstallerType};
 use yara_x::mods::PE;
 
-use super::{super::Installers, Burn, Nsis};
+use super::{super::Installers, Burn, Nsis, Qt};
 use crate::{
-    analysis::installers::{burn::BurnError, nsis::NsisError},
+    analysis::installers::{burn::BurnError, nsis::NsisError, qt::QtError},
     traits::FromMachine,
 };
 
@@ -19,6 +19,7 @@ pub enum Exe {
     Burn(Box<Burn>),
     Inno(Box<Inno>),
     Nsis(Nsis),
+    Qt(Qt),
     Generic(Box<Installer>),
 }
 
@@ -39,6 +40,12 @@ impl Exe {
         match Nsis::new(&mut reader, pe) {
             Ok(nsis) => return Ok(Self::Nsis(nsis)),
             Err(NsisError::NotNsisFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        match Qt::new(&mut reader, pe) {
+            Ok(qt) => return Ok(Self::Qt(qt)),
+            Err(QtError::NotQtFile) => {}
             Err(error) => return Err(error.into()),
         }
 
@@ -69,6 +76,7 @@ impl Installers for Exe {
             Self::Burn(burn) => burn.installers(),
             Self::Inno(inno) => inno.installers(),
             Self::Nsis(nsis) => nsis.installers(),
+            Self::Qt(qt) => qt.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
         }
     }
