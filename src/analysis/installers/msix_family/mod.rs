@@ -20,7 +20,7 @@ use zip::ZipArchive;
 
 use super::msix_family::utils::{get_install_location, hash_signature, read_manifest};
 use crate::{
-    analysis::{Installers, extensions::MSIX},
+    analysis::{Icon, Installers, create_icon, extensions::MSIX},
     traits::AsciiExt,
 };
 
@@ -28,6 +28,7 @@ pub struct Msix {
     appx_manifest: String,
     pub signature_sha_256: Sha256String,
     pub manifest: Package,
+    logos: BTreeSet<Icon>,
 }
 
 const APPX_MANIFEST_XML: &str = "AppxManifest.xml";
@@ -152,6 +153,23 @@ impl Msix {
                             }
                         }
                     }
+                    b"VisualElements" => {
+                        for attribute in event.attributes().flatten() {
+                            match attribute.key.local_name().as_ref() {
+                                b"Square44x44Logo" | b"Square150x150Logo"
+                                | b"Square310x310Logo" | b"Wide310x150Logo" => {
+                                    manifest.logos.insert(
+                                        String::from_utf8_lossy(&attribute.value).into_owned(),
+                                    );
+                                }
+                                _ => {}
+                            }
+                        }
+                    }
+                    b"Logo" => {
+                        let logo = reader.read_text(event.to_end().name())?;
+                        manifest.logos.insert(logo.into_owned());
+                    }
                     _ => {}
                 },
                 Event::Eof => break,
@@ -159,10 +177,22 @@ impl Msix {
             }
         }
 
+        let logos = manifest
+            .logos
+            .iter()
+            .filter_map(|path| {
+                let mut file = zip.by_name(path).ok()?;
+                let mut data = Vec::with_capacity(file.size() as usize);
+                file.read_to_end(&mut data).ok()?;
+                create_icon(data, path)
+            })
+            .collect();
+
         Ok(Self {
             appx_manifest,
             signature_sha_256,
             manifest,
+            logos,
         })
     }
 }
@@ -235,6 +265,13 @@ impl Installers for Msix {
             ..Installer::default()
         }]
     }
+
+    fn icons(&self) -> BTreeSet<Icon> {
+        self.logos
+            .iter()
+            .filter_map(|icon| serde_json::from_value(serde_json::to_value(icon).ok()?).ok())
+            .collect()
+    }
 }
 
 /// <https://learn.microsoft.com/uwp/schemas/appxpackage/uapmanifestschema/element-package>
@@ -245,6 +282,7 @@ pub struct Package {
     dependencies: Dependencies,
     capabilities: Capabilities,
     file_type_association: FileTypeAssociation,
+    logos: BTreeSet<String>,
 }
 
 /// <https://learn.microsoft.com/uwp/schemas/appxpackage/uapmanifestschema/element-identity>

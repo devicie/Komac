@@ -1,9 +1,12 @@
+use std::collections::BTreeSet;
 use std::io::{Read, Seek};
 
 use color_eyre::Result;
 use inno::{Inno, error::InnoError};
 use tracing::debug;
 use winget_types::installer::{Architecture, Installer, InstallerSwitches, InstallerType};
+
+use crate::analysis::Icon;
 use yara_x::mods::PE;
 
 use super::{
@@ -146,6 +149,20 @@ impl Installers for Exe {
             Self::SevenZipSfx(sfx) => sfx.installers(),
             Self::Squirrel(squirrel) => squirrel.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
+        }
+    }
+
+    fn icons(&self) -> BTreeSet<Icon> {
+        match self {
+            Self::Burn(burn) => burn.icons(),
+            Self::AdvancedInstaller(_)
+            | Self::Inno(_)
+            | Self::InstallShield(_)
+            | Self::Nsis(_)
+            | Self::Qt(_)
+            | Self::SevenZipSfx(_)
+            | Self::Squirrel(_)
+            | Self::Generic(_) => BTreeSet::new(),
         }
     }
 }
