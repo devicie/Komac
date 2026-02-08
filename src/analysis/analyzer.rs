@@ -1,4 +1,4 @@
-use std::{io::Cursor, mem};
+use std::{collections::BTreeSet, io::Cursor, mem};
 
 use camino::Utf8Path;
 use color_eyre::eyre::{Result, bail};
@@ -13,7 +13,7 @@ use yara_x::mods::PE;
 use super::extensions::{APPX, APPX_BUNDLE, EXE, MSI, MSIX, MSIX_BUNDLE, ZIP};
 use crate::{
     analysis::{
-        Installers,
+        Icon, Installers, extract_pe_icons,
         installers::{
             Exe, Msi, Zip,
             msix_family::{Msix, bundle::MsixBundle},
@@ -28,6 +28,7 @@ pub struct Analyzer<'data> {
     pub package_name: Option<PackageName>,
     pub publisher: Option<Publisher>,
     pub installers: Vec<Installer>,
+    pub icons: BTreeSet<Icon>,
     pub zip: Option<Zip<Cursor<&'data [u8]>>>,
 }
 
@@ -42,9 +43,18 @@ impl<'data> Analyzer<'data> {
         let mut copyright = None;
         let mut package_name = None;
         let mut publisher = None;
+        let mut icons = BTreeSet::new();
         let installers = match extension.as_str() {
-            MSI => Msi::new(Cursor::new(data.as_ref()))?.installers(),
-            MSIX | APPX => Msix::new(Cursor::new(data.as_ref()))?.installers(),
+            MSI => {
+                let msi = Msi::new(Cursor::new(data.as_ref()))?;
+                icons = msi.icons();
+                msi.installers()
+            }
+            MSIX | APPX => {
+                let msix = Msix::new(Cursor::new(data.as_ref()))?;
+                icons = msix.icons();
+                msix.installers()
+            }
             MSIX_BUNDLE | APPX_BUNDLE => MsixBundle::new(Cursor::new(data.as_ref()))?.installers(),
             ZIP => {
                 let mut scoped_zip = Zip::new(Cursor::new(data.as_ref()))?;
@@ -58,7 +68,24 @@ impl<'data> Analyzer<'data> {
                 copyright = Copyright::from_version_info(&pe.version_info);
                 package_name = PackageName::from_version_info(&pe.version_info);
                 publisher = Publisher::from_version_info(&pe.version_info);
-                Exe::new(Cursor::new(data.as_ref()), &pe)?.installers()
+                let exe = Exe::new(Cursor::new(data.as_ref()), &pe)?;
+                icons = exe.icons();
+                icons.extend(extract_pe_icons(&pe, data.as_ref()));
+                exe.installers()
+                    .into_iter()
+                    .map(|mut installer| {
+                        if installer.architecture.is_x86() {
+                            let file_name_lower = file_name.to_lowercase();
+                            if file_name_lower.contains("arm64") {
+                                installer.architecture =
+                                    winget_types::installer::Architecture::Arm64;
+                            } else if file_name_lower.contains("x64") {
+                                installer.architecture = winget_types::installer::Architecture::X64;
+                            }
+                        }
+                        installer
+                    })
+                    .collect()
             }
             _ => bail!(r#"Unsupported file extension: "{extension}""#),
         };
@@ -68,6 +95,7 @@ impl<'data> Analyzer<'data> {
             copyright,
             package_name,
             publisher,
+            icons,
             zip,
         })
     }

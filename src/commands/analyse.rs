@@ -5,10 +5,21 @@ use camino::{Utf8Path, Utf8PathBuf};
 use clap::Parser;
 use color_eyre::{Result, eyre::ensure};
 use memmap2::Mmap;
+use serde::Serialize;
 use sha2::{Digest, Sha256};
-use winget_types::Sha256String;
+use winget_types::{Sha256String, installer::Installer};
 
-use crate::{analysis::Analyzer, manifests::print_manifest};
+use crate::{
+    analysis::{Analyzer, Icon},
+    manifests::print_manifest,
+};
+
+#[derive(Serialize)]
+struct AnalyseOutput<'a> {
+    installers: &'a [Installer],
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    icons: Vec<&'a Icon>,
+}
 
 /// Analyses a file and outputs information about it
 #[derive(Parser)]
@@ -53,10 +64,11 @@ impl Analyse {
                 installer.sha_256 = sha_256.clone();
             }
         }
-        let yaml = match analyser.installers.as_slice() {
-            [installer] => serde_yaml::to_string(installer)?,
-            installers => serde_yaml::to_string(installers)?,
+        let output = AnalyseOutput {
+            installers: &analyser.installers,
+            icons: analyser.icons.iter().collect(),
         };
+        let yaml = serde_yaml::to_string(&output)?;
         let mut lock = stdout().lock();
         print_manifest(&mut lock, &yaml);
         Ok(())

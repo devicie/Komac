@@ -2,7 +2,7 @@ mod manifest;
 mod wix_burn_stub;
 
 use std::{
-    collections::HashMap,
+    collections::{BTreeSet, HashMap},
     io,
     io::{Read, Seek, SeekFrom},
 };
@@ -27,7 +27,8 @@ use yara_x::mods::{
 };
 
 use super::msi::Msi;
-use crate::{analysis::Installers, traits::FromMachine};
+use crate::analysis::{Icon, Installers};
+use crate::traits::FromMachine;
 
 #[derive(Error, Debug)]
 pub enum BurnError {
@@ -215,5 +216,9 @@ impl Installers for Burn {
                 .unwrap_or_default(),
             ..Installer::default()
         }]
+    }
+
+    fn icons(&self) -> BTreeSet<Icon> {
+        self.msi.as_ref().map(Msi::icons).unwrap_or_default()
     }
 }

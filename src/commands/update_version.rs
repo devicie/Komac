@@ -211,6 +211,11 @@ impl UpdateVersion {
             self.release_notes_url.as_ref(),
         );
 
+        manifests.default_locale.icons = download_results
+            .values_mut()
+            .flat_map(|analyzer| mem::take(&mut analyzer.icons))
+            .collect();
+
         manifests.locales.iter_mut().for_each(|locale| {
             locale.update(
                 &self.package_version,

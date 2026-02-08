@@ -385,6 +385,10 @@ impl NewVersion {
                     .as_ref()
                     .and_then(|values| values.release_notes_url.as_ref()),
             )?,
+            icons: download_results
+                .values_mut()
+                .flat_map(|analyzer| mem::take(&mut analyzer.icons))
+                .collect(),
             manifest_type: ManifestType::DefaultLocale,
             ..DefaultLocaleManifest::default()
         };

@@ -2,6 +2,7 @@ mod directory_table;
 mod property_table;
 
 use std::{
+    collections::BTreeSet,
     io::{Error, ErrorKind, Read, Result, Seek},
     str::SplitAsciiWhitespace,
 };
@@ -18,7 +19,9 @@ use winget_types::{
 };
 
 use crate::{
-    analysis::{installers::msi::directory_table::DirectoryTable, r#trait::Installers},
+    analysis::{
+        Icon, create_icon, installers::msi::directory_table::DirectoryTable, r#trait::Installers,
+    },
     traits::AsciiExt,
 };
 
@@ -36,6 +39,7 @@ pub struct Msi {
     pub directory_table: DirectoryTable,
     pub creating_application: Option<String>,
     pub comments: Option<String>,
+    pub icons: BTreeSet<Icon>,
 }
 
 impl Msi {
@@ -77,6 +81,24 @@ impl Msi {
         };
 
         let directory_table = DirectoryTable::new(&mut msi)?;
+
+        let icons = msi
+            .select_rows(Select::table("Icon").columns(&["Name"]))
+            .ok()
+            .map(|rows| {
+                rows.filter_map(|row| row[0].as_str().map(str::to_owned))
+                    .collect::<Vec<String>>()
+            })
+            .unwrap_or_default()
+            .into_iter()
+            .filter_map(|name| {
+                let mut stream = msi.read_stream(&format!("Icon.{name}")).ok()?;
+                let mut data = Vec::new();
+                stream.read_to_end(&mut data).ok()?;
+                create_icon(data, &format!("{name}.ico"))
+            })
+            .collect();
+
         let summary_info = msi.summary_info();
 
         Ok(Self {
@@ -86,6 +108,7 @@ impl Msi {
             directory_table,
             creating_application: summary_info.creating_application().map(str::to_owned),
             comments: summary_info.comments().map(str::to_owned),
+            icons,
         })
     }
 
@@ -277,5 +300,12 @@ impl Installers for Msi {
         };
 
         vec![installer]
+    }
+
+    fn icons(&self) -> BTreeSet<Icon> {
+        self.icons
+            .iter()
+            .filter_map(|icon| serde_json::from_value(serde_json::to_value(icon).ok()?).ok())
+            .collect()
     }
 }

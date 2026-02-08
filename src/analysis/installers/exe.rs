@@ -1,8 +1,11 @@
+use std::collections::BTreeSet;
 use std::io::{Read, Seek};
 
 use color_eyre::Result;
 use inno::{Inno, error::InnoError};
 use winget_types::installer::{Architecture, Installer, InstallerType};
+
+use crate::analysis::Icon;
 use yara_x::mods::PE;
 
 use super::{super::Installers, Burn, Nsis};
@@ -70,6 +73,13 @@ impl Installers for Exe {
             Self::Inno(inno) => inno.installers(),
             Self::Nsis(nsis) => nsis.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
+        }
+    }
+
+    fn icons(&self) -> BTreeSet<Icon> {
+        match self {
+            Self::Burn(burn) => burn.icons(),
+            Self::Inno(_) | Self::Nsis(_) | Self::Generic(_) => BTreeSet::new(),
         }
     }
 }
