@@ -26,10 +26,15 @@ use yara_x::mods::PE;
 use crate::{
     analysis::{
         Installers,
-        installers::installshield::{
-            file::File, setup_ini::SetupIni, setup_iss::SetupIss, setup_xml::SetupXml,
+        installers::{
+            installshield::{
+                file::File,
+                setup_ini::{InstallType, SetupIni},
+                setup_iss::SetupIss,
+                setup_xml::SetupXml,
+            },
+            utils::RELATIVE_PROGRAM_FILES_64,
         },
-        installers::utils::RELATIVE_PROGRAM_FILES_64,
     },
     traits::FromMachine,
 };
@@ -72,7 +77,15 @@ impl InstallShield {
             .get("ISInternalDescription")
             .is_some_and(|desc| desc.starts_with("InstallScript"))
         {
-            parse_installscript_entries(&mut reader)?
+            // File count
+            reader.read_u32::<LittleEndian>()?;
+            parse_installscript_entries(&mut reader, read_utf16le_strz)?
+        } else if pe
+            .version_info
+            .get("ProductName")
+            .is_some_and(|name| name == "InstallShield (R)")
+        {
+            parse_installscript_entries(&mut reader, read_ascii_strz)?
         } else {
             let header = Header::read(&mut reader)?;
             debug!(?header);
@@ -177,10 +190,16 @@ impl Installers for InstallShield {
 
         let product_code = startup
             .and_then(|s| s.product_code.as_ref())
-            .map(|code| format!("InstallShield_{code}"))
+            .map(|code| {
+                if startup.is_some_and(|s| matches!(s.script_driven, InstallType::InstallScript)) {
+                    format!("InstallShield_{code}")
+                } else {
+                    code.clone()
+                }
+            })
             .or_else(|| {
                 startup
-                    .and_then(|s| s.product_guid.as_ref())
+                    .and_then(|s| s.product_code.as_ref())
                     .map(|guid| format!("{{{guid}}}"))
             })
             .or_else(|| xml.and_then(|xml| xml.get_property("UpgradeCode")));
@@ -364,24 +383,42 @@ fn parse_stream_entries<R: Read + Seek>(
 
 fn parse_installscript_entries<R: Read + Seek>(
     reader: &mut R,
+    read: fn(&mut R) -> Result<String, std::io::Error>,
 ) -> Result<Vec<File>, InstallShieldError> {
-    (0..reader.read_u32::<LittleEndian>()?)
-        .map(|_| {
-            let name = read_utf16le_strz(reader)?;
-            for _ in 0..2 {
-                read_utf16le_strz(reader)?;
-            }
-            let size: u32 = read_utf16le_strz(reader)?.parse().unwrap_or(0);
-            let offset = reader.stream_position()?;
-            reader.seek(SeekFrom::Current(i64::from(size)))?;
-            Ok(File {
-                name,
-                encoded_flags: 0,
-                size,
-                offset,
-            })
-        })
-        .collect()
+    let start = reader.stream_position()?;
+    let end = reader.seek(SeekFrom::End(0))?;
+    reader.seek(SeekFrom::Start(start))?;
+    let mut files = Vec::new();
+    while reader.stream_position()? < end {
+        let name = read(reader)?;
+        if name.is_empty() {
+            break;
+        }
+        read(reader)?; // path
+        read(reader)?; // version
+        let size: u32 = read(reader)?.parse().unwrap_or(0);
+        let offset = reader.stream_position()?;
+        reader.seek(SeekFrom::Current(i64::from(size)))?;
+        files.push(File {
+            name,
+            encoded_flags: 0,
+            size,
+            offset,
+        });
+    }
+    Ok(files)
+}
+
+fn read_ascii_strz<R: Read>(reader: &mut R) -> Result<String, std::io::Error> {
+    let mut buf = Vec::new();
+    loop {
+        let byte = reader.read_u8()?;
+        if byte == 0 {
+            break;
+        }
+        buf.push(byte);
+    }
+    Ok(String::from_utf8_lossy(&buf).into_owned())
 }
 
 fn read_utf16le_strz<R: Read>(reader: &mut R) -> Result<String, std::io::Error> {
