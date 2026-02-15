@@ -28,10 +28,7 @@ use crate::{
         Installers,
         installers::{
             installshield::{
-                file::File,
-                setup_ini::{InstallType, SetupIni},
-                setup_iss::SetupIss,
-                setup_xml::SetupXml,
+                file::File, setup_ini::SetupIni, setup_iss::SetupIss, setup_xml::SetupXml,
             },
             utils::RELATIVE_PROGRAM_FILES_64,
         },
@@ -72,71 +69,43 @@ impl InstallShield {
             .seek(SeekFrom::Start(header_offset))
             .map_err(|_| InstallShieldError::NotInstallShieldFile)?;
 
+        // TODO instead, try parsing each type and skip if it fails?
         let files = if pe
             .version_info
             .get("ISInternalDescription")
             .is_some_and(|desc| desc.starts_with("InstallScript"))
         {
-            // File count
-            reader.read_u32::<LittleEndian>()?;
-            parse_installscript_entries(&mut reader, read_utf16le_strz)?
+            let file_count = reader.read_u32::<LittleEndian>()?;
+            parse_installscript_entries(&mut reader, file_count, read_utf16le_strz)?
         } else if pe
             .version_info
             .get("ProductName")
             .is_some_and(|name| name == "InstallShield (R)")
         {
-            parse_installscript_entries(&mut reader, read_ascii_strz)?
+            parse_installscript_entries(&mut reader, u32::MAX, read_ascii_strz)?
         } else {
             let header = Header::read(&mut reader)?;
             debug!(?header);
-            let files = match header.kind {
+            match header.kind {
                 Kind::Plain => parse_plain_entries(&mut reader, header.num_files)?,
                 Kind::SetupStream => {
                     parse_stream_entries(&mut reader, header.num_files, header.header_type)?
                 }
-            };
-            files.iter().for_each(|f| debug!(?f.name));
-            files
+            }
         };
+        files.iter().for_each(|f| debug!(?f.name));
 
-        // Basic and InstallScript
-        let setup_ini = files
-            .iter()
-            .rev()
-            .find(|f| f.name.eq_ignore_ascii_case("setup.ini"))
-            .and_then(|f| {
-                let content = f.read_text(&mut reader).ok()??;
-                debug!("{}", content);
-                serini::from_str::<SetupIni>(&content).ok()
-            });
+        let setup_ini = find_and_parse(&files, &mut reader, "setup.ini", |content| {
+            serini::from_str::<SetupIni>(content).ok()
+        });
 
-        // InstallScript
-        let setup_iss = files
-            .iter()
-            .rev()
-            .find(|f| f.name.eq_ignore_ascii_case("setup.iss"))
-            .and_then(|f| {
-                let content = f.read_text(&mut reader).ok()??;
-                debug!("{}", content);
-                serini::from_str::<SetupIss>(&content).ok()
-            });
+        let setup_iss = find_and_parse(&files, &mut reader, "setup.iss", |content| {
+            serini::from_str::<SetupIss>(content).ok()
+        });
 
-        // Advanced UI. Also has SuiteSetup.ini, but it's mostly empty
-        let setup_xml = files
-            .iter()
-            .rev()
-            .find(|f| f.name.eq_ignore_ascii_case("Setup.xml"))
-            .and_then(|f| {
-                let content = f.read_text(&mut reader).ok()??;
-                debug!("{}", content);
-                match quick_xml::de::from_str::<SetupXml>(&content) {
-                    Ok(xml) => Some(xml),
-                    Err(e) => {
-                        debug!("Failed to deserialize Setup.xml: {}", e);
-                        None
-                    }
-                }
-            });
+        let setup_xml = find_and_parse(&files, &mut reader, "Setup.xml", |content| {
+            quick_xml::de::from_str::<SetupXml>(content).ok()
+        });
 
         if setup_ini.is_none() && setup_iss.is_none() && setup_xml.is_none() {
             return Err(InstallShieldError::NotInstallShieldFile);
@@ -151,23 +120,47 @@ impl InstallShield {
     }
 }
 
+fn find_and_parse<R: Read + Seek, T>(
+    files: &[File],
+    reader: &mut R,
+    name: &str,
+    parse: fn(&str) -> Option<T>,
+) -> Option<T> {
+    files
+        .iter()
+        .rev()
+        .find(|f| f.name.eq_ignore_ascii_case(name))
+        .and_then(|f| match f.read_text(reader) {
+            Ok(Some(content)) => {
+                debug!("{content}");
+                let result = parse(&content);
+                if result.is_none() {
+                    debug!("Failed to parse {}", f.name);
+                }
+                result
+            }
+            Ok(None) => None,
+            Err(e) => {
+                debug!("Failed to read {}: {e}", f.name);
+                None
+            }
+        })
+}
+
 impl Installers for InstallShield {
     fn installers(&self) -> Vec<Installer> {
         let startup = self.setup_ini.as_ref().map(|ini| &ini.startup);
         let xml = self.setup_xml.as_ref();
         let iss = self.setup_iss.as_ref();
+        let script_driven = startup.and_then(|s| s.script_driven.as_deref());
+        let msi_based = matches!(script_driven, Some("0" | "2"));
 
-        if xml.is_none()
-            && iss.is_none()
-            && !startup.is_some_and(|s| {
-                s.package_name
-                    .as_deref()
-                    .is_some_and(|p| p.ends_with(".msi"))
-            })
-        {
+        if script_driven == Some("4") && iss.is_none() {
             tracing::warn!(
-                "Detected InstallScript installer without embedded setup.iss. A separate setup.iss file may be require for silent installation, which isn't supported by winget: https://github.com/microsoft/winget-pkgs/issues/246"
-            )
+                "InstallScriptUnicode installer without embedded setup.iss - \
+                 a separate response file may be required for silent installation: \
+                 https://github.com/microsoft/winget-pkgs/issues/246"
+            );
         }
 
         let publisher = startup
@@ -191,18 +184,20 @@ impl Installers for InstallShield {
         let product_code = startup
             .and_then(|s| s.product_code.as_ref())
             .map(|code| {
-                if startup.is_some_and(|s| matches!(s.script_driven, InstallType::InstallScript)) {
-                    format!("InstallShield_{code}")
-                } else {
+                if msi_based {
                     code.clone()
+                } else if script_driven == Some("4") {
+                    format!("{{{code}}}")
+                } else {
+                    format!("InstallShield_{code}")
                 }
             })
             .or_else(|| {
-                startup
-                    .and_then(|s| s.product_code.as_ref())
-                    .map(|guid| format!("{{{guid}}}"))
-            })
-            .or_else(|| xml.and_then(|xml| xml.get_property("UpgradeCode")));
+                xml.and_then(|xml| {
+                    xml.get_property("ProductCode")
+                        .or_else(|| Some(xml.suite_id.clone()))
+                })
+            });
 
         let version = startup
             .and_then(|s| s.product_version.as_deref())
@@ -219,7 +214,8 @@ impl Installers for InstallShield {
             .and_then(|id| Language::from_code(id).tag().parse::<LanguageTag>().ok());
 
         let display_name = startup
-            .map(|s| s.product.clone())
+            .and_then(|s| s.product.clone())
+            .or_else(|| iss.map(|iss| iss.application.name.clone()))
             .or_else(|| xml.map(|xml| xml.arp_info.display_name.clone()))
             .or_else(|| xml.and_then(|xml| xml.get_property("ProductName")));
 
@@ -236,6 +232,30 @@ impl Installers for InstallShield {
             .as_deref()
             .and_then(Scope::from_install_directory)
             .or(Some(Scope::Machine));
+
+        let switches = if xml.is_some() {
+            // Suite/Advanced UI
+            InstallerSwitches::builder()
+                .silent("/silent".parse().unwrap())
+                .silent_with_progress("/passive".parse().unwrap())
+                .log("/log \"<LOGPATH>\"".parse().unwrap())
+                .repair("/repair".parse().unwrap())
+                .build()
+        } else if msi_based {
+            // Basic MSI or Basic MSI with InstallScript
+            InstallerSwitches::builder()
+                .silent("/s /v\"/qn /norestart\"".parse().unwrap())
+                .silent_with_progress("/s /v\"/qb /norestart\"".parse().unwrap())
+                .install_location("/v\"INSTALLDIR=\"\"<INSTALLPATH>\"\"\"".parse().unwrap())
+                .log("/v\"/log \"\"<LOGPATH>\"\"\"".parse().unwrap())
+                .build()
+        } else {
+            // InstallScript
+            InstallerSwitches::builder()
+                .silent("/s".parse().unwrap())
+                .silent_with_progress("/s".parse().unwrap())
+                .build()
+        };
 
         vec![Installer {
             locale,
@@ -256,13 +276,8 @@ impl Installers for InstallShield {
                 ..InstallationMetadata::default()
             },
             install_modes: InstallModes::all(),
-            switches: InstallerSwitches::builder()
-                .silent("/S /V/quiet /V/norestart".parse().unwrap())
-                .silent_with_progress("/S /V/passive /V/norestart".parse().unwrap())
-                .install_location("/V\"INSTALLDIR=\"\"<INSTALLPATH>\"\"\"".parse().unwrap())
-                .log("/V\"/log \"\"<LOGPATH>\"\"\"".parse().unwrap())
-                .build(),
-            expected_return_codes: return_codes::expected_return_codes(),
+            switches,
+            expected_return_codes: return_codes::expected_return_codes(msi_based),
             ..Installer::default()
         }]
     }
@@ -383,13 +398,14 @@ fn parse_stream_entries<R: Read + Seek>(
 
 fn parse_installscript_entries<R: Read + Seek>(
     reader: &mut R,
+    count: u32,
     read: fn(&mut R) -> Result<String, std::io::Error>,
 ) -> Result<Vec<File>, InstallShieldError> {
     let start = reader.stream_position()?;
     let end = reader.seek(SeekFrom::End(0))?;
     reader.seek(SeekFrom::Start(start))?;
     let mut files = Vec::new();
-    while reader.stream_position()? < end {
+    while files.len() < count as usize && reader.stream_position()? < end {
         let name = read(reader)?;
         if name.is_empty() {
             break;

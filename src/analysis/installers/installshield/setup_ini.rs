@@ -12,12 +12,12 @@ pub struct SetupIni {
 #[serde(rename_all = "PascalCase")]
 pub struct Startup {
     pub cmd_line: String,
-    #[serde(default)]
-    pub script_driven: InstallType,
+    // 0=BasicMsi, InstallScript, BasicMsiWithInstallScript, Unknown, InstallScriptUnicode
+    pub script_driven: Option<String>,
     pub company_name: Option<String>,
     pub package_name: Option<String>,
     #[serde(alias = "AppName")]
-    pub product: String,
+    pub product: Option<String>,
     #[serde(alias = "ProductGUID")]
     pub product_code: Option<String>,
     pub product_version: Option<String>,
@@ -27,21 +27,5 @@ pub struct Startup {
 #[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "PascalCase")]
 pub struct Languages {
-    #[serde(default)]
-    pub require_exact_lang_match: String,
-    #[serde(default, rename = "RTLLangs")]
-    pub rtl_langs: String,
     pub default: String,
-    #[serde(default)]
-    pub supported: String,
-}
-
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Eq)]
-pub enum InstallType {
-    BasicMsi,
-    #[default]
-    InstallScript,
-    BasicMsiWithInstallScript,
-    Unknown,
-    InstallScriptUnicode,
 }
