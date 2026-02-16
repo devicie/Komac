@@ -60,13 +60,25 @@ pub struct InstallShield {
 
 impl InstallShield {
     pub fn new<R: Read + Seek>(mut reader: R, pe: &PE) -> Result<Self, InstallShieldError> {
-        let header_offset = pe
+        let overlay_start = pe
             .overlay
             .offset
             .ok_or(InstallShieldError::NotInstallShieldFile)?;
+        let overlay_data_end = pe
+            .data_directories
+            .get(4) // IMAGE_DIRECTORY_ENTRY_SECURITY
+            .and_then(|dir| dir.virtual_address)
+            .map(u64::from)
+            .filter(|&offset| offset > overlay_start)
+            .unwrap_or(
+                overlay_start
+                    + pe.overlay
+                        .size
+                        .ok_or(InstallShieldError::NotInstallShieldFile)?,
+            );
 
         reader
-            .seek(SeekFrom::Start(header_offset))
+            .seek(SeekFrom::Start(overlay_start))
             .map_err(|_| InstallShieldError::NotInstallShieldFile)?;
 
         // TODO instead, try parsing each type and skip if it fails?
@@ -76,13 +88,18 @@ impl InstallShield {
             .is_some_and(|desc| desc.starts_with("InstallScript"))
         {
             let file_count = reader.read_u32::<LittleEndian>()?;
-            parse_installscript_entries(&mut reader, file_count, read_utf16le_strz)?
+            parse_installscript_entries(
+                &mut reader,
+                file_count,
+                read_utf16le_strz,
+                overlay_data_end,
+            )?
         } else if pe
             .version_info
             .get("ProductName")
-            .is_some_and(|name| name == "InstallShield (R)")
+            .is_some_and(|name| name == "InstallShield (R)" || name == "InstallShield")
         {
-            parse_installscript_entries(&mut reader, u32::MAX, read_ascii_strz)?
+            parse_installscript_entries(&mut reader, u32::MAX, read_ascii_strz, overlay_data_end)?
         } else {
             let header = Header::read(&mut reader)?;
             debug!(?header);
@@ -400,14 +417,12 @@ fn parse_installscript_entries<R: Read + Seek>(
     reader: &mut R,
     count: u32,
     read: fn(&mut R) -> Result<String, std::io::Error>,
+    end: u64,
 ) -> Result<Vec<File>, InstallShieldError> {
-    let start = reader.stream_position()?;
-    let end = reader.seek(SeekFrom::End(0))?;
-    reader.seek(SeekFrom::Start(start))?;
     let mut files = Vec::new();
     while files.len() < count as usize && reader.stream_position()? < end {
         let name = read(reader)?;
-        if name.is_empty() {
+        if name.is_empty() || reader.stream_position()? > end {
             break;
         }
         read(reader)?; // path
