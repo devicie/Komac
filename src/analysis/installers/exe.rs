@@ -6,11 +6,11 @@ use tracing::debug;
 use winget_types::installer::{Architecture, Installer, InstallerSwitches, InstallerType};
 use yara_x::mods::PE;
 
-use super::{super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis};
+use super::{super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Squirrel};
 use crate::{
     analysis::installers::{
         advanced::AdvancedInstallerError, burn::BurnError, installshield::InstallShieldError,
-        nsis::NsisError,
+        nsis::NsisError, squirrel::SquirrelError,
     },
     traits::FromMachine,
 };
@@ -25,6 +25,7 @@ pub enum Exe {
     Inno(Box<Inno>),
     InstallShield(Box<InstallShield>),
     Nsis(Nsis),
+    Squirrel(Squirrel),
     Generic(Box<Installer>),
 }
 
@@ -57,6 +58,12 @@ impl Exe {
         match Nsis::new(&mut reader, pe) {
             Ok(nsis) => return Ok(Self::Nsis(nsis)),
             Err(NsisError::NotNsisFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
+        match Squirrel::new(&mut reader, pe) {
+            Ok(squirrel) => return Ok(Self::Squirrel(squirrel)),
+            Err(SquirrelError::NotSquirrelFile) => {}
             Err(error) => return Err(error.into()),
         }
 
@@ -117,6 +124,7 @@ impl Installers for Exe {
             Self::Inno(inno) => inno.installers(),
             Self::InstallShield(installshield) => installshield.installers(),
             Self::Nsis(nsis) => nsis.installers(),
+            Self::Squirrel(squirrel) => squirrel.installers(),
             Self::Generic(installer) => vec![*installer.clone()],
         }
     }
