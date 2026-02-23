@@ -1,5 +1,6 @@
 pub mod analyze;
 pub mod cleanup;
+pub mod compare_installers;
 pub mod complete;
 pub mod list_versions;
 pub mod new_version;

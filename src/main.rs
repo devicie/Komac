@@ -10,6 +10,7 @@ use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitEx
 use crate::commands::{
     analyze::Analyze,
     cleanup::Cleanup,
+    compare_installers::CompareInstallers,
     complete::Complete,
     list_versions::ListVersions,
     new_version::NewVersion,
@@ -59,6 +60,7 @@ async fn main() -> Result<()> {
         Commands::Sync(sync_fork) => sync_fork.run().await,
         Commands::Complete(complete) => complete.run(),
         Commands::Analyze(analyse) => analyse.run(),
+        Commands::CompareInstallers(compare) => compare.run().await,
         Commands::RemoveDeadVersions(remove_dead_versions) => remove_dead_versions.run().await,
         Commands::Submit(submit) => submit.run().await,
     }
@@ -105,6 +107,7 @@ enum Commands {
     Sync(SyncFork),
     Complete(Complete),
     Analyze(Analyze),
+    CompareInstallers(CompareInstallers),
     RemoveDeadVersions(RemoveDeadVersions),
     Submit(Submit),
 }
