@@ -81,7 +81,7 @@ fn sha256_digest<R: Read>(mut reader: R) -> io::Result<Output<Sha256>> {
     Ok(digest.finalize())
 }
 
-fn is_valid_file(path: &str) -> Result<Utf8PathBuf> {
+pub(super) fn is_valid_file(path: &str) -> Result<Utf8PathBuf> {
     let path = Utf8Path::new(path);
     ensure!(path.exists(), "{path} does not exist");
     ensure!(path.is_file(), "{path} is not a file");
