@@ -164,6 +164,14 @@ impl FromVSVersionInfo for PackageName {
     }
 }
 
+impl FromVSVersionInfo for PackageVersion {
+    fn from_version_info(version_info: &HashMap<String, String>) -> Option<Self> {
+        version_info
+            .get("ProductVersion")
+            .and_then(|product_version| Self::new(product_version.trim()).ok())
+    }
+}
+
 impl FromVSVersionInfo for Publisher {
     fn from_version_info(version_info: &HashMap<String, String>) -> Option<Self> {
         version_info

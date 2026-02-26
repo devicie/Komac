@@ -1,4 +1,5 @@
 pub mod analyse;
+pub mod autoupdate;
 pub mod cleanup;
 pub mod compare_installers;
 pub mod complete;
@@ -7,6 +8,7 @@ pub mod new_version;
 pub mod remove_dead_versions;
 pub mod remove_version;
 pub mod show_version;
+pub mod strategies;
 pub mod submit;
 pub mod sync_fork;
 pub mod token;

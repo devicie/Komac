@@ -9,6 +9,7 @@ use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitEx
 
 use crate::commands::{
     analyse::Analyse,
+    autoupdate::AutoUpdate,
     cleanup::Cleanup,
     compare_installers::CompareInstallers,
     complete::Complete,
@@ -48,6 +49,7 @@ async fn main() -> Result<()> {
     match Cli::parse().command {
         Commands::New(new_version) => new_version.run().await,
         Commands::Update(update_version) => update_version.run().await,
+        Commands::AutoUpdate(autoupdate) => autoupdate.run().await,
         Commands::Cleanup(cleanup) => cleanup.run().await,
         Commands::Remove(remove_version) => remove_version.run().await,
         Commands::Token(token_args) => match token_args.command {
@@ -98,6 +100,7 @@ struct Cli {
 enum Commands {
     New(Box<NewVersion>),       // Comparatively large so boxed to store on the heap
     Update(Box<UpdateVersion>), // Comparatively large so boxed to store on the heap
+    AutoUpdate(AutoUpdate),
     Remove(RemoveVersion),
     Cleanup(Cleanup),
     Token(TokenArgs),

@@ -5,6 +5,7 @@ use color_eyre::eyre::{Result, bail};
 use memmap2::Mmap;
 use tracing::debug;
 use winget_types::{
+    PackageVersion,
     installer::Installer,
     locale::{Copyright, PackageName, Publisher},
 };
@@ -26,6 +27,7 @@ pub struct Analyzer<'data> {
     pub file_name: String,
     pub copyright: Option<Copyright>,
     pub package_name: Option<PackageName>,
+    pub package_version: Option<PackageVersion>,
     pub publisher: Option<Publisher>,
     pub installers: Vec<Installer>,
     pub zip: Option<Zip<Cursor<&'data [u8]>>>,
@@ -41,6 +43,7 @@ impl<'data> Analyzer<'data> {
         let mut zip = None;
         let mut copyright = None;
         let mut package_name = None;
+        let mut package_version = None;
         let mut publisher = None;
         let installers = match extension.as_str() {
             MSI => Msi::new(Cursor::new(data.as_ref()))?.installers(),
@@ -57,6 +60,7 @@ impl<'data> Analyzer<'data> {
                 debug!(?pe.version_info);
                 copyright = Copyright::from_version_info(&pe.version_info);
                 package_name = PackageName::from_version_info(&pe.version_info);
+                package_version = PackageVersion::from_version_info(&pe.version_info);
                 publisher = Publisher::from_version_info(&pe.version_info);
                 Exe::new(Cursor::new(data.as_ref()), &pe)?
                     .installers()
@@ -64,10 +68,14 @@ impl<'data> Analyzer<'data> {
                     .map(|mut installer| {
                         if installer.architecture.is_x86() {
                             let file_name_lower = file_name.to_lowercase();
-                            if file_name_lower.contains("arm64") || file_name_lower.contains("aarch64") {
+                            if file_name_lower.contains("arm64")
+                                || file_name_lower.contains("aarch64")
+                            {
                                 installer.architecture =
                                     winget_types::installer::Architecture::Arm64;
-                            } else if file_name_lower.contains("amd64") || file_name_lower.contains("x64") {
+                            } else if file_name_lower.contains("amd64")
+                                || file_name_lower.contains("x64")
+                            {
                                 installer.architecture = winget_types::installer::Architecture::X64;
                             }
                         }
@@ -82,6 +90,7 @@ impl<'data> Analyzer<'data> {
             file_name: String::new(),
             copyright,
             package_name,
+            package_version,
             publisher,
             zip,
         })

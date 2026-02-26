@@ -105,8 +105,7 @@ impl Squirrel {
             .and_then(|name| {
                 let mut exe = Vec::new();
                 nupkg.by_name(&name).ok()?.read_to_end(&mut exe).ok()?;
-                yara_x::mods::invoke::<PE>(&exe)
-                    .map(|pe| Architecture::from_machine(pe.machine()))
+                yara_x::mods::invoke::<PE>(&exe).map(|pe| Architecture::from_machine(pe.machine()))
             })
             .unwrap_or_else(|| Architecture::from_machine(pe.machine()));
 

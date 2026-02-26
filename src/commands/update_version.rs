@@ -1,5 +1,6 @@
 use std::{
     collections::BTreeSet,
+    collections::HashMap,
     io::{Read, Seek},
     mem,
     num::{NonZeroU32, NonZeroUsize},
@@ -21,7 +22,7 @@ use winget_types::{
 };
 
 use crate::{
-    analysis::installers::Zip,
+    analysis::{Analyzer, installers::Zip},
     commands::utils::{
         SPINNER_TICK_RATE, SubmitOption, prompt_existing_pull_request, write_changes_to_dir,
     },
@@ -30,7 +31,6 @@ use crate::{
     github::{
         GITHUB_HOST, GitHubError, WINGET_PKGS_FULL_NAME,
         client::{GitHub, GitHubValues},
-        graphql::get_existing_pull_request::PullRequest,
         utils::{PackagePath, pull_request::pr_changes},
     },
     manifests::Url,
@@ -46,71 +46,71 @@ use crate::{
 pub struct UpdateVersion {
     /// The package's unique identifier
     #[arg()]
-    package_identifier: PackageIdentifier,
+    pub(super) package_identifier: PackageIdentifier,
 
-    /// The package's version
+    /// The package's version. If omitted, inferred from PE ProductVersion
     #[arg(short = 'v', long = "version")]
-    package_version: PackageVersion,
+    pub(super) package_version: Option<PackageVersion>,
 
     /// The list of package installers
     #[arg(short, long, num_args = 1.., required = true, value_hint = clap::ValueHint::Url)]
-    urls: Vec<Url>,
+    pub(super) urls: Vec<Url>,
 
     /// The list of files to use instead of downloading urls
     #[arg(short, long, num_args = 1.., requires = "urls", value_parser = is_valid_file, value_hint = clap::ValueHint::FilePath)]
-    files: Vec<Utf8PathBuf>,
+    pub(super) files: Vec<Utf8PathBuf>,
 
     /// Number of installers to download at the same time
     #[arg(long, default_value_t = NonZeroUsize::new(num_cpus::get()).unwrap())]
-    concurrent_downloads: NonZeroUsize,
+    pub(super) concurrent_downloads: NonZeroUsize,
 
     /// List of issues that updating this package would resolve
     #[arg(long)]
-    resolves: Vec<NonZeroU32>,
+    pub(super) resolves: Vec<NonZeroU32>,
 
     /// Automatically submit a pull request
     #[arg(short, long)]
-    submit: bool,
+    pub(super) submit: bool,
 
     /// URL to package's release notes
     #[arg(long, value_hint = clap::ValueHint::Url)]
-    release_notes_url: Option<ReleaseNotesUrl>,
+    pub(super) release_notes_url: Option<ReleaseNotesUrl>,
 
     /// Name of external tool that invoked Komac
     #[arg(long, env = "KOMAC_CREATED_WITH")]
-    created_with: Option<String>,
+    pub(super) created_with: Option<String>,
 
     /// URL to external tool that invoked Komac
     #[arg(long, env = "KOMAC_CREATED_WITH_URL", value_hint = clap::ValueHint::Url)]
-    created_with_url: Option<DecodedUrl>,
+    pub(super) created_with_url: Option<DecodedUrl>,
 
     /// Directory to output the manifests to
     #[arg(short, long, env = "OUTPUT_DIRECTORY", value_hint = clap::ValueHint::DirPath)]
-    output: Option<Utf8PathBuf>,
+    pub(super) output: Option<Utf8PathBuf>,
 
     /// Open pull request link automatically
     #[arg(long, env = "OPEN_PR")]
-    open_pr: bool,
+    pub(super) open_pr: bool,
 
     /// Run without submitting
     #[arg(long, env = "DRY_RUN")]
-    dry_run: bool,
+    pub(super) dry_run: bool,
 
     /// Package version to replace
     #[arg(short, long, num_args = 0..=1, default_missing_value = "latest")]
-    replace: Option<PackageVersion>,
+    pub(super) replace: Option<PackageVersion>,
 
     /// Skip checking for existing pull requests
     #[arg(long, env)]
-    skip_pr_check: bool,
+    pub(super) skip_pr_check: bool,
 
     /// GitHub personal access token with the `public_repo` scope
     #[arg(short, long, env = "GITHUB_TOKEN")]
-    token: Option<String>,
+    pub(super) token: Option<String>,
 }
 
 impl UpdateVersion {
-    pub async fn run(self) -> Result<()> {
+    pub async fn run(mut self) -> Result<()> {
         if !self.files.is_empty() {
             ensure!(
                 self.urls.len() == self.files.len(),
@@ -123,10 +123,7 @@ impl UpdateVersion {
         let token = TokenManager::handle(self.token.as_deref()).await?;
         let github = GitHub::new(&token)?;
 
-        let (versions, existing_pr) = try_join!(
-            github.get_versions(&self.package_identifier),
-            github.get_existing_pull_request(&self.package_identifier, &self.package_version),
-        )?;
+        let versions = github.get_versions(&self.package_identifier).await?;
 
         let latest_version = versions.last().unwrap_or_else(|| unreachable!());
         println!(
@@ -134,10 +131,15 @@ impl UpdateVersion {
             self.package_identifier
         );
 
-        let replace_version = self.resolve_replace_version(&versions, latest_version)?;
-
-        if self.should_abort_for_existing_pr(existing_pr)? {
-            return Ok(());
+        let mut has_checked_existing_pr = false;
+        if let Some(package_version) = self.package_version.as_ref() {
+            if self
+                .should_abort_for_existing_pr(&github, package_version)
+                .await?
+            {
+                return Ok(());
+            }
+            has_checked_existing_pr = true;
         }
 
         let (mut manifests, mut github_values, mut files) = try_join!(
@@ -160,6 +162,25 @@ impl UpdateVersion {
         )?;
 
         let mut download_results = process_files(&mut files).await?;
+        if self.package_version.is_none() {
+            self.package_version = Some(self.infer_package_version(&download_results)?);
+        }
+        let package_version = self
+            .package_version
+            .as_ref()
+            .unwrap_or_else(|| unreachable!());
+
+        if !has_checked_existing_pr
+            && self
+                .should_abort_for_existing_pr(&github, package_version)
+                .await?
+        {
+            return Ok(());
+        }
+
+        let replace_version =
+            self.resolve_replace_version(&versions, latest_version, package_version)?;
+
         let installer_results = download_results
             .iter_mut()
             .flat_map(|(_url, analyser)| mem::take(&mut analyser.installers))
@@ -179,7 +200,7 @@ impl UpdateVersion {
                 installer
             })
             .collect::<Vec<_>>();
-        manifests.default_locale.package_version = self.package_version.clone();
+        manifests.default_locale.package_version = package_version.clone();
         let matched_installers = match_installers(previous_installers, &installer_results);
         let installers = matched_installers
             .into_iter()
@@ -220,7 +241,7 @@ impl UpdateVersion {
             })
             .collect::<Vec<_>>();
 
-        manifests.installer.package_version = self.package_version.clone();
+        manifests.installer.package_version = package_version.clone();
         manifests.installer.minimum_os_version = manifests
             .installer
             .minimum_os_version
@@ -229,23 +250,22 @@ impl UpdateVersion {
         manifests.installer.optimize();
 
         manifests.default_locale.update(
-            &self.package_version,
+            package_version,
             &mut github_values,
             self.release_notes_url.as_ref(),
         );
 
         manifests.locales.iter_mut().for_each(|locale| {
             locale.update(
-                &self.package_version,
+                package_version,
                 &mut github_values,
                 self.release_notes_url.as_ref(),
             );
         });
 
-        manifests.version.update(&self.package_version);
+        manifests.version.update(package_version);
 
-        let package_path =
-            PackagePath::new(&self.package_identifier, Some(&self.package_version), None);
+        let package_path = PackagePath::new(&self.package_identifier, Some(package_version), None);
         let mut changes = pr_changes()
             .package_identifier(&self.package_identifier)
             .manifests(&manifests)
@@ -268,7 +288,7 @@ impl UpdateVersion {
         let submit_option = SubmitOption::prompt(
             &mut changes,
             &self.package_identifier,
-            &self.package_version,
+            package_version,
             self.submit,
             self.dry_run,
         )?;
@@ -280,14 +300,14 @@ impl UpdateVersion {
         // Create an indeterminate progress bar to show as a pull request is being created
         let pr_progress = ProgressBar::new_spinner().with_message(format!(
             "Creating a pull request for {} {}",
-            self.package_identifier, self.package_version
+            self.package_identifier, package_version
         ));
         pr_progress.enable_steady_tick(SPINNER_TICK_RATE);
 
         let pull_request_url = github
             .add_version()
             .identifier(&self.package_identifier)
-            .version(&self.package_version)
+            .version(package_version)
             .versions(&versions)
             .changes(changes)
             .maybe_replace_version(replace_version)
@@ -316,6 +336,7 @@ impl UpdateVersion {
         &'a self,
         versions: &'a BTreeSet<PackageVersion>,
         latest_version: &'a PackageVersion,
+        package_version: &PackageVersion,
     ) -> Result<Option<&'a PackageVersion>> {
         let replace_version = self
             .replace
@@ -327,7 +348,7 @@ impl UpdateVersion {
                     version
                 }
             })
-            .filter(|&version| version.as_str() != self.package_version.as_str());
+            .filter(|&version| version.as_str() != package_version.as_str());
 
         if let Some(version) = replace_version
             && !versions.contains(version)
@@ -341,16 +362,19 @@ impl UpdateVersion {
         Ok(replace_version)
     }
 
-    fn should_abort_for_existing_pr<T>(&self, existing_pr: T) -> Result<bool>
-    where
-        T: Into<Option<PullRequest>>,
-    {
-        if let Some(ref pull_request) = existing_pr.into()
+    async fn should_abort_for_existing_pr(
+        &self,
+        github: &GitHub,
+        package_version: &PackageVersion,
+    ) -> Result<bool> {
+        if let Some(ref pull_request) = github
+            .get_existing_pull_request(&self.package_identifier, package_version)
+            .await?
             && !self.skip_pr_check
             && !self.dry_run
             && !prompt_existing_pull_request(
                 &self.package_identifier,
-                &self.package_version,
+                package_version,
                 pull_request,
             )?
         {
@@ -358,6 +382,41 @@ impl UpdateVersion {
         }
 
         Ok(false)
+    }
+
+    fn infer_package_version(
+        &self,
+        download_results: &HashMap<DecodedUrl, Analyzer<'_>>,
+    ) -> Result<PackageVersion> {
+        let versions = download_results
+            .values()
+            .filter_map(|analyzer| analyzer.package_version.clone())
+            .collect::<BTreeSet<_>>();
+
+        if versions.is_empty() {
+            bail!(
+                "No --version was provided and no PE ProductVersion metadata was found. Pass --version explicitly."
+            );
+        }
+
+        if versions.len() > 1 {
+            let detected_versions = versions
+                .iter()
+                .map(PackageVersion::as_str)
+                .collect::<Vec<_>>()
+                .join(", ");
+            bail!(
+                "No --version was provided and multiple PE ProductVersion values were detected: {detected_versions}. Pass --version explicitly."
+            );
+        }
+
+        versions.into_iter().next().map_or_else(
+            || unreachable!(),
+            |package_version| {
+                println!("Using PE ProductVersion {package_version} as package version");
+                Ok(package_version)
+            },
+        )
     }
 
     async fn fetch_github_values(
