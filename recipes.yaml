@@ -1,0 +1,72 @@
+# Sourceforge version different to display version? Registry is 0.5.5
+# andem81.Windroy: https://sourceforge.net/projects/windroy/
+
+# Unsupported installer format
+# EPSON.EpsonConnectPrinterSetup
+# Psi.Psi: https://sourceforge.net/projects/psi/
+
+# Multiple apps in one project
+# GnuWin32.File: https://sourceforge.net/projects/gnuwin32/
+# ezwinports.make: https://downloads.sourceforge.net/project/ezwinports/
+# FreeCiv.FreeCiv: https://sourceforge.net/projects/freeciv/
+
+# Weird layout
+# JTDX.JTDX: https://sourceforge.net/projects/jtdx/ # DLL as "latest"
+# Microsoft.IdFix: https://github.com/microsoft/idfix # Doesn't use GitHub Releases
+
+# Weird version
+# REALiX.HWiNFO: https://sourceforge.net/projects/hwinfo/
+# RKibria.frhed: https://sourceforge.net/projects/frhed/
+# x64dbg.x64dbg: https://sourceforge.net/projects/x64dbg/
+# mendelson.AS2: https://sourceforge.net/projects/mec-as2/
+# Microsoft.Azure.BatchExplorer: https://github.com/Azure/BatchExplorer
+
+Vivi.Vivi: https://api.vivi.io/windows
+
+# Drops architecture. Could URL replace previous version?
+Lazarus.Lazarus: https://sourceforge.net/projects/lazarus/
+SDCC.SDCC: https://sourceforge.net/projects/sdcc/
+
+Microsoft.GlobalSecureAccessClient:
+  - url: https://aka.ms/GlobalSecureAccess-windows
+    header: Content-Length
+    value: "156627096"
+  - url: https://aka.ms/GlobalSecureAccess-WindowsOnArm
+    header: Content-Length
+    value: "152679912"
+Microsoft.ASRTestTool:
+  - url: https://demo.wd.microsoft.com/Content/ASRtool.exe
+    header: Etag
+    value: '"0939fd42ad5d81:0"'
+# Amazon.AppStream: https://clients.amazonappstream.com/installers/windows/latest/AmazonWorkSpacesApplicationsClientSetup.exe
+
+cjpais.Handy: https://github.com/cjpais/Handy
+Hugin.Hugin: https://sourceforge.net/projects/hugin/
+Microsoft.IntuneWSLPlugin: https://github.com/microsoft/shell-intune-samples
+PokerTH.PokerTH: https://github.com/pokerth/pokerth
+Skylot.jadx: https://github.com/skylot/jadx
+tumic0.GPXSee: https://sourceforge.net/projects/gpxsee/ # also https://github.com/tumic0/GPXSee, but author previously submitted sourceforge URL
+WildByDesign.AppControlTrayTool: https://github.com/WildByDesign/WDACTrayTool
+Zint.Zint: https://sourceforge.net/projects/zint/
+
+AkelPad.AkelPad: https://sourceforge.net/projects/akelpad/
+BeeBEEP.BeeBEEP: https://sourceforge.net/projects/beebeep/
+Brio.FolderSize: https://sourceforge.net/projects/foldersize/
+Eraser.Eraser: https://sourceforge.net/projects/eraser/
+gretl.gretl: https://sourceforge.net/projects/gretl/
+Harbour.Harbour: https://sourceforge.net/projects/harbour-project/
+Intel.Iometer: https://sourceforge.net/projects/iometer/
+jgaa.WarSetup: https://sourceforge.net/projects/warsetup/
+marha.VcXsrv: https://sourceforge.net/projects/vcxsrv/
+MComix.MComix: https://sourceforge.net/projects/mcomix/
+MPC-BE.MPC-BE: https://sourceforge.net/projects/mpcbe/
+NumeRe.NumeRe: https://sourceforge.net/projects/numere/
+OmegaT.OmegaT: https://sourceforge.net/projects/omegat/
+OptiPNG.OptiPNG: https://sourceforge.net/projects/optipng/
+OSGeo.GeoServer: https://sourceforge.net/projects/geoserver/
+Orwell.Dev-C++: https://sourceforge.net/projects/orwelldevcpp/
+SBCL.SBCL: https://sourceforge.net/projects/sbcl/
+Scribus.Scribus: https://sourceforge.net/projects/scribus/
+UdiFuchs.UFRaw: https://sourceforge.net/projects/ufraw/
+WinSCP.WinSCP: https://sourceforge.net/projects/winscp/
+Ziad.TCG: https://sourceforge.net/projects/temp-cleaner-gui/

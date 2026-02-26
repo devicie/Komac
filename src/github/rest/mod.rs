@@ -1,6 +1,7 @@
 mod compare_commits;
 mod error;
 mod merge_upstream;
+mod releases;
 mod tree;
 
 use reqwest::header::{HeaderName, HeaderValue};

@@ -6,6 +6,7 @@ use std::{
 use camino::Utf8Path;
 use color_eyre::eyre::{Result, bail};
 use winget_types::{
+    PackageVersion,
     installer::Installer,
     locale::{Copyright, PackageName, Publisher},
 };
@@ -23,6 +24,7 @@ pub struct Analyzer<'reader, R: Read + Seek> {
     pub file_name: String,
     pub copyright: Option<Copyright>,
     pub package_name: Option<PackageName>,
+    pub package_version: Option<PackageVersion>,
     pub publisher: Option<Publisher>,
     pub installers: Vec<Installer>,
     pub zip: Option<Zip<&'reader mut R>>,
@@ -82,6 +84,7 @@ impl<R: Read + Seek> Default for Analyzer<'_, R> {
             file_name: String::default(),
             copyright: None,
             package_name: None,
+            package_version: None,
             publisher: None,
             installers: Vec::default(),
             zip: None,
