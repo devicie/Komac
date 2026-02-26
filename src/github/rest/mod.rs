@@ -1,3 +1,4 @@
+mod releases;
 mod tree;
 
 use reqwest::header::{HeaderName, HeaderValue};
