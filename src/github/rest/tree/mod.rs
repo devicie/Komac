@@ -4,6 +4,7 @@ mod r#type;
 
 use std::collections::BTreeSet;
 
+use color_eyre::eyre::eyre;
 pub use git_file_mode::GitFileMode;
 use itertools::Itertools;
 pub use object::TreeObject;
@@ -27,6 +28,41 @@ pub struct GitTree {
 }
 
 impl GitHub {
+    pub async fn get_package_identifiers(
+        &self,
+    ) -> Result<BTreeSet<PackageIdentifier>, GitHubError> {
+        let endpoint = format!(
+            "{REST_API_URL}/repos/{MICROSOFT}/{WINGET_PKGS}/git/trees/HEAD:manifests?recursive=1"
+        );
+
+        let response = self
+            .0
+            .get(endpoint)
+            .header(ACCEPT, GITHUB_JSON_MIME)
+            .header(X_GITHUB_API_VERSION, REST_API_VERSION)
+            .send()
+            .await?
+            .error_for_status()?;
+
+        let GitTree { tree, .. } = response.json::<GitTree>().await?;
+
+        let package_identifiers = tree
+            .iter()
+            .filter(|entry| entry.is_blob())
+            .filter_map(|entry| entry.path.rsplit('/').next())
+            .filter_map(|file_name| file_name.strip_suffix(".installer.yaml"))
+            .filter_map(|identifier| identifier.parse::<PackageIdentifier>().ok())
+            .collect::<BTreeSet<_>>();
+
+        if package_identifiers.is_empty() {
+            Err(GitHubError::GraphQL(eyre!(
+                "failed to enumerate package identifiers from winget-pkgs"
+            )))
+        } else {
+            Ok(package_identifiers)
+        }
+    }
+
     pub async fn get_versions(
         &self,
         package_identifier: &PackageIdentifier,
