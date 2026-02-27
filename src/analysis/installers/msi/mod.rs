@@ -286,6 +286,7 @@ impl Installers for Msi {
                                 .all(|char| char.is_uppercase() || !char.is_alphabetic())
                                 && !key.starts_with("ARP")
                                 && !key.starts_with("WIXUI_")
+                                && !key.starts_with("AI_")
                         })
                         .map(|(key, value)| format!("{}=\"{}\"", key, value))
                         .collect::<Vec<_>>();
