@@ -24,7 +24,7 @@ use crate::{
 
 const SOURCEFORGE_HOST: &str = "sourceforge.net";
 const DATE_FORMAT: &str = "%Y-%m-%d %H:%M:%S";
-const SOURCEFORGE_REQUEST_DELAY: Duration = Duration::from_secs(1);
+const SOURCEFORGE_REQUEST_DELAY: Duration = Duration::from_millis(500);
 
 static LAST_SOURCEFORGE_REQUEST_AT: LazyLock<Mutex<Instant>> = LazyLock::new(|| {
     Mutex::new(

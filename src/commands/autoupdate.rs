@@ -228,7 +228,8 @@ impl AutoUpdate {
             token.as_ref(),
             package_identifier,
             vec![RecipeSource {
-                url,
+                url: Some(url),
+                page: None,
                 header: self.header.clone(),
                 value: self.state.clone(),
             }],
@@ -260,33 +261,40 @@ impl AutoUpdate {
         let mut state_updates = Vec::new();
 
         for source in sources {
-            let effective_header = source.header.as_deref().or(self.header.as_deref());
-            let effective_value = source.value.as_deref().or(self.state.as_deref());
+            let strategy_result = if let Some(page_url) = &source.page {
+                crate::commands::strategies::html_page::resolve(latest_version, page_url).await?
+            } else {
+                let source_url = source.url.as_ref().unwrap_or_else(|| unreachable!());
+                let effective_header = source.header.as_deref().or(self.header.as_deref());
+                let effective_value = source.value.as_deref().or(self.state.as_deref());
 
-            ensure!(
-                effective_header.is_some() == effective_value.is_some(),
-                "Recipe source for {package_identifier} must provide both header and value"
-            );
+                ensure!(
+                    effective_header.is_some() == effective_value.is_some(),
+                    "Recipe source for {package_identifier} must provide both header and value"
+                );
 
-            let strategy_result = AutoUpdateStrategy::resolve(
-                github,
-                &package_identifier,
-                latest_version,
-                &source.url,
-                self.strategy,
-                effective_header,
-                effective_value,
-            )
-            .await?;
+                let result = AutoUpdateStrategy::resolve(
+                    github,
+                    &package_identifier,
+                    latest_version,
+                    source_url,
+                    self.strategy,
+                    effective_header,
+                    effective_value,
+                )
+                .await?;
 
-            if effective_header.is_some()
-                && let Some(observed_state) = strategy_result.observed_state.clone()
-            {
-                state_updates.push(RecipeStateUpdate {
-                    url: source.url.clone(),
-                    value: observed_state,
-                });
-            }
+                if effective_header.is_some()
+                    && let Some(observed_state) = result.observed_state.clone()
+                {
+                    state_updates.push(RecipeStateUpdate {
+                        url: source_url.clone(),
+                        value: observed_state,
+                    });
+                }
+
+                result
+            };
 
             if let Some(existing_version) = package_version.as_ref() {
                 ensure!(
@@ -373,7 +381,8 @@ struct RecipeStateUpdate {
 
 #[derive(Debug, Clone, Deserialize)]
 struct RecipeSource {
-    url: DecodedUrl,
+    url: Option<DecodedUrl>,
+    page: Option<DecodedUrl>,
     header: Option<String>,
     #[serde(default, deserialize_with = "deserialize_optional_scalar_string")]
     value: Option<String>,
@@ -399,7 +408,8 @@ where
 impl RecipeSource {
     fn from_url(url: DecodedUrl) -> Self {
         Self {
-            url,
+            url: Some(url),
+            page: None,
             header: None,
             value: None,
         }
@@ -428,6 +438,10 @@ fn parse_recipes(file_content: &str) -> Result<Vec<(PackageIdentifier, Vec<Recip
             );
 
             for source in &urls {
+                ensure!(
+                    source.url.is_some() != source.page.is_some(),
+                    "Recipe source for {package_identifier} must have exactly one of 'url' or 'page'"
+                );
                 ensure!(
                     source.header.is_some() == source.value.is_some(),
                     "Recipe source for {package_identifier} must include both header and value"
