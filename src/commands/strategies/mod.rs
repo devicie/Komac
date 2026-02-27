@@ -1,4 +1,5 @@
 pub mod github_releases;
+pub mod html_page;
 pub mod sourceforge;
 pub mod vanity_url;
 
