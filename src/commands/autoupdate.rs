@@ -1,5 +1,5 @@
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     num::{NonZeroU32, NonZeroUsize},
 };
 
@@ -22,11 +22,10 @@ use crate::{
 #[derive(Parser)]
 pub struct AutoUpdate {
     /// The package's unique identifier
-    #[arg(required_unless_present = "recipes", requires = "url")]
     package_identifier: Option<PackageIdentifier>,
 
-    /// Source URL used to detect and run an autoupdate strategy
-    #[arg(required_unless_present = "recipes", requires = "package_identifier", value_hint = clap::ValueHint::Url)]
+    /// Source URL used to detect and run an autoupdate strategy (inferred from the winget repo if omitted)
+    #[arg(requires = "package_identifier", value_hint = clap::ValueHint::Url)]
     url: Option<DecodedUrl>,
 
     /// YAML file containing `ID: URL` or `ID: [URL, URL, ...]` entries to process in batch mode
@@ -118,7 +117,13 @@ impl AutoUpdate {
             if self.fail_fast {
                 for (package_identifier, sources) in recipes {
                     let result = self
-                        .run_entry(&github, token.as_ref(), package_identifier.clone(), sources)
+                        .run_entry(
+                            &github,
+                            token.as_ref(),
+                            package_identifier.clone(),
+                            sources,
+                            None,
+                        )
                         .await;
 
                     match result {
@@ -162,7 +167,13 @@ impl AutoUpdate {
                 let results = stream::iter(recipes.into_iter().map(
                     |(package_identifier, sources)| async {
                         let result = self
-                            .run_entry(&github, token.as_ref(), package_identifier.clone(), sources)
+                            .run_entry(
+                                &github,
+                                token.as_ref(),
+                                package_identifier.clone(),
+                                sources,
+                                None,
+                            )
                             .await;
                         (package_identifier, result)
                     },
@@ -217,25 +228,99 @@ impl AutoUpdate {
             return Ok(());
         }
 
-        let package_identifier = self
-            .package_identifier
-            .clone()
-            .unwrap_or_else(|| unreachable!());
-        let url = self.url.clone().unwrap_or_else(|| unreachable!());
+        if let Some(package_identifier) = self.package_identifier.clone() {
+            let sources = if let Some(url) = self.url.clone() {
+                vec![RecipeSource {
+                    url: Some(url),
+                    page: None,
+                    header: self.header.clone(),
+                    value: self.state.clone(),
+                }]
+            } else {
+                sources_from_manifest(&github, &package_identifier).await?
+            };
 
-        self.run_entry(
-            &github,
-            token.as_ref(),
-            package_identifier,
-            vec![RecipeSource {
-                url: Some(url),
-                page: None,
-                header: self.header.clone(),
-                value: self.state.clone(),
-            }],
-        )
-        .await
-        .map(|_| ())
+            return self
+                .run_entry(
+                    &github,
+                    token.as_ref(),
+                    package_identifier,
+                    sources,
+                    Some(AutoUpdateStrategy::GithubReleases),
+                )
+                .await
+                .map(|_| ());
+        }
+
+        let package_identifiers = github.get_package_identifiers().await?;
+        info!(
+            count = package_identifiers.len(),
+            "No package identifier provided — processing all packages from winget-pkgs"
+        );
+
+        if self.fail_fast {
+            for package_identifier in package_identifiers {
+                let sources = sources_from_manifest(&github, &package_identifier).await?;
+                self.run_entry(
+                    &github,
+                    token.as_ref(),
+                    package_identifier,
+                    sources,
+                    Some(AutoUpdateStrategy::GithubReleases),
+                )
+                .await?;
+            }
+            return Ok(());
+        }
+
+        let results = stream::iter(package_identifiers.into_iter().map(
+            |package_identifier| async {
+                let sources = sources_from_manifest(&github, &package_identifier).await;
+                let result = match sources {
+                    Ok(sources) => {
+                        self.run_entry(
+                            &github,
+                            token.as_ref(),
+                            package_identifier.clone(),
+                            sources,
+                            Some(AutoUpdateStrategy::GithubReleases),
+                        )
+                        .await
+                    }
+                    Err(error) => Err(error),
+                };
+
+                (package_identifier, result)
+            },
+        ))
+        .buffer_unordered(self.concurrent_downloads.get())
+        .collect::<Vec<_>>()
+        .await;
+
+        let mut succeeded = 0usize;
+        let mut failed = 0usize;
+
+        for (package_identifier, result) in results {
+            match result {
+                Ok(_) => succeeded += 1,
+                Err(error) => {
+                    failed += 1;
+                    error!(
+                        package = %package_identifier,
+                        error = %error,
+                        "Autoupdate entry failed"
+                    );
+                }
+            }
+        }
+
+        info!(succeeded, failed, "Autoupdate all-packages summary");
+
+        if failed > 0 {
+            bail!("{failed} auto-update entries failed");
+        }
+
+        Ok(())
     }
 
     async fn run_entry(
@@ -244,6 +329,7 @@ impl AutoUpdate {
         token: &str,
         package_identifier: PackageIdentifier,
         sources: Vec<RecipeSource>,
+        strategy_override: Option<AutoUpdateStrategy>,
     ) -> Result<Vec<RecipeStateUpdate>> {
         ensure!(
             !sources.is_empty(),
@@ -278,7 +364,7 @@ impl AutoUpdate {
                     &package_identifier,
                     latest_version,
                     source_url,
-                    self.strategy,
+                    strategy_override.or(self.strategy),
                     effective_header,
                     effective_value,
                 )
@@ -414,6 +500,48 @@ impl RecipeSource {
             value: None,
         }
     }
+}
+
+/// Fetch the latest installer manifest from the winget-pkgs repository and
+/// build [`RecipeSource`] entries from the unique installer URLs it contains.
+async fn sources_from_manifest(
+    github: &GitHub,
+    package_identifier: &PackageIdentifier,
+) -> Result<Vec<RecipeSource>> {
+    let versions = github.get_versions(package_identifier).await?;
+    let latest_version = versions.last().unwrap_or_else(|| unreachable!());
+
+    info!(
+        package = %package_identifier,
+        version = %latest_version,
+        "No URL provided — inferring sources from winget-pkgs installer manifest"
+    );
+
+    let manifests = github
+        .get_manifests(package_identifier, latest_version)
+        .await?;
+
+    let mut seen = HashSet::new();
+    let sources: Vec<RecipeSource> = manifests
+        .installer
+        .installers
+        .iter()
+        .filter(|installer| seen.insert(installer.url.as_str().to_owned()))
+        .map(|installer| RecipeSource::from_url(installer.url.clone()))
+        .collect();
+
+    ensure!(
+        !sources.is_empty(),
+        "Installer manifest for {package_identifier} {latest_version} contains no installer URLs"
+    );
+
+    info!(
+        package = %package_identifier,
+        urls = sources.len(),
+        "Inferred source URLs from installer manifest"
+    );
+
+    Ok(sources)
 }
 
 fn parse_recipes(file_content: &str) -> Result<Vec<(PackageIdentifier, Vec<RecipeSource>)>> {
