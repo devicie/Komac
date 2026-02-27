@@ -14,7 +14,6 @@ pub struct TreeObject {
 
 impl TreeObject {
     /// Returns `true` if the tree type is blob.
-    #[expect(unused)]
     #[inline]
     pub const fn is_blob(&self) -> bool {
         self.r#type.is_blob()
