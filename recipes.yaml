@@ -1,3 +1,6 @@
+# winget-extras
+# ralish.CertUiExts: https://github.com/ralish/CertUiExts
+
 # Sourceforge version different to display version? Registry is 0.5.5
 # andem81.Windroy: https://sourceforge.net/projects/windroy/
 
@@ -21,7 +24,12 @@
 # mendelson.AS2: https://sourceforge.net/projects/mec-as2/
 # Microsoft.Azure.BatchExplorer: https://github.com/Azure/BatchExplorer
 
-Vivi.Vivi: https://api.vivi.io/windows
+Vivi.Vivi:
+  - https://api.vivi.io/windows
+  - https://api.vivi.io/windows-msi
+  - https://api.vivi.io/windows-msi64
+  - page: https://www.vivi.io/downloads/
+  - page: https://www.vivi.io/downloads/enterprise/
 
 # Drops architecture. Could URL replace previous version?
 Lazarus.Lazarus: https://sourceforge.net/projects/lazarus/
