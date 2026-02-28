@@ -1,6 +1,7 @@
 use std::{
     collections::BTreeSet,
     collections::HashMap,
+    collections::HashSet,
     io::{Read, Seek},
     mem,
     num::{NonZeroU32, NonZeroUsize},
@@ -199,7 +200,7 @@ impl UpdateVersion {
 
         manifests.default_locale.package_version = self.package_version.as_ref().unwrap().clone();
         let matched_installers = match_installers(previous_installers, &installer_results);
-        let installers = matched_installers
+        let mut installers = matched_installers
             .into_iter()
             .map(|(previous_installer, new_installer)| {
                 let analyzer = &download_results[&new_installer.url];
@@ -243,6 +244,17 @@ impl UpdateVersion {
                 installer
             })
             .collect::<Vec<_>>();
+
+        let matched_urls = installers
+            .iter()
+            .map(|installer| installer.url.clone())
+            .collect::<HashSet<_>>();
+
+        installers.extend(
+            installer_results
+                .into_iter()
+                .filter(|installer| !matched_urls.contains(&installer.url)),
+        );
 
         manifests.installer.package_version = package_version.clone();
         manifests.installer.minimum_os_version = manifests
