@@ -173,7 +173,7 @@ impl UpdateVersion {
 
         manifests.default_locale.package_version = self.package_version.clone();
         let matched_installers = match_installers(previous_installers, &installer_results);
-        let installers = matched_installers
+        let mut installers = matched_installers
             .into_iter()
             .map(|(previous_installer, new_installer)| {
                 let analyzer = &download_results[&new_installer.url];
@@ -217,6 +217,18 @@ impl UpdateVersion {
                 installer
             })
             .collect::<Vec<_>>();
+
+        if installers
+            .iter()
+            .flat_map(|installer| &installer.locale)
+            .all_equal()
+        {
+            for installer in &mut installers {
+                installer.locale = None;
+            }
+        }
+
+        manifests.installer.locale = None;
 
         manifests.installer.package_version = self.package_version.clone();
         manifests.installer.minimum_os_version = manifests
