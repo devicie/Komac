@@ -38,7 +38,10 @@ use crate::{
     manifests::Url,
     match_installers::match_installers,
     token::TokenManager,
-    traits::{LocaleExt, path::NormalizePath},
+    traits::{
+        LocaleExt,
+        path::{LowercaseExtension, NormalizePath},
+    },
 };
 
 /// Add a version to a pre-existing package
@@ -411,7 +414,7 @@ fn fix_relative_paths<R: Read + Seek>(
                         )
                     })
                     .map(|path| NestedInstallerFiles {
-                        relative_file_path: path.to_path_buf(),
+                        relative_file_path: path.lowercase_extension(),
                         ..nested_installer_files
                     })
             }
