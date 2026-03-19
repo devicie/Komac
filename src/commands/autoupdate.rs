@@ -9,7 +9,7 @@ use color_eyre::eyre::{Result, WrapErr, bail, ensure};
 use futures_util::{StreamExt, stream};
 use serde::{Deserialize, Deserializer, de::Error as DeError};
 use tokio::fs;
-use tracing::{error, info, warn};
+use tracing::{error, info};
 use winget_types::{PackageIdentifier, PackageVersion, url::DecodedUrl};
 
 use crate::{
@@ -31,6 +31,10 @@ pub struct AutoUpdate {
     /// YAML file containing `ID: URL` or `ID: [URL, URL, ...]` entries to process in batch mode
     #[arg(long, value_hint = clap::ValueHint::FilePath)]
     recipes: Option<Utf8PathBuf>,
+
+    /// File containing newline-separated package identifiers to skip
+    #[arg(long = "exclude-file", value_name = "FILE", value_hint = clap::ValueHint::FilePath)]
+    exclude_files: Vec<Utf8PathBuf>,
 
     /// Explicit strategy to use (otherwise auto-detected from URL)
     #[arg(long, value_enum)]
@@ -95,6 +99,23 @@ pub struct AutoUpdate {
 
 impl AutoUpdate {
     pub async fn run(self) -> Result<()> {
+        let excluded_packages = read_excluded_package_identifiers(&self.exclude_files).await?;
+
+        if !self.exclude_files.is_empty() {
+            info!(
+                files = self.exclude_files.len(),
+                count = excluded_packages.len(),
+                "Loaded package exclusions from files"
+            );
+        }
+
+        if !excluded_packages.is_empty() {
+            info!(
+                count = excluded_packages.len(),
+                "Applying package exclusions"
+            );
+        }
+
         let token = TokenManager::handle(self.token.as_deref()).await?;
         let github = GitHub::new(&token)?;
 
@@ -103,12 +124,30 @@ impl AutoUpdate {
                 .await
                 .wrap_err_with(|| format!("Failed to read {recipes_file}"))?;
             let recipes = parse_recipes(&file_content)?;
+            let total_recipe_entries = recipes.len();
+            let recipes = recipes
+                .into_iter()
+                .filter(|(package_identifier, _)| !excluded_packages.contains(package_identifier))
+                .collect::<Vec<_>>();
+            let excluded_recipe_entries = total_recipe_entries.saturating_sub(recipes.len());
 
             info!(
                 file = %recipes_file,
                 count = recipes.len(),
                 "Processing autoupdate recipes"
             );
+
+            if excluded_recipe_entries > 0 {
+                info!(
+                    excluded = excluded_recipe_entries,
+                    "Skipped excluded recipe entries"
+                );
+            }
+
+            if recipes.is_empty() {
+                info!("No recipe entries left to process after filtering");
+                return Ok(());
+            }
 
             let mut succeeded = 0usize;
             let mut failed = 0usize;
@@ -229,6 +268,14 @@ impl AutoUpdate {
         }
 
         if let Some(package_identifier) = self.package_identifier.clone() {
+            if excluded_packages.contains(&package_identifier) {
+                info!(
+                    package = %package_identifier,
+                    "Package excluded from auto-update; skipping"
+                );
+                return Ok(());
+            }
+
             let sources = if let Some(url) = self.url.clone() {
                 vec![RecipeSource {
                     url: Some(url),
@@ -253,10 +300,26 @@ impl AutoUpdate {
         }
 
         let package_identifiers = github.get_package_identifiers().await?;
+        let total_packages = package_identifiers.len();
+        let package_identifiers = package_identifiers
+            .into_iter()
+            .filter(|package_identifier| !excluded_packages.contains(package_identifier))
+            .collect::<Vec<_>>();
+        let excluded_count = total_packages.saturating_sub(package_identifiers.len());
+
         info!(
             count = package_identifiers.len(),
             "No package identifier provided — processing all packages from winget-pkgs"
         );
+
+        if excluded_count > 0 {
+            info!(excluded = excluded_count, "Skipped excluded packages");
+        }
+
+        if package_identifiers.is_empty() {
+            info!("No packages left to process after filtering");
+            return Ok(());
+        }
 
         if self.fail_fast {
             for package_identifier in package_identifiers {
@@ -419,7 +482,7 @@ impl AutoUpdate {
         }
 
         if !skip_version_check && package_version <= *latest_version {
-            warn!(
+            info!(
                 package = %package_identifier,
                 latest_version = %latest_version,
                 source_version = %package_version,
@@ -457,6 +520,50 @@ impl AutoUpdate {
 
         Ok(state_updates)
     }
+}
+
+async fn read_excluded_package_identifiers(
+    files: &[Utf8PathBuf],
+) -> Result<HashSet<PackageIdentifier>> {
+    let mut excluded_packages = HashSet::new();
+
+    for file in files {
+        let file_content = fs::read_to_string(file)
+            .await
+            .wrap_err_with(|| format!("Failed to read exclusion file {file}"))?;
+
+        let parsed = parse_excluded_package_identifiers(&file_content)
+            .wrap_err_with(|| format!("Failed to parse exclusion file {file}"))?;
+
+        excluded_packages.extend(parsed);
+    }
+
+    Ok(excluded_packages)
+}
+
+fn parse_excluded_package_identifiers(file_content: &str) -> Result<HashSet<PackageIdentifier>> {
+    let mut excluded_packages = HashSet::new();
+
+    for (line_number, line) in file_content.lines().enumerate() {
+        let trimmed_line = line.trim();
+
+        if trimmed_line.is_empty() || trimmed_line.starts_with('#') {
+            continue;
+        }
+
+        let package_identifier = trimmed_line
+            .parse::<PackageIdentifier>()
+            .wrap_err_with(|| {
+                format!(
+                    "Invalid package identifier on line {}: {trimmed_line}",
+                    line_number + 1
+                )
+            })?;
+
+        excluded_packages.insert(package_identifier);
+    }
+
+    Ok(excluded_packages)
 }
 
 #[derive(Debug, Clone)]
@@ -511,12 +618,6 @@ async fn sources_from_manifest(
     let versions = github.get_versions(package_identifier).await?;
     let latest_version = versions.last().unwrap_or_else(|| unreachable!());
 
-    info!(
-        package = %package_identifier,
-        version = %latest_version,
-        "No URL provided — inferring sources from winget-pkgs installer manifest"
-    );
-
     let manifests = github
         .get_manifests(package_identifier, latest_version)
         .await?;
@@ -533,12 +634,6 @@ async fn sources_from_manifest(
     ensure!(
         !sources.is_empty(),
         "Installer manifest for {package_identifier} {latest_version} contains no installer URLs"
-    );
-
-    info!(
-        package = %package_identifier,
-        urls = sources.len(),
-        "Inferred source URLs from installer manifest"
     );
 
     Ok(sources)
@@ -705,7 +800,10 @@ fn escape_yaml_string(value: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{RecipeStateUpdate, escape_yaml_string, parse_recipes, update_recipe_state_values};
+    use super::{
+        RecipeStateUpdate, escape_yaml_string, parse_excluded_package_identifiers, parse_recipes,
+        update_recipe_state_values,
+    };
     use winget_types::{PackageIdentifier, url::DecodedUrl};
 
     #[test]
@@ -796,5 +894,33 @@ Microsoft.GlobalSecureAccessClient:
     #[test]
     fn escapes_yaml_state_values() {
         assert_eq!(escape_yaml_string("\"abc\""), "\\\"abc\\\"");
+    }
+
+    #[test]
+    fn parses_excluded_package_identifiers_from_lines() {
+        let content = r#"
+# comment
+Example.Package
+
+Another.Package
+Example.Package
+"#;
+
+        let excluded = parse_excluded_package_identifiers(content).unwrap();
+
+        assert_eq!(excluded.len(), 2);
+        assert!(excluded.iter().any(|id| id.as_str() == "Example.Package"));
+        assert!(excluded.iter().any(|id| id.as_str() == "Another.Package"));
+    }
+
+    #[test]
+    fn fails_for_invalid_excluded_package_identifier() {
+        let content = "Valid.Package\nnot a valid id\n";
+
+        let error = parse_excluded_package_identifiers(content)
+            .unwrap_err()
+            .to_string();
+
+        assert!(error.contains("Invalid package identifier on line 2"));
     }
 }
