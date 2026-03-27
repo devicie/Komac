@@ -51,6 +51,14 @@ pub struct RemoveDeadVersions {
     #[arg(long, hide = true, env = "CI")]
     auto: bool,
 
+    /// Remove all versions regardless of whether their installer URLs are dead
+    #[arg(long, hide = true)]
+    all: bool,
+
+    /// Reason for removing the version(s)
+    #[arg(short = 'r', long = "reason")]
+    deletion_reason: Option<String>,
+
     /// Number of versions to check concurrently
     #[arg(short, long, default_value_t = NonZeroUsize::new(num_cpus::get()).unwrap())]
     concurrent: NonZeroUsize,
@@ -127,6 +135,7 @@ impl RemoveDeadVersions {
                         .identifier(&package_identifier)
                         .version(&version)
                         .auto(self.auto)
+                        .remove_all(url_statuses.is_empty())
                         .prompt()
                         .await?;
 
@@ -135,7 +144,10 @@ impl RemoveDeadVersions {
                         continue;
                     }
 
-                    let deletion_reason = Self::get_deletion_reason(&url_statuses)?;
+                    let deletion_reason = match &self.deletion_reason {
+                        Some(reason) => reason.clone(),
+                        None => Self::get_deletion_reason(&url_statuses)?,
+                    };
 
                     rate_limit.wait().await;
 
@@ -169,38 +181,48 @@ impl RemoveDeadVersions {
                 let overall_progress = &overall_progress;
                 let progress_bar = &progress_bars[index % self.concurrent.get()];
                 async move {
-                    progress_bar
-                        .set_message(format!("Checking {package_identifier} {}", version.blue()));
+                    if self.all {
+                        progress_bar.set_message(format!(
+                            "Queuing {package_identifier} {}",
+                            version.blue()
+                        ));
+                        sender.send((version, vec![])).await?;
+                    } else {
+                        progress_bar.set_message(format!(
+                            "Checking {package_identifier} {}",
+                            version.blue()
+                        ));
 
-                    let installer_urls = github
-                        .get_manifest::<InstallerManifest>(
-                            package_identifier,
-                            &version,
-                            ManifestTypeWithLocale::Installer,
-                        )
-                        .await?
-                        .installers
-                        .into_iter()
-                        .map(|installer| installer.url)
-                        .unique();
+                        let installer_urls = github
+                            .get_manifest::<InstallerManifest>(
+                                package_identifier,
+                                &version,
+                                ManifestTypeWithLocale::Installer,
+                            )
+                            .await?
+                            .installers
+                            .into_iter()
+                            .map(|installer| installer.url)
+                            .unique();
 
-                    let url_statuses = stream::iter(installer_urls)
-                        .map(|url| {
-                            client
-                                .head((*url).clone())
-                                .send()
-                                .map_ok(|response| (url, response.status()))
-                        })
-                        .buffered(2)
-                        .try_collect::<Vec<(_, _)>>()
-                        .await?;
+                        let url_statuses = stream::iter(installer_urls)
+                            .map(|url| {
+                                client
+                                    .head((*url).clone())
+                                    .send()
+                                    .map_ok(|response| (url, response.status()))
+                            })
+                            .buffered(2)
+                            .try_collect::<Vec<(_, _)>>()
+                            .await?;
 
-                    let all_installers_missing = url_statuses
-                        .iter()
-                        .all(|(_url, status)| RESOURCE_MISSING_STATUS_CODES.contains(status));
+                        let all_installers_missing = url_statuses
+                            .iter()
+                            .all(|(_url, status)| RESOURCE_MISSING_STATUS_CODES.contains(status));
 
-                    if all_installers_missing {
-                        sender.send((version, url_statuses)).await?;
+                        if all_installers_missing {
+                            sender.send((version, url_statuses)).await?;
+                        }
                     }
 
                     overall_progress.inc(1);
@@ -226,6 +248,9 @@ impl RemoveDeadVersions {
     }
 
     fn get_deletion_reason(url_statuses: &[(DecodedUrl, StatusCode)]) -> Result<String> {
+        if url_statuses.is_empty() {
+            return Ok(String::from("Removing version"));
+        }
         let mut deletion_reason = String::from("All InstallerUrls returned ");
         if let Ok(status) = url_statuses
             .iter()
@@ -252,19 +277,29 @@ async fn confirm_removal(
     identifier: &PackageIdentifier,
     version: &PackageVersion,
     auto: bool,
+    remove_all: bool,
 ) -> Result<bool> {
     if let Some(pull_request) = github
         .get_existing_pull_request(identifier, version)
         .await?
         && pull_request.is_open()
     {
-        println!(
-            "{identifier} {version} returned {} in all its InstallerUrls but there is already {} pull request for this version that was created on {} at {}.",
-            StatusCode::NOT_FOUND.red(),
-            pull_request.state,
-            pull_request.created_at.date_naive(),
-            pull_request.created_at.time()
-        );
+        if remove_all {
+            println!(
+                "There is already {} pull request for {identifier} {version} that was created on {} at {}.",
+                pull_request.state,
+                pull_request.created_at.date_naive(),
+                pull_request.created_at.time()
+            );
+        } else {
+            println!(
+                "{identifier} {version} returned {} in all its InstallerUrls but there is already {} pull request for this version that was created on {} at {}.",
+                StatusCode::NOT_FOUND.red(),
+                pull_request.state,
+                pull_request.created_at.date_naive(),
+                pull_request.created_at.time()
+            );
+        }
         return if auto {
             Ok(false)
         } else {
@@ -272,9 +307,13 @@ async fn confirm_removal(
         };
     }
 
-    Ok(auto
-        || confirm_prompt(&format!(
+    let message = if remove_all {
+        format!("Remove {identifier} {version}?")
+    } else {
+        format!(
             "{identifier} {version} returned {} in all its InstallerUrls. Remove?",
             StatusCode::NOT_FOUND.red()
-        ))?)
+        )
+    };
+    Ok(auto || confirm_prompt(&message)?)
 }
