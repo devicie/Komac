@@ -1,12 +1,12 @@
 use std::{
-    collections::{BTreeSet, HashMap},
+    collections::BTreeSet,
     io,
     io::{Read, Seek, SeekFrom},
     mem,
 };
 
 use camino::{Utf8Path, Utf8PathBuf};
-use color_eyre::eyre::Result;
+use color_eyre::eyre::{Result, bail};
 use inquire::{MultiSelect, min_length};
 use tracing::debug;
 use winget_types::installer::{
@@ -55,36 +55,37 @@ impl<R: Read + Seek> Zip<R> {
 
         debug!(?possible_installer_files);
 
-        let installer_type_counts = VALID_NESTED_FILE_EXTENSIONS
-            .iter()
-            .map(|file_extension| {
-                (
-                    file_extension,
-                    possible_installer_files
-                        .iter()
-                        .filter(|file_name| {
-                            file_name.extension().is_some_and(|extension| {
-                                extension.eq_ignore_ascii_case(file_extension)
-                            })
-                        })
-                        .count(),
-                )
-            })
-            .collect::<HashMap<_, _>>();
+        if possible_installer_files.is_empty() {
+            bail!("ZIP contains no valid installer files (exe, msi, msix, appx, etc.)");
+        }
 
         let mut nested_installer_files = BTreeSet::new();
         let mut installers = None;
+        let exe_candidates = possible_installer_files
+            .iter()
+            .filter(|file_name| {
+                file_name
+                    .extension()
+                    .is_some_and(|extension| extension.eq_ignore_ascii_case("exe"))
+            })
+            .collect::<Vec<_>>();
+        let has_non_exe_candidates = possible_installer_files.iter().any(|file_name| {
+            file_name
+                .extension()
+                .is_some_and(|extension| !extension.eq_ignore_ascii_case("exe"))
+        });
+        let chosen_file_name = if possible_installer_files.len() == 1 {
+            possible_installer_files.first()
+        } else if exe_candidates.len() > 1 && !has_non_exe_candidates {
+            // For ZIPs containing only portable EXEs, use the first one by archive order.
+            exe_candidates.first().copied()
+        } else {
+            None
+        };
 
-        // If there's only one valid file in the zip, extract and analyze it
-        if installer_type_counts
-            .values()
-            .filter(|&&count| count == 1)
-            .count()
-            == 1
-        {
-            let chosen_file_name = &possible_installer_files[0];
+        if let Some(chosen_file_name) = chosen_file_name {
             nested_installer_files = BTreeSet::from([NestedInstallerFiles {
-                relative_file_path: chosen_file_name.clone(),
+                relative_file_path: (*chosen_file_name).clone(),
                 portable_command_alias: None,
             }]);
             if let Ok(mut chosen_file) = zip.by_name(chosen_file_name.as_str()) {
