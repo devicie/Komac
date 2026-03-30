@@ -4,9 +4,10 @@ use std::{
     mem,
 };
 
+use camino::Utf8Path;
 use color_eyre::eyre::Result;
 use futures_util::{StreamExt, TryStreamExt, stream};
-use tracing::debug;
+use tracing::{debug, warn};
 use winget_types::{installer::Architecture, url::DecodedUrl};
 
 use crate::{analysis::Analyzer, download::DownloadedFile};
@@ -23,11 +24,23 @@ pub async fn process_files(
              last_modified,
              ..
          }| async move {
-            let mut file_analyzer = Analyzer::new(file, file_name)?;
+            let mut file_analyser = match Analyzer::new(file, file_name) {
+                Ok(analyser) => analyser,
+                Err(err) => {
+                    let ext = Utf8Path::new(file_name.as_str())
+                        .extension()
+                        .unwrap_or_default();
+                    if ext.eq_ignore_ascii_case("zip") {
+                        warn!(url = %url, error = %err, "Skipping zip with no valid installer files");
+                        return Ok(None);
+                    }
+                    return Err(err);
+                }
+            };
             let architecture = url
                 .override_architecture()
                 .or_else(|| Architecture::from_url(url.as_str()));
-            for installer in &mut file_analyzer.installers {
+            for installer in &mut file_analyser.installers {
                 if let Some(architecture) = architecture {
                     installer.architecture = architecture;
                 }
@@ -36,11 +49,12 @@ pub async fn process_files(
                 installer.sha_256 = sha_256.clone();
                 installer.release_date = *last_modified;
             }
-            file_analyzer.file_name = mem::take(file_name);
-            Ok((mem::take(url.inner_mut()), file_analyzer))
+            file_analyser.file_name = mem::take(file_name);
+            Ok(Some((mem::take(url.inner_mut()), file_analyser)))
         },
     ))
     .buffer_unordered(num_cpus::get())
+    .try_filter_map(|opt| async move { Ok(opt) })
     .try_collect::<HashMap<_, _>>()
     .await
 }
