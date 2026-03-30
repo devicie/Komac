@@ -287,6 +287,7 @@ pub async fn resolve(
 
     let mut found: Option<CachedGithubRelease> = None;
     let mut prerelease_fallback: Option<CachedGithubRelease> = None;
+    let mut had_channel_match = false;
 
     for release in releases {
         if release.draft {
@@ -322,6 +323,8 @@ pub async fn resolve(
                 );
                 continue;
             }
+        } else {
+            had_channel_match = true;
         }
 
         let Some(package_version) = package_version_from_tag(tag) else {
@@ -409,7 +412,16 @@ pub async fn resolve(
         prerelease_fallback = Some(candidate);
     }
 
-    let cached_release = found.or(prerelease_fallback).ok_or_else(|| {
+    // Only use the prerelease fallback when no release matched the target channel at all
+    // (e.g. a repo that marks every release as prerelease). If channel-matching releases
+    // existed but had no Windows assets, return an error instead of falling back to an
+    // older prerelease that happens to have assets.
+    let cached_release = if had_channel_match {
+        found
+    } else {
+        found.or(prerelease_fallback)
+    }
+    .ok_or_else(|| {
         let diag_msg = format!(
             "total_releases={}, non_draft={}, \
             skipped_draft={}, skipped_channel_mismatch={}, \
