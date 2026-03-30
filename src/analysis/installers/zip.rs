@@ -77,8 +77,8 @@ impl<R: Read + Seek> Zip<R> {
         let chosen_file_name = if possible_installer_files.len() == 1 {
             possible_installer_files.first()
         } else if exe_candidates.len() > 1 && !has_non_exe_candidates {
-            // For ZIPs containing only portable EXEs, use the first one by archive order.
-            exe_candidates.first().copied()
+            // For ZIPs containing only portable EXEs, pick the one with the fewest folder levels.
+            exe_candidates.iter().copied().min_by_key(|p| p.components().count())
         } else {
             None
         };
