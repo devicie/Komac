@@ -4,7 +4,7 @@ pub mod sourceforge;
 pub mod vanity_url;
 
 use clap::ValueEnum;
-use color_eyre::eyre::{Result, bail};
+use color_eyre::eyre::Result;
 use winget_types::{
     PackageIdentifier, PackageVersion,
     url::{DecodedUrl, ReleaseNotesUrl},
@@ -30,7 +30,7 @@ pub enum AutoUpdateStrategy {
 }
 
 impl AutoUpdateStrategy {
-    const ORDER: [Self; 3] = [Self::GithubReleases, Self::SourceForge, Self::VanityUrl];
+    const AUTO_STRATEGIES: [Self; 2] = [Self::GithubReleases, Self::SourceForge];
 
     pub async fn resolve(
         github: &GitHub,
@@ -55,7 +55,7 @@ impl AutoUpdateStrategy {
             .map_err(Into::into);
         }
 
-        for strategy in Self::ORDER {
+        for strategy in Self::AUTO_STRATEGIES {
             match Self::resolve_with(
                 strategy,
                 github,
@@ -78,7 +78,7 @@ impl AutoUpdateStrategy {
             }
         }
 
-        bail!("No autoupdate strategy matched URL: {source_url}")
+        Err(StrategyResolveError::NoStrategyMatched(source_url.to_string()).into())
     }
 
     async fn resolve_with(
@@ -91,9 +91,11 @@ impl AutoUpdateStrategy {
         state: Option<&str>,
     ) -> Result<UpdateVersionStrategyResult, StrategyResolveError> {
         match strategy {
-            Self::GithubReleases => github_releases::resolve(github, source_url)
-                .await
-                .map_err(StrategyResolveError::GithubReleases),
+            Self::GithubReleases => {
+                github_releases::resolve(github, package_identifier, source_url)
+                    .await
+                    .map_err(StrategyResolveError::GithubReleases)
+            }
             Self::SourceForge => {
                 sourceforge::resolve(github, package_identifier, latest_version, source_url)
                     .await
@@ -121,4 +123,6 @@ enum StrategyResolveError {
     SourceForge(#[from] sourceforge::SourceForgeError),
     #[error(transparent)]
     VanityUrl(#[from] vanity_url::VanityUrlError),
+    #[error("No autoupdate strategy matched URL: {0}")]
+    NoStrategyMatched(String),
 }
