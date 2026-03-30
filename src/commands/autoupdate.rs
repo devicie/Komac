@@ -1,15 +1,17 @@
 use std::{
     collections::{HashMap, HashSet},
     num::{NonZeroU32, NonZeroUsize},
+    sync::Arc,
 };
 
 use camino::Utf8PathBuf;
 use clap::Parser;
 use color_eyre::eyre::{Result, WrapErr, bail, ensure};
 use futures_util::{StreamExt, stream};
-use serde::{Deserialize, Deserializer, de::Error as DeError};
+use serde::{Deserialize, Deserializer, Serialize, de::Error as DeError};
 use tokio::fs;
-use tracing::{error, info};
+use tokio::sync::Mutex;
+use tracing::{error, info, warn};
 use winget_types::{PackageIdentifier, PackageVersion, url::DecodedUrl};
 
 use crate::{
@@ -17,6 +19,98 @@ use crate::{
     github::client::GitHub,
     token::TokenManager,
 };
+
+const NO_STRATEGY_CACHE_FILE_PATH: &str = ".komac/autoupdate/no_strategy_cache.json";
+
+#[derive(Clone, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
+struct NoStrategyCacheKey {
+    package_identifier: String,
+}
+
+#[derive(Default, Serialize, Deserialize)]
+struct NoStrategyCacheFile {
+    entries: Vec<NoStrategyCacheKey>,
+}
+
+#[derive(Default)]
+struct NoStrategyCache {
+    entries: HashSet<NoStrategyCacheKey>,
+    is_dirty: bool,
+}
+
+impl NoStrategyCache {
+    async fn load() -> Result<Self> {
+        let path = Utf8PathBuf::from(NO_STRATEGY_CACHE_FILE_PATH);
+        let content = match fs::read_to_string(&path).await {
+            Ok(content) => content,
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+                return Ok(Self::default());
+            }
+            Err(error) => {
+                return Err(error)
+                    .wrap_err_with(|| format!("Failed to read no-strategy cache at {path}"));
+            }
+        };
+
+        let parsed = match serde_json::from_str::<NoStrategyCacheFile>(&content) {
+            Ok(parsed) => parsed,
+            Err(error) => {
+                warn!(
+                    path = %path,
+                    error = %error,
+                    "Failed to parse no-strategy cache JSON; ignoring cache file"
+                );
+                return Ok(Self::default());
+            }
+        };
+
+        Ok(Self {
+            entries: parsed.entries.into_iter().collect(),
+            is_dirty: false,
+        })
+    }
+
+    fn contains(&self, package_identifier: &PackageIdentifier) -> bool {
+        self.entries.contains(&NoStrategyCacheKey {
+            package_identifier: package_identifier.to_string(),
+        })
+    }
+
+    fn insert(&mut self, package_identifier: &PackageIdentifier) {
+        if self.entries.insert(NoStrategyCacheKey {
+            package_identifier: package_identifier.to_string(),
+        }) {
+            self.is_dirty = true;
+        }
+    }
+
+    async fn persist_if_dirty(&mut self) -> Result<()> {
+        if !self.is_dirty {
+            return Ok(());
+        }
+
+        let path = Utf8PathBuf::from(NO_STRATEGY_CACHE_FILE_PATH);
+        if let Some(parent) = path.parent() {
+            fs::create_dir_all(parent)
+                .await
+                .wrap_err_with(|| format!("Failed to create cache directory {parent}"))?;
+        }
+
+        let mut entries = self.entries.iter().cloned().collect::<Vec<_>>();
+        entries
+            .sort_unstable_by(|left, right| left.package_identifier.cmp(&right.package_identifier));
+
+        let serialized = serde_json::to_string_pretty(&NoStrategyCacheFile { entries })
+            .wrap_err("Failed to serialize no-strategy cache")?;
+
+        fs::write(&path, format!("{serialized}\n"))
+            .await
+            .wrap_err_with(|| format!("Failed to write no-strategy cache at {path}"))?;
+
+        self.is_dirty = false;
+        Ok(())
+    }
+}
 
 /// Auto-detect update parameters from an upstream source URL and run update
 #[derive(Parser)]
@@ -32,9 +126,13 @@ pub struct AutoUpdate {
     #[arg(long, value_hint = clap::ValueHint::FilePath)]
     recipes: Option<Utf8PathBuf>,
 
-    /// File containing newline-separated package identifiers to skip
+    /// File containing newline-separated package identifier substrings to skip (matches on contains)
     #[arg(long = "exclude-file", value_name = "FILE", value_hint = clap::ValueHint::FilePath)]
     exclude_files: Vec<Utf8PathBuf>,
+
+    /// Restrict processing to a single first-letter manifest folder (for example, 'c' -> manifests/c)
+    #[arg(long = "letter", alias = "start-with", value_name = "LETTER")]
+    letter: Option<char>,
 
     /// Explicit strategy to use (otherwise auto-detected from URL)
     #[arg(long, value_enum)]
@@ -99,25 +197,39 @@ pub struct AutoUpdate {
 
 impl AutoUpdate {
     pub async fn run(self) -> Result<()> {
-        let excluded_packages = read_excluded_package_identifiers(&self.exclude_files).await?;
+        let excluded_substrings = read_excluded_substrings(&self.exclude_files).await?;
 
         if !self.exclude_files.is_empty() {
             info!(
                 files = self.exclude_files.len(),
-                count = excluded_packages.len(),
+                count = excluded_substrings.len(),
                 "Loaded package exclusions from files"
             );
         }
 
-        if !excluded_packages.is_empty() {
+        if !excluded_substrings.is_empty() {
             info!(
-                count = excluded_packages.len(),
-                "Applying package exclusions"
+                count = excluded_substrings.len(),
+                "Applying package exclusions (substring match)"
+            );
+        }
+
+        if let Some(letter) = self.letter {
+            info!(
+                letter = letter.to_string(),
+                "Restricting package scan to this letter"
             );
         }
 
         let token = TokenManager::handle(self.token.as_deref()).await?;
         let github = GitHub::new(&token)?;
+        let no_strategy_cache = Arc::new(Mutex::new(NoStrategyCache::load().await?));
+
+        info!(
+            count = no_strategy_cache.lock().await.entries.len(),
+            path = NO_STRATEGY_CACHE_FILE_PATH,
+            "Loaded no-strategy cache entries"
+        );
 
         if let Some(recipes_file) = self.recipes.as_ref() {
             let mut file_content = fs::read_to_string(recipes_file)
@@ -127,7 +239,9 @@ impl AutoUpdate {
             let total_recipe_entries = recipes.len();
             let recipes = recipes
                 .into_iter()
-                .filter(|(package_identifier, _)| !excluded_packages.contains(package_identifier))
+                .filter(|(package_identifier, _)| {
+                    !is_package_excluded(package_identifier, &excluded_substrings, self.letter)
+                })
                 .collect::<Vec<_>>();
             let excluded_recipe_entries = total_recipe_entries.saturating_sub(recipes.len());
 
@@ -159,7 +273,9 @@ impl AutoUpdate {
                         .run_entry(
                             &github,
                             token.as_ref(),
+                            Arc::clone(&no_strategy_cache),
                             package_identifier.clone(),
+                            None,
                             sources,
                             None,
                         )
@@ -209,7 +325,9 @@ impl AutoUpdate {
                             .run_entry(
                                 &github,
                                 token.as_ref(),
+                                Arc::clone(&no_strategy_cache),
                                 package_identifier.clone(),
+                                None,
                                 sources,
                                 None,
                             )
@@ -217,7 +335,7 @@ impl AutoUpdate {
                         (package_identifier, result)
                     },
                 ))
-                .buffer_unordered(self.concurrent_downloads.get())
+                .buffer_unordered(2)
                 .collect::<Vec<_>>()
                 .await;
 
@@ -268,7 +386,7 @@ impl AutoUpdate {
         }
 
         if let Some(package_identifier) = self.package_identifier.clone() {
-            if excluded_packages.contains(&package_identifier) {
+            if is_package_excluded(&package_identifier, &excluded_substrings, self.letter) {
                 info!(
                     package = %package_identifier,
                     "Package excluded from auto-update; skipping"
@@ -276,34 +394,56 @@ impl AutoUpdate {
                 return Ok(());
             }
 
-            let sources = if let Some(url) = self.url.clone() {
-                vec![RecipeSource {
-                    url: Some(url),
-                    page: None,
-                    header: self.header.clone(),
-                    value: self.state.clone(),
-                }]
+            let (latest_version, sources) = if let Some(url) = self.url.clone() {
+                (
+                    None,
+                    vec![RecipeSource {
+                        url: Some(url),
+                        page: None,
+                        header: self.header.clone(),
+                        value: self.state.clone(),
+                    }],
+                )
             } else {
-                sources_from_manifest(&github, &package_identifier).await?
+                let (latest_version, sources) =
+                    sources_from_manifest(&github, &package_identifier).await?;
+                (Some(latest_version), sources)
             };
 
             return self
                 .run_entry(
                     &github,
                     token.as_ref(),
+                    Arc::clone(&no_strategy_cache),
                     package_identifier,
+                    latest_version,
                     sources,
-                    Some(AutoUpdateStrategy::GithubReleases),
+                    self.strategy,
                 )
                 .await
                 .map(|_| ());
         }
 
-        let package_identifiers = github.get_package_identifiers().await?;
+        info!(
+            letter = self.letter.map(|char| char.to_string()),
+            "Enumerating package identifiers from winget-pkgs"
+        );
+
+        let package_identifiers = github
+            .get_package_identifiers_for_letter(self.letter)
+            .await?;
+
+        info!(
+            count = package_identifiers.len(),
+            "Finished enumerating package identifiers"
+        );
+
         let total_packages = package_identifiers.len();
         let package_identifiers = package_identifiers
             .into_iter()
-            .filter(|package_identifier| !excluded_packages.contains(package_identifier))
+            .filter(|package_identifier| {
+                !is_package_excluded(package_identifier, &excluded_substrings, self.letter)
+            })
             .collect::<Vec<_>>();
         let excluded_count = total_packages.saturating_sub(package_identifiers.len());
 
@@ -323,13 +463,31 @@ impl AutoUpdate {
 
         if self.fail_fast {
             for package_identifier in package_identifiers {
-                let sources = sources_from_manifest(&github, &package_identifier).await?;
+                if no_strategy_cache.lock().await.contains(&package_identifier) {
+                    info!(
+                        package = %package_identifier,
+                        "Skipping package because no-strategy cache entry exists"
+                    );
+                    continue;
+                }
+
+                let latest_version =
+                    latest_version_from_manifest(&github, &package_identifier).await?;
+
+                let sources = sources_from_manifest_for_version(
+                    &github,
+                    &package_identifier,
+                    &latest_version,
+                )
+                .await?;
                 self.run_entry(
                     &github,
                     token.as_ref(),
+                    Arc::clone(&no_strategy_cache),
                     package_identifier,
+                    Some(latest_version),
                     sources,
-                    Some(AutoUpdateStrategy::GithubReleases),
+                    self.strategy,
                 )
                 .await?;
             }
@@ -338,25 +496,48 @@ impl AutoUpdate {
 
         let results = stream::iter(package_identifiers.into_iter().map(
             |package_identifier| async {
-                let sources = sources_from_manifest(&github, &package_identifier).await;
-                let result = match sources {
-                    Ok(sources) => {
-                        self.run_entry(
-                            &github,
-                            token.as_ref(),
-                            package_identifier.clone(),
-                            sources,
-                            Some(AutoUpdateStrategy::GithubReleases),
-                        )
-                        .await
+                let result = if no_strategy_cache.lock().await.contains(&package_identifier) {
+                    info!(
+                        package = %package_identifier,
+                        "Skipping package because no-strategy cache entry exists"
+                    );
+                    Ok(Vec::new())
+                } else {
+                    let latest_version =
+                        latest_version_from_manifest(&github, &package_identifier).await;
+                    match latest_version {
+                        Ok(latest_version) => {
+                            let sources = sources_from_manifest_for_version(
+                                &github,
+                                &package_identifier,
+                                &latest_version,
+                            )
+                            .await;
+
+                            match sources {
+                                Ok(sources) => {
+                                    self.run_entry(
+                                        &github,
+                                        token.as_ref(),
+                                        Arc::clone(&no_strategy_cache),
+                                        package_identifier.clone(),
+                                        Some(latest_version),
+                                        sources,
+                                        self.strategy,
+                                    )
+                                    .await
+                                }
+                                Err(error) => Err(error),
+                            }
+                        }
+                        Err(error) => Err(error),
                     }
-                    Err(error) => Err(error),
                 };
 
                 (package_identifier, result)
             },
         ))
-        .buffer_unordered(self.concurrent_downloads.get())
+        .buffer_unordered(2)
         .collect::<Vec<_>>()
         .await;
 
@@ -390,7 +571,9 @@ impl AutoUpdate {
         &self,
         github: &GitHub,
         token: &str,
+        no_strategy_cache: Arc<Mutex<NoStrategyCache>>,
         package_identifier: PackageIdentifier,
+        latest_version: Option<PackageVersion>,
         sources: Vec<RecipeSource>,
         strategy_override: Option<AutoUpdateStrategy>,
     ) -> Result<Vec<RecipeStateUpdate>> {
@@ -399,8 +582,20 @@ impl AutoUpdate {
             "No source URLs were provided for {package_identifier}"
         );
 
-        let versions = github.get_versions(&package_identifier).await?;
-        let latest_version = versions.last().unwrap_or_else(|| unreachable!());
+        if no_strategy_cache.lock().await.contains(&package_identifier) {
+            info!(
+                package = %package_identifier,
+                "Skipping package because no-strategy cache entry exists"
+            );
+            return Ok(Vec::new());
+        }
+
+        let latest_version = if let Some(version) = latest_version {
+            version
+        } else {
+            let versions = github.get_versions(&package_identifier).await?;
+            versions.last().cloned().unwrap_or_else(|| unreachable!())
+        };
 
         let mut package_version = None;
         let mut resolved_urls = Vec::new();
@@ -411,7 +606,7 @@ impl AutoUpdate {
 
         for source in sources {
             let strategy_result = if let Some(page_url) = &source.page {
-                crate::commands::strategies::html_page::resolve(latest_version, page_url).await?
+                crate::commands::strategies::html_page::resolve(&latest_version, page_url).await?
             } else {
                 let source_url = source.url.as_ref().unwrap_or_else(|| unreachable!());
                 let effective_header = source.header.as_deref().or(self.header.as_deref());
@@ -425,13 +620,63 @@ impl AutoUpdate {
                 let result = AutoUpdateStrategy::resolve(
                     github,
                     &package_identifier,
-                    latest_version,
+                    &latest_version,
                     source_url,
                     strategy_override.or(self.strategy),
                     effective_header,
                     effective_value,
                 )
-                .await?;
+                .await;
+
+                let result = match result {
+                    Ok(result) => result,
+                    Err(error) => {
+                        let error_msg = error.to_string();
+                        if error_msg.contains("No autoupdate strategy matched") {
+                            let mut cache = no_strategy_cache.lock().await;
+                            cache.insert(&package_identifier);
+                            cache.persist_if_dirty().await?;
+
+                            tracing::warn!(
+                                package = %package_identifier,
+                                latest_version = %latest_version,
+                                url = %source_url,
+                                "No autoupdate strategy matched; cached and skipping"
+                            );
+                            return Ok(Vec::new());
+                        }
+
+                        tracing::error!(
+                            package = %package_identifier,
+                            url = %source_url,
+                            error = %error,
+                            "Strategy resolution failed"
+                        );
+
+                        // Keep troubleshooting hints at debug level so normal info output stays concise.
+                        if error_msg.contains("No suitable release found") {
+                            tracing::debug!(
+                                package = %package_identifier,
+                                url = %source_url,
+                                "Hint: release tags may not be parseable semver; consider vanity_url/html_page strategy or channel-specific package"
+                            );
+                        } else if error_msg.contains("HTTP status client error (404") {
+                            tracing::debug!(
+                                package = %package_identifier,
+                                url = %source_url,
+                                "Hint: verify owner/repo path or use a non-github_releases strategy"
+                            );
+                        } else if error_msg.contains("Not a github-releases URL") {
+                            tracing::debug!(
+                                package = %package_identifier,
+                                url = %source_url,
+                                "Hint: expected github_releases source format is https://github.com/OWNER/REPO"
+                            );
+                        }
+
+                        return Err(error);
+                    }
+                };
 
                 if effective_header.is_some()
                     && let Some(observed_state) = result.observed_state.clone()
@@ -481,7 +726,7 @@ impl AutoUpdate {
             return Ok(Vec::new());
         }
 
-        if !skip_version_check && package_version <= *latest_version {
+        if !skip_version_check && package_version <= latest_version {
             info!(
                 package = %package_identifier,
                 latest_version = %latest_version,
@@ -497,10 +742,21 @@ impl AutoUpdate {
             Some(package_version)
         };
 
+        // Sort URLs: non-zip files alphabetically, then zip files alphabetically
+        let (mut non_zip_urls, mut zip_urls): (Vec<_>, Vec<_>) = resolved_urls
+            .into_iter()
+            .partition(|url| !url.as_str().ends_with(".zip"));
+
+        non_zip_urls.sort_by(|a, b| a.as_str().cmp(b.as_str()));
+        zip_urls.sort_by(|a, b| a.as_str().cmp(b.as_str()));
+
+        non_zip_urls.extend(zip_urls);
+        let sorted_urls = non_zip_urls;
+
         UpdateVersion {
             package_identifier,
             package_version: update_package_version,
-            urls: resolved_urls,
+            urls: sorted_urls,
             files: Vec::new(),
             concurrent_downloads: self.concurrent_downloads,
             resolves: self.resolves.clone(),
@@ -522,48 +778,59 @@ impl AutoUpdate {
     }
 }
 
-async fn read_excluded_package_identifiers(
-    files: &[Utf8PathBuf],
-) -> Result<HashSet<PackageIdentifier>> {
-    let mut excluded_packages = HashSet::new();
+fn is_package_excluded(
+    package_identifier: &PackageIdentifier,
+    excluded_substrings: &[String],
+    letter: Option<char>,
+) -> bool {
+    let id_str = package_identifier.as_str();
+    let id_lower = id_str.to_lowercase();
+
+    // Restrict processing to a single first-letter bucket when requested.
+    if let Some(letter) = letter {
+        let first_char = id_lower.chars().next().unwrap_or('a');
+        if first_char != letter.to_lowercase().next().unwrap_or('a') {
+            return true;
+        }
+    }
+
+    // Check if matches any excluded substring
+    excluded_substrings
+        .iter()
+        .any(|substring| id_lower.contains(&substring.to_lowercase()))
+}
+
+async fn read_excluded_substrings(files: &[Utf8PathBuf]) -> Result<Vec<String>> {
+    let mut excluded_substrings = Vec::new();
 
     for file in files {
         let file_content = fs::read_to_string(file)
             .await
             .wrap_err_with(|| format!("Failed to read exclusion file {file}"))?;
 
-        let parsed = parse_excluded_package_identifiers(&file_content)
+        let parsed = parse_excluded_substrings(&file_content)
             .wrap_err_with(|| format!("Failed to parse exclusion file {file}"))?;
 
-        excluded_packages.extend(parsed);
+        excluded_substrings.extend(parsed);
     }
 
-    Ok(excluded_packages)
+    Ok(excluded_substrings)
 }
 
-fn parse_excluded_package_identifiers(file_content: &str) -> Result<HashSet<PackageIdentifier>> {
-    let mut excluded_packages = HashSet::new();
+fn parse_excluded_substrings(file_content: &str) -> Result<Vec<String>> {
+    let mut excluded_substrings = Vec::new();
 
-    for (line_number, line) in file_content.lines().enumerate() {
+    for line in file_content.lines() {
         let trimmed_line = line.trim();
 
         if trimmed_line.is_empty() || trimmed_line.starts_with('#') {
             continue;
         }
 
-        let package_identifier = trimmed_line
-            .parse::<PackageIdentifier>()
-            .wrap_err_with(|| {
-                format!(
-                    "Invalid package identifier on line {}: {trimmed_line}",
-                    line_number + 1
-                )
-            })?;
-
-        excluded_packages.insert(package_identifier);
+        excluded_substrings.push(trimmed_line.to_string());
     }
 
-    Ok(excluded_packages)
+    Ok(excluded_substrings)
 }
 
 #[derive(Debug, Clone)]
@@ -614,10 +881,26 @@ impl RecipeSource {
 async fn sources_from_manifest(
     github: &GitHub,
     package_identifier: &PackageIdentifier,
-) -> Result<Vec<RecipeSource>> {
-    let versions = github.get_versions(package_identifier).await?;
-    let latest_version = versions.last().unwrap_or_else(|| unreachable!());
+) -> Result<(PackageVersion, Vec<RecipeSource>)> {
+    let latest_version = latest_version_from_manifest(github, package_identifier).await?;
+    let sources =
+        sources_from_manifest_for_version(github, package_identifier, &latest_version).await?;
+    Ok((latest_version, sources))
+}
 
+async fn latest_version_from_manifest(
+    github: &GitHub,
+    package_identifier: &PackageIdentifier,
+) -> Result<PackageVersion> {
+    let versions = github.get_versions(package_identifier).await?;
+    Ok(versions.last().cloned().unwrap_or_else(|| unreachable!()))
+}
+
+async fn sources_from_manifest_for_version(
+    github: &GitHub,
+    package_identifier: &PackageIdentifier,
+    latest_version: &PackageVersion,
+) -> Result<Vec<RecipeSource>> {
     let manifests = github
         .get_manifests(package_identifier, latest_version)
         .await?;
@@ -801,7 +1084,7 @@ fn escape_yaml_string(value: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::{
-        RecipeStateUpdate, escape_yaml_string, parse_excluded_package_identifiers, parse_recipes,
+        RecipeStateUpdate, escape_yaml_string, parse_excluded_substrings, parse_recipes,
         update_recipe_state_values,
     };
     use winget_types::{PackageIdentifier, url::DecodedUrl};
@@ -897,30 +1180,32 @@ Microsoft.GlobalSecureAccessClient:
     }
 
     #[test]
-    fn parses_excluded_package_identifiers_from_lines() {
+    fn parses_excluded_substrings_from_lines() {
         let content = r#"
 # comment
 Example.Package
 
 Another.Package
-Example.Package
 "#;
 
-        let excluded = parse_excluded_package_identifiers(content).unwrap();
+        let excluded = parse_excluded_substrings(content).unwrap();
 
         assert_eq!(excluded.len(), 2);
-        assert!(excluded.iter().any(|id| id.as_str() == "Example.Package"));
-        assert!(excluded.iter().any(|id| id.as_str() == "Another.Package"));
+        assert!(excluded.iter().any(|s| s == "Example.Package"));
+        assert!(excluded.iter().any(|s| s == "Another.Package"));
     }
 
     #[test]
-    fn fails_for_invalid_excluded_package_identifier() {
-        let content = "Valid.Package\nnot a valid id\n";
+    fn parses_excluded_substrings_for_substring_match() {
+        let content = r#"
+beta
+alpha.rc
+"#;
 
-        let error = parse_excluded_package_identifiers(content)
-            .unwrap_err()
-            .to_string();
+        let excluded = parse_excluded_substrings(content).unwrap();
 
-        assert!(error.contains("Invalid package identifier on line 2"));
+        assert_eq!(excluded.len(), 2);
+        assert!(excluded.iter().any(|s| s == "beta"));
+        assert!(excluded.iter().any(|s| s == "alpha.rc"));
     }
 }
