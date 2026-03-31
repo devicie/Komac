@@ -70,6 +70,17 @@ async fn main() -> Result<()> {
 
 fn setup_logging() {
     let indicatif_layer = IndicatifLayer::new();
+    let env_filter = EnvFilter::builder()
+        .with_default_directive(LevelFilter::INFO.into())
+        .from_env_lossy();
+
+    // Respect RUST_LOG when provided. Only add a crate directive when no
+    // explicit env filter is set.
+    let env_filter = if std::env::var_os("RUST_LOG").is_some() {
+        env_filter
+    } else {
+        env_filter.add_directive(format!("{}=info", crate_name!()).parse().unwrap())
+    };
 
     tracing_subscriber::registry()
         .with(
@@ -79,12 +90,7 @@ fn setup_logging() {
                 .without_time(),
         )
         .with(indicatif_layer)
-        .with(
-            EnvFilter::builder()
-                .with_default_directive(LevelFilter::INFO.into())
-                .from_env_lossy()
-                .add_directive(format!("{}=trace", crate_name!()).parse().unwrap()),
-        )
+        .with(env_filter)
         .init();
 }
 
