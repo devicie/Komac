@@ -1,0 +1,92 @@
+# Updated by vendor
+Ablaze.Floorp
+
+# Retired channels
+CondaForge.Mambaforge
+CondaForge.Miniforge3.PyPy3
+buxuku.SmartSub.
+
+# Channels
+AdoptOpenJDK.OpenJDK.
+BrechtSanders.WinLibs.
+BellSoft.LibericaNIK.
+BtbN.FFmpeg.
+Aptivi.Nitrocid.0.1.0.x
+FirebirdProject.Firebird.3
+FirebirdProject.Firebird.4
+
+# Interactive only
+# TODO remove dupe
+Bloret.Launcher
+Bloret.BloretLauncher
+
+# Installer unsupported by winget
+# CMU.Alice
+donkrage.regpack
+
+# One-to-many with split releases
+Bitwarden.
+davidegiacometti.EdgeFavoritesForCmdPal
+davidegiacometti.VisualStudioForCmdPal
+
+# Doesn't use releases
+# DavidAnson.TextAnalysisToolNET
+
+# Tag doesn't contain version
+ArtemChepurnyi.Keyguard
+# Corona.Solar2D
+
+# we should exclude specific versions or patters, like -beta
+# AlekseyHoffman.Sigma-File-Manager
+# Aptivi.Nitrocid.0.1.0.x
+# ArtemChepurnyi.Keyguard
+# Authpass.Authpass
+# AzaharPlus.AzaharPlus
+# Bitwarden.CLI
+# Bitwarden.Bitwarden
+
+# beta version marked as latest
+# awawa-dev.HyperHDR
+
+
+# all prereleases
+# arghena.katharsis
+# arjun-g.google-meet-desktop
+
+# CleverRaven.CataclysmDarkDaysAhead
+
+# buxuku.SmartSub.CPU
+# buxuku.SmartSub.CUDA.
+# anatawa12.ALCOM
+# CondaForge.Mambaforge
+# CondaForge.Miniforge3.PyPy3
+# ClipTeam.ClipCC.Beta
+# CollapseLauncher.Collapse.Preview
+# CozyCloud.CozyDrive.Beta
+# Coq.CoqPlatform.Beta
+# Cyanfish.NAPS2.Prerelease
+# DevProxy.DevProxy.Beta
+# Duplicati.Duplicati.Beta
+
+# one-to-many
+# ahmetb.kubectx
+
+
+
+# version format
+# CNRISTI.RelightLab
+# Cockatrice.Cockatrice
+# CollapseLauncher.Collapse
+# Corona.Solar2D
+# Cosine.CLI
+# CumulusMX.CumulusMX
+# cangzhang.champ-r
+# bluecfd.bluecfd
+# DynamoRIO.drmemory
+
+
+# TODO inno '{cm:app_name}' becomes app name
+# TODO inno '{code:getsetup}
+# TODO benaclejames.VRCFaceTracking
+# TODO analyse https://github.com/chen-qingyu/bf/releases/download/v1.1.1/bf-1.1.1-win64.exe
+# inno v{code:getSetupVersion|1.27.162+3c4d5ceeb3} bcssov.IronyModManager
