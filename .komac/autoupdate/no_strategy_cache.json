@@ -1,0 +1,8353 @@
+{
+  "entries": [
+    {
+      "package_identifier": "115.115Chrome"
+    },
+    {
+      "package_identifier": "123.123pan"
+    },
+    {
+      "package_identifier": "1IC.BPMN-RPAStudio"
+    },
+    {
+      "package_identifier": "1sj.rrysj"
+    },
+    {
+      "package_identifier": "2BrightSparks.SyncBackFree"
+    },
+    {
+      "package_identifier": "2BrightSparks.SyncBackPro"
+    },
+    {
+      "package_identifier": "2BrightSparks.SyncBackSE"
+    },
+    {
+      "package_identifier": "2BrightSparks.UndeleteOnClick"
+    },
+    {
+      "package_identifier": "34u.MultiBaseCSBirdBase"
+    },
+    {
+      "package_identifier": "34u.MultiBaseCSHome"
+    },
+    {
+      "package_identifier": "34u.MultiBaseCSProfessional"
+    },
+    {
+      "package_identifier": "34u.MultiBaseCSServer"
+    },
+    {
+      "package_identifier": "360.360AlbumViewer"
+    },
+    {
+      "package_identifier": "360.360Chrome"
+    },
+    {
+      "package_identifier": "360.360Chrome.X"
+    },
+    {
+      "package_identifier": "360.360CleanMaster"
+    },
+    {
+      "package_identifier": "360.360DesktopLite"
+    },
+    {
+      "package_identifier": "360.360DocProtect"
+    },
+    {
+      "package_identifier": "360.360Ent"
+    },
+    {
+      "package_identifier": "360.360File"
+    },
+    {
+      "package_identifier": "360.360GT"
+    },
+    {
+      "package_identifier": "360.360SE"
+    },
+    {
+      "package_identifier": "360.360VirtualVault"
+    },
+    {
+      "package_identifier": "360.360Zip"
+    },
+    {
+      "package_identifier": "360.NamiAI"
+    },
+    {
+      "package_identifier": "360.NamiClaw"
+    },
+    {
+      "package_identifier": "360.PalmInput"
+    },
+    {
+      "package_identifier": "3CX.CallFlowDesigner"
+    },
+    {
+      "package_identifier": "3CX.MultilineTAPI"
+    },
+    {
+      "package_identifier": "3CX.PhoneSystem"
+    },
+    {
+      "package_identifier": "3CX.Softphone"
+    },
+    {
+      "package_identifier": "3DVista.VirtualTour"
+    },
+    {
+      "package_identifier": "3Dconnexion.3DxWare.10"
+    },
+    {
+      "package_identifier": "3Dflow.3DFZephyr.Free"
+    },
+    {
+      "package_identifier": "3TSoftwareLabs.Studio3T"
+    },
+    {
+      "package_identifier": "3d-io.Exr-IO"
+    },
+    {
+      "package_identifier": "4tNiagaraSoftware.4tTrayMinimizer"
+    },
+    {
+      "package_identifier": "5E.5EClient"
+    },
+    {
+      "package_identifier": "7S2P.Effie"
+    },
+    {
+      "package_identifier": "7S2P.Effie.CN"
+    },
+    {
+      "package_identifier": "7zip.7zip"
+    },
+    {
+      "package_identifier": "7zip.7zr"
+    },
+    {
+      "package_identifier": "8BitDo.UltimateSoftwareV2"
+    },
+    {
+      "package_identifier": "8x8.QualityManagement"
+    },
+    {
+      "package_identifier": "8x8.Work"
+    },
+    {
+      "package_identifier": "A-SIT.PDF-Over"
+    },
+    {
+      "package_identifier": "AAAInternetPublishing.WTFast"
+    },
+    {
+      "package_identifier": "AAS.WorldWideTelescope"
+    },
+    {
+      "package_identifier": "AB0WV.PinPoint"
+    },
+    {
+      "package_identifier": "ABB.RobotStudio"
+    },
+    {
+      "package_identifier": "ABB.e-Design"
+    },
+    {
+      "package_identifier": "ABB.i-busTool"
+    },
+    {
+      "package_identifier": "ABC.ABCEBankAssistant"
+    },
+    {
+      "package_identifier": "ABC.PowerExtension"
+    },
+    {
+      "package_identifier": "ACDSystems.ACDSee.Free"
+    },
+    {
+      "package_identifier": "ACDSystems.ACDSeeGemstone"
+    },
+    {
+      "package_identifier": "ACDSystems.ACDSeePhotoStudio.Home"
+    },
+    {
+      "package_identifier": "ACDSystems.ACDSeePhotoStudio.Professional"
+    },
+    {
+      "package_identifier": "ACDSystems.ACDSeePhotoStudio.Ultimate"
+    },
+    {
+      "package_identifier": "ACEStudio.ACEStudio"
+    },
+    {
+      "package_identifier": "ACROSSecurity.0patch"
+    },
+    {
+      "package_identifier": "ACS.CCIDPCSCDriver"
+    },
+    {
+      "package_identifier": "ACS.UnifiedPCSCDriver"
+    },
+    {
+      "package_identifier": "ADATA.SSDToolbox"
+    },
+    {
+      "package_identifier": "ADInstruments.ConfigSoft"
+    },
+    {
+      "package_identifier": "ADInstruments.GLPClient"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.DeviceEnabler.BloodFlowMeter"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.DeviceEnabler.CODA"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.DeviceEnabler.Equivital"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.DeviceEnabler.HumanNIBP"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.DeviceEnabler.Kent"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.DeviceEnabler.OxfordOptronix"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.DeviceEnabler.PhysioTelConnect"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.DeviceEnabler.PlaybackFile"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.DeviceEnabler.TrignoWireless"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.DeviceEnabler.WiiBalanceBoard"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.AudioOutput"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.CardiacAxis"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.EventManager"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.ExportQuickTime"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.FastResponseOutput"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.GlucoseCalibration"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.MultipointCalibration"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.NICO"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.Scheduler"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.Spirometry"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Extension.Telegraph"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.BloodPressure"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.CardiacOutput"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.DMTNormalization"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.DoseResponse"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.ECGAnalysis"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.HRV"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.Metabolic"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.PVLoop"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.PeakAnalysis"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.SpikeHistogram"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChart.Module.VideoCapture"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChartLightning"
+    },
+    {
+      "package_identifier": "ADInstruments.LabChartReader"
+    },
+    {
+      "package_identifier": "ADInstruments.LtSampling"
+    },
+    {
+      "package_identifier": "ADInstruments.kuraCloudDesktop"
+    },
+    {
+      "package_identifier": "AETEurope.SafeSignICMiniDriver"
+    },
+    {
+      "package_identifier": "AETEurope.SafeSignICStandard"
+    },
+    {
+      "package_identifier": "AETMobileB.V.ZORG-IDDesktopApp"
+    },
+    {
+      "package_identifier": "AFAS.ProfitCommunicationCenter.1"
+    },
+    {
+      "package_identifier": "AFAS.ProfitCommunicationCenter.6"
+    },
+    {
+      "package_identifier": "AGFEO.AGFEODashboard"
+    },
+    {
+      "package_identifier": "AGProjects.Blink"
+    },
+    {
+      "package_identifier": "AGTEK.Gradework"
+    },
+    {
+      "package_identifier": "AGTEK.MaterialsSA"
+    },
+    {
+      "package_identifier": "AGTEK.Reveal"
+    },
+    {
+      "package_identifier": "AGTEK.RevealClassify"
+    },
+    {
+      "package_identifier": "AGTEK.Trackwork"
+    },
+    {
+      "package_identifier": "AGTEK.UndergroundSA"
+    },
+    {
+      "package_identifier": "AHS.HanakumaChifuyu"
+    },
+    {
+      "package_identifier": "AHS.KoharuRikka"
+    },
+    {
+      "package_identifier": "AHS.NatsukiKarin"
+    },
+    {
+      "package_identifier": "AHS.TohokuItako"
+    },
+    {
+      "package_identifier": "AHS.TohokuKiritan"
+    },
+    {
+      "package_identifier": "AHS.TohokuZunko"
+    },
+    {
+      "package_identifier": "AHS.TsurumakiMaki"
+    },
+    {
+      "package_identifier": "AHS.TsurumakiMakiJPN"
+    },
+    {
+      "package_identifier": "AIMP.AIMP"
+    },
+    {
+      "package_identifier": "AJA.RetailInstaller"
+    },
+    {
+      "package_identifier": "ALCPU.CoreTemp"
+    },
+    {
+      "package_identifier": "ALE.Rainbow"
+    },
+    {
+      "package_identifier": "ALTEC.AltecDataPrint"
+    },
+    {
+      "package_identifier": "ALTEC.QlickPrint"
+    },
+    {
+      "package_identifier": "AMD.AMDSoftwareCloudEdition"
+    },
+    {
+      "package_identifier": "AMSSoftware.BusinessCardMaker"
+    },
+    {
+      "package_identifier": "AMSSoftware.Clipify"
+    },
+    {
+      "package_identifier": "AMSSoftware.InteriorDesign3D"
+    },
+    {
+      "package_identifier": "AMSSoftware.PassportPhotoMaker"
+    },
+    {
+      "package_identifier": "AMSSoftware.PhoenixFileRescue"
+    },
+    {
+      "package_identifier": "AMSSoftware.PhotoCalendarCreator"
+    },
+    {
+      "package_identifier": "AMSSoftware.PhotoDiva"
+    },
+    {
+      "package_identifier": "AMSSoftware.PhotoWorks"
+    },
+    {
+      "package_identifier": "AMustInEveryOffice.ASAPUtilities.Business"
+    },
+    {
+      "package_identifier": "AMustInEveryOffice.ASAPUtilities.HomeStudent"
+    },
+    {
+      "package_identifier": "AOMEI.Backupper.Standard"
+    },
+    {
+      "package_identifier": "AOMEI.PartitionAssistant"
+    },
+    {
+      "package_identifier": "AOMEI.PartitionAssistant.ARM64"
+    },
+    {
+      "package_identifier": "APIDocumentation.Scalar"
+    },
+    {
+      "package_identifier": "ASIX.AX88179DriverSetup"
+    },
+    {
+      "package_identifier": "ATLauncher.ATLauncher"
+    },
+    {
+      "package_identifier": "ATNSOFT.KeyManager"
+    },
+    {
+      "package_identifier": "ATNSOFT.KeyRemapper"
+    },
+    {
+      "package_identifier": "ATNSOFT.TextPaster"
+    },
+    {
+      "package_identifier": "AVer.AVerTouch"
+    },
+    {
+      "package_identifier": "AWP.AtlantisWordProcessor"
+    },
+    {
+      "package_identifier": "AWP.AtlantisWordProcessorLite"
+    },
+    {
+      "package_identifier": "AXIS.AXISDeviceManager"
+    },
+    {
+      "package_identifier": "AXIS.AxisDeviceCompatibilityTool"
+    },
+    {
+      "package_identifier": "AXIS.AxisIPUtility"
+    },
+    {
+      "package_identifier": "AXIS.AxisStreamingAssistant.x64"
+    },
+    {
+      "package_identifier": "AXIS.AxisStreamingAssistant.x86"
+    },
+    {
+      "package_identifier": "Aardappel.Cube"
+    },
+    {
+      "package_identifier": "Abacus.AbaClient"
+    },
+    {
+      "package_identifier": "Abbott.LibreViewDeviceDrivers"
+    },
+    {
+      "package_identifier": "Abelssoft.SSDFresh"
+    },
+    {
+      "package_identifier": "Abelssoft.YouTubeSongDownloader"
+    },
+    {
+      "package_identifier": "Ability.AbilityOffice.10.Professional"
+    },
+    {
+      "package_identifier": "Ability.AbilityOffice.10.Standard"
+    },
+    {
+      "package_identifier": "Ability.AbilityOffice.8.Professional"
+    },
+    {
+      "package_identifier": "Ability.AbilityOffice.8.Standard"
+    },
+    {
+      "package_identifier": "AbleWord.AbleWord"
+    },
+    {
+      "package_identifier": "Ableton.AbletonLive10Suite"
+    },
+    {
+      "package_identifier": "AcFun.ARLiveForAcfunLive"
+    },
+    {
+      "package_identifier": "AcFun.AcFunVirtualTool"
+    },
+    {
+      "package_identifier": "AceBIT.PasswordDepot.18"
+    },
+    {
+      "package_identifier": "AceBIT.PasswordDepot.18.Corporate"
+    },
+    {
+      "package_identifier": "AceBIT.PasswordDepotEnterpriseServer.18"
+    },
+    {
+      "package_identifier": "Acer.AutoDetectSerialNumber"
+    },
+    {
+      "package_identifier": "Acqusys.Taskeract"
+    },
+    {
+      "package_identifier": "AcroSoftware.CutePDFWriter"
+    },
+    {
+      "package_identifier": "Acronis.CyberProtectHomeOffice"
+    },
+    {
+      "package_identifier": "Actifile.ActifileAgent"
+    },
+    {
+      "package_identifier": "ActiveDatabaseSoftware.FlySpeedSQLQuery"
+    },
+    {
+      "package_identifier": "ActiveDirectoryPro.365ProToolkit"
+    },
+    {
+      "package_identifier": "ActiveDirectoryPro.ADProToolkit"
+    },
+    {
+      "package_identifier": "ActiveState.KomodoEdit"
+    },
+    {
+      "package_identifier": "ActiveState.KomodoIDE"
+    },
+    {
+      "package_identifier": "AdGuard.AdGuard"
+    },
+    {
+      "package_identifier": "AdGuard.AdGuard.Beta"
+    },
+    {
+      "package_identifier": "AdGuard.AdGuardVPN.Beta"
+    },
+    {
+      "package_identifier": "AdLock.AdLock"
+    },
+    {
+      "package_identifier": "Admobilize.AdMobilize.DesktopUI"
+    },
+    {
+      "package_identifier": "Admobilize.AdMobilize.MalosVision"
+    },
+    {
+      "package_identifier": "Admobilize.AdMobilize.VisionService"
+    },
+    {
+      "package_identifier": "Admobilize.admprovider"
+    },
+    {
+      "package_identifier": "Adobe.Acrobat.Pro"
+    },
+    {
+      "package_identifier": "Adobe.Acrobat.Pro.2020"
+    },
+    {
+      "package_identifier": "Adobe.Acrobat.Reader.32-bit"
+    },
+    {
+      "package_identifier": "Adobe.Acrobat.Reader.64-bit"
+    },
+    {
+      "package_identifier": "Adobe.AdobeConnect"
+    },
+    {
+      "package_identifier": "Adobe.Connect"
+    },
+    {
+      "package_identifier": "Adobe.Connect.MSI"
+    },
+    {
+      "package_identifier": "Adobe.CreativeCloud"
+    },
+    {
+      "package_identifier": "Adobe.DNGConverter"
+    },
+    {
+      "package_identifier": "Adobe.WorkfrontProof"
+    },
+    {
+      "package_identifier": "AdsPower.AdsPower"
+    },
+    {
+      "package_identifier": "Advice.myADVICE.Auftragsverwaltung"
+    },
+    {
+      "package_identifier": "Aerosoft.One"
+    },
+    {
+      "package_identifier": "AfreetSoftware.HamVNA"
+    },
+    {
+      "package_identifier": "AfreetSoftware.OmniRig"
+    },
+    {
+      "package_identifier": "AgileBits.1Password.Beta"
+    },
+    {
+      "package_identifier": "AgileBits.1Password.CLI"
+    },
+    {
+      "package_identifier": "Agilent.LabAdvisor"
+    },
+    {
+      "package_identifier": "Agisoft.Metashape.Professional"
+    },
+    {
+      "package_identifier": "Agisoft.Metashape.Standard"
+    },
+    {
+      "package_identifier": "Agisoft.TextureDeLighter"
+    },
+    {
+      "package_identifier": "AhoyLabs.BackyardAI"
+    },
+    {
+      "package_identifier": "Aidex.AntiTwin.Portable"
+    },
+    {
+      "package_identifier": "Aignesberger.WebSiteWatcher"
+    },
+    {
+      "package_identifier": "Aignesberger.WebSiteWatcherFree"
+    },
+    {
+      "package_identifier": "AirDroid.AirDroid"
+    },
+    {
+      "package_identifier": "AirDroid.AirDroidBusinessDesktopClient"
+    },
+    {
+      "package_identifier": "AirExplorer.AirExplorer"
+    },
+    {
+      "package_identifier": "AirMyPC.AirMyPC"
+    },
+    {
+      "package_identifier": "AirVPN.Eddie"
+    },
+    {
+      "package_identifier": "Aircall.Aircall"
+    },
+    {
+      "package_identifier": "Aircall.AircallWorkspace"
+    },
+    {
+      "package_identifier": "Airspy.AdsbSpy"
+    },
+    {
+      "package_identifier": "Airspy.SDRSharp.DotNet9"
+    },
+    {
+      "package_identifier": "Airspy.SpyServer"
+    },
+    {
+      "package_identifier": "Airtame.Airtame"
+    },
+    {
+      "package_identifier": "Airytec.SwitchOff"
+    },
+    {
+      "package_identifier": "Airzone.Ductzone"
+    },
+    {
+      "package_identifier": "AkelPad.AkelPad"
+    },
+    {
+      "package_identifier": "Akiflow.Akiflow"
+    },
+    {
+      "package_identifier": "Akka.AkkaCli"
+    },
+    {
+      "package_identifier": "Akka.Cli"
+    },
+    {
+      "package_identifier": "Akko.CloudDriver"
+    },
+    {
+      "package_identifier": "AktivCo.RutokenDrivers"
+    },
+    {
+      "package_identifier": "Aladin.eBook"
+    },
+    {
+      "package_identifier": "AlanJhu.OXWUEEW"
+    },
+    {
+      "package_identifier": "Albion.Online"
+    },
+    {
+      "package_identifier": "AlexKaul.Freeter"
+    },
+    {
+      "package_identifier": "AlexThuering.DVDStyler"
+    },
+    {
+      "package_identifier": "AlexanderLitvinov.AutoText"
+    },
+    {
+      "package_identifier": "AlexanderSpiess.Ultramarinviewer"
+    },
+    {
+      "package_identifier": "AlexandruCsete.Gpredict"
+    },
+    {
+      "package_identifier": "Algento.Botim"
+    },
+    {
+      "package_identifier": "Algoryx.Algodoo"
+    },
+    {
+      "package_identifier": "Alibaba.AliIM"
+    },
+    {
+      "package_identifier": "Alibaba.AliMail"
+    },
+    {
+      "package_identifier": "Alibaba.AliWorkbench"
+    },
+    {
+      "package_identifier": "Alibaba.AlipayKeyTool"
+    },
+    {
+      "package_identifier": "Alibaba.DingTalk"
+    },
+    {
+      "package_identifier": "Alibaba.Lingma"
+    },
+    {
+      "package_identifier": "Alibaba.MiniProgramStudio"
+    },
+    {
+      "package_identifier": "Alibaba.Qianwen"
+    },
+    {
+      "package_identifier": "Alibaba.Qoder"
+    },
+    {
+      "package_identifier": "Alibaba.Quark"
+    },
+    {
+      "package_identifier": "Alibaba.QuarkCloudDrive"
+    },
+    {
+      "package_identifier": "Alibaba.Qwen"
+    },
+    {
+      "package_identifier": "Alibaba.Taobao"
+    },
+    {
+      "package_identifier": "Alibaba.Teambition"
+    },
+    {
+      "package_identifier": "Alibaba.UC"
+    },
+    {
+      "package_identifier": "Alibaba.UCCloudDrive"
+    },
+    {
+      "package_identifier": "Alibaba.Yuque"
+    },
+    {
+      "package_identifier": "Alibaba.aDrive"
+    },
+    {
+      "package_identifier": "Allen&Heath.AvantisDirector"
+    },
+    {
+      "package_identifier": "Allen&Heath.SQMixPad"
+    },
+    {
+      "package_identifier": "Allen&Heath.dLiveDirector"
+    },
+    {
+      "package_identifier": "AllroundAutomations.PLSQLDeveloper"
+    },
+    {
+      "package_identifier": "Almico.SpeedFan"
+    },
+    {
+      "package_identifier": "AlroviApS.RoGoldUltimateApp"
+    },
+    {
+      "package_identifier": "Altap.Salamander"
+    },
+    {
+      "package_identifier": "AlterPhoto.AlterPhoto"
+    },
+    {
+      "package_identifier": "Altova.Authentic.2023.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.Authentic.2024.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.Authentic.2025.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.Authentic.2026.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.Authentic.Integration.2023"
+    },
+    {
+      "package_identifier": "Altova.Authentic.Integration.2024"
+    },
+    {
+      "package_identifier": "Altova.Authentic.Integration.2025"
+    },
+    {
+      "package_identifier": "Altova.Authentic.Integration.2026"
+    },
+    {
+      "package_identifier": "Altova.DatabaseSpy.2023.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.DatabaseSpy.2023.Professional"
+    },
+    {
+      "package_identifier": "Altova.DatabaseSpy.2024.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.DatabaseSpy.2024.Professional"
+    },
+    {
+      "package_identifier": "Altova.DatabaseSpy.2025.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.DatabaseSpy.2025.Professional"
+    },
+    {
+      "package_identifier": "Altova.DatabaseSpy.2026.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.DatabaseSpy.2026.Professional"
+    },
+    {
+      "package_identifier": "Altova.DiffDog.2023.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.DiffDog.2023.Professional"
+    },
+    {
+      "package_identifier": "Altova.DiffDog.2024.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.DiffDog.2024.Professional"
+    },
+    {
+      "package_identifier": "Altova.DiffDog.2025.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.DiffDog.2025.Professional"
+    },
+    {
+      "package_identifier": "Altova.DiffDog.2026.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.DiffDog.2026.Professional"
+    },
+    {
+      "package_identifier": "Altova.DiffDogServer.2025"
+    },
+    {
+      "package_identifier": "Altova.DiffDogServer.2026"
+    },
+    {
+      "package_identifier": "Altova.FlowForceServer.2025"
+    },
+    {
+      "package_identifier": "Altova.FlowForceServer.2025.Advanced"
+    },
+    {
+      "package_identifier": "Altova.FlowForceServer.2026"
+    },
+    {
+      "package_identifier": "Altova.FlowForceServer.2026.Advanced"
+    },
+    {
+      "package_identifier": "Altova.LicenseServer.2025"
+    },
+    {
+      "package_identifier": "Altova.LicenseServer.3"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2023.Basic"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2023.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2023.Professional"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2024.Basic"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2024.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2024.Professional"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2025.Basic"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2025.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2025.Professional"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2026.Basic"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2026.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.MapForce.2026.Professional"
+    },
+    {
+      "package_identifier": "Altova.MapForceServer.2025"
+    },
+    {
+      "package_identifier": "Altova.MapForceServer.2025.Advanced"
+    },
+    {
+      "package_identifier": "Altova.MapForceServer.2026"
+    },
+    {
+      "package_identifier": "Altova.MapForceServer.2026.Advanced"
+    },
+    {
+      "package_identifier": "Altova.MissionKit.2023.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.MissionKit.2023.Professional"
+    },
+    {
+      "package_identifier": "Altova.MissionKit.2024.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.MissionKit.2024.Professional"
+    },
+    {
+      "package_identifier": "Altova.MissionKit.2025.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.MissionKit.2025.Professional"
+    },
+    {
+      "package_identifier": "Altova.MissionKit.2026.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.MissionKit.2026.Professional"
+    },
+    {
+      "package_identifier": "Altova.MobileTogetherDesigner"
+    },
+    {
+      "package_identifier": "Altova.MobileTogetherServer"
+    },
+    {
+      "package_identifier": "Altova.MobileTogetherServer.Advanced"
+    },
+    {
+      "package_identifier": "Altova.RaptorXMLServer.2025"
+    },
+    {
+      "package_identifier": "Altova.RaptorXMLServer.2025.XBRL"
+    },
+    {
+      "package_identifier": "Altova.RaptorXMLServer.2026"
+    },
+    {
+      "package_identifier": "Altova.RaptorXMLServer.2026.XBRL"
+    },
+    {
+      "package_identifier": "Altova.SchemaAgent.2023"
+    },
+    {
+      "package_identifier": "Altova.SchemaAgent.2024"
+    },
+    {
+      "package_identifier": "Altova.SchemaAgent.2025"
+    },
+    {
+      "package_identifier": "Altova.SchemaAgent.2026"
+    },
+    {
+      "package_identifier": "Altova.SchemaAgentServer.2023"
+    },
+    {
+      "package_identifier": "Altova.SchemaAgentServer.2024"
+    },
+    {
+      "package_identifier": "Altova.SchemaAgentServer.2025"
+    },
+    {
+      "package_identifier": "Altova.SchemaAgentServer.2026"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2023.Basic"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2023.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2023.Professional"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2024.Basic"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2024.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2024.Professional"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2025.Basic"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2025.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2025.Professional"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2026.Basic"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2026.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.StyleVision.2026.Professional"
+    },
+    {
+      "package_identifier": "Altova.StyleVisionServer.2025"
+    },
+    {
+      "package_identifier": "Altova.StyleVisionServer.2026"
+    },
+    {
+      "package_identifier": "Altova.UModel.2023.Basic"
+    },
+    {
+      "package_identifier": "Altova.UModel.2023.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.UModel.2023.Professional"
+    },
+    {
+      "package_identifier": "Altova.UModel.2024.Basic"
+    },
+    {
+      "package_identifier": "Altova.UModel.2024.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.UModel.2024.Professional"
+    },
+    {
+      "package_identifier": "Altova.UModel.2025.Basic"
+    },
+    {
+      "package_identifier": "Altova.UModel.2025.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.UModel.2025.Professional"
+    },
+    {
+      "package_identifier": "Altova.UModel.2026.Basic"
+    },
+    {
+      "package_identifier": "Altova.UModel.2026.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.UModel.2026.Professional"
+    },
+    {
+      "package_identifier": "Altova.XMLSpy.2023.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.XMLSpy.2023.Professional"
+    },
+    {
+      "package_identifier": "Altova.XMLSpy.2024.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.XMLSpy.2024.Professional"
+    },
+    {
+      "package_identifier": "Altova.XMLSpy.2025.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.XMLSpy.2025.Professional"
+    },
+    {
+      "package_identifier": "Altova.XMLSpy.2026.Enterprise"
+    },
+    {
+      "package_identifier": "Altova.XMLSpy.2026.Professional"
+    },
+    {
+      "package_identifier": "Amazon.AWSCLI"
+    },
+    {
+      "package_identifier": "Amazon.AWSVPNClient"
+    },
+    {
+      "package_identifier": "Amazon.AppStream"
+    },
+    {
+      "package_identifier": "Amazon.AthenaODBCDriver.1"
+    },
+    {
+      "package_identifier": "Amazon.AthenaODBCDriver.2"
+    },
+    {
+      "package_identifier": "Amazon.Chime"
+    },
+    {
+      "package_identifier": "Amazon.CloudWatchAgent"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.11.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.17.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.18.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.19.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.20.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.21.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.22.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.23.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.24.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.25.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.8.JDK"
+    },
+    {
+      "package_identifier": "Amazon.Corretto.8.JRE"
+    },
+    {
+      "package_identifier": "Amazon.EC2Launch"
+    },
+    {
+      "package_identifier": "Amazon.Games"
+    },
+    {
+      "package_identifier": "Amazon.Kindle"
+    },
+    {
+      "package_identifier": "Amazon.KindlePreviewer"
+    },
+    {
+      "package_identifier": "Amazon.Kiro"
+    },
+    {
+      "package_identifier": "Amazon.Music"
+    },
+    {
+      "package_identifier": "Amazon.NoSQLWorkbench"
+    },
+    {
+      "package_identifier": "Amazon.OpenSearch.ODBC"
+    },
+    {
+      "package_identifier": "Amazon.Redshift.ODBC.v1"
+    },
+    {
+      "package_identifier": "Amazon.Redshift.ODBC.v2"
+    },
+    {
+      "package_identifier": "Amazon.SSMAgent"
+    },
+    {
+      "package_identifier": "Amazon.SendToKindle"
+    },
+    {
+      "package_identifier": "Amazon.SessionManagerPlugin"
+    },
+    {
+      "package_identifier": "Amazon.WorkspacesClient"
+    },
+    {
+      "package_identifier": "Amebis.ALicPos"
+    },
+    {
+      "package_identifier": "Amebis.Besana"
+    },
+    {
+      "package_identifier": "Amebis.Hipsis"
+    },
+    {
+      "package_identifier": "AmericanRadioRelayLeague.TrustedQSL"
+    },
+    {
+      "package_identifier": "AmrakSoftware.DMGExtractor"
+    },
+    {
+      "package_identifier": "AmyXun.AxGlyph"
+    },
+    {
+      "package_identifier": "AmyXun.AxMath"
+    },
+    {
+      "package_identifier": "Anaconda.Anaconda3"
+    },
+    {
+      "package_identifier": "Anaconda.Miniconda3"
+    },
+    {
+      "package_identifier": "AnalogDevices.LTspice"
+    },
+    {
+      "package_identifier": "AnchorFree.TouchVPN"
+    },
+    {
+      "package_identifier": "Andekan.Kinship"
+    },
+    {
+      "package_identifier": "AndreWiethoff.ExactAudioCopy"
+    },
+    {
+      "package_identifier": "AndrejFogelton.eyeblink"
+    },
+    {
+      "package_identifier": "Andrelouis.NokiaSPMIDIPlayer"
+    },
+    {
+      "package_identifier": "AndrewWhewell.VirtualRadarServer"
+    },
+    {
+      "package_identifier": "AndyFul.ConfigureDefender"
+    },
+    {
+      "package_identifier": "AngryMiao.AMMaster"
+    },
+    {
+      "package_identifier": "AngusJohnson.PDFTKBuilder"
+    },
+    {
+      "package_identifier": "AngusJohnson.ResourceHacker"
+    },
+    {
+      "package_identifier": "Anim8or.Anim8or"
+    },
+    {
+      "package_identifier": "Ankama.AnkamaLauncher"
+    },
+    {
+      "package_identifier": "AnnyStudio.JPEGLosslessRotator"
+    },
+    {
+      "package_identifier": "AntLab.AntConc"
+    },
+    {
+      "package_identifier": "AntSoftware.AntRenamer"
+    },
+    {
+      "package_identifier": "Anthropic.Claude"
+    },
+    {
+      "package_identifier": "Anthropic.ClaudeCode"
+    },
+    {
+      "package_identifier": "AntibodySoftware.WizFile"
+    },
+    {
+      "package_identifier": "AntibodySoftware.WizKey"
+    },
+    {
+      "package_identifier": "AntibodySoftware.WizMouse"
+    },
+    {
+      "package_identifier": "AntibodySoftware.WizTree"
+    },
+    {
+      "package_identifier": "AntstreamLtd.Antstream"
+    },
+    {
+      "package_identifier": "Antutu.AntutuBenchmark"
+    },
+    {
+      "package_identifier": "Antutu.AntutuLLMBenchmark"
+    },
+    {
+      "package_identifier": "AnyAssociation.Anytype"
+    },
+    {
+      "package_identifier": "AnyDesk.AnyDesk"
+    },
+    {
+      "package_identifier": "AnyLogic.AnyLogic.Personal"
+    },
+    {
+      "package_identifier": "AnyLogic.AnyLogic.Professional"
+    },
+    {
+      "package_identifier": "AnyLogic.AnyLogic.University"
+    },
+    {
+      "package_identifier": "AnyTXT.AnyTXTSearcher"
+    },
+    {
+      "package_identifier": "Anydo.Anydo"
+    },
+    {
+      "package_identifier": "Anysphere.Cursor"
+    },
+    {
+      "package_identifier": "ApSIC.Xbench"
+    },
+    {
+      "package_identifier": "Apache.DirectoryStudio"
+    },
+    {
+      "package_identifier": "Apache.Groovy.2"
+    },
+    {
+      "package_identifier": "Apache.Groovy.3"
+    },
+    {
+      "package_identifier": "Apache.Groovy.4"
+    },
+    {
+      "package_identifier": "Apache.OpenOffice"
+    },
+    {
+      "package_identifier": "ApacheFriends.Xampp.8.1"
+    },
+    {
+      "package_identifier": "ApacheFriends.Xampp.8.2"
+    },
+    {
+      "package_identifier": "ApacheLounge.httpd"
+    },
+    {
+      "package_identifier": "Apipost.ApiPost"
+    },
+    {
+      "package_identifier": "AppByTroye.KoodoReader"
+    },
+    {
+      "package_identifier": "AppControl.AppControl"
+    },
+    {
+      "package_identifier": "AppDeployNews.SilentSwitchFinder"
+    },
+    {
+      "package_identifier": "AppDynamic.AirServer"
+    },
+    {
+      "package_identifier": "AppSolves.TikTok-LIVE-Automation"
+    },
+    {
+      "package_identifier": "Appeon.PowerBuilder-2025-3683-EN-GA"
+    },
+    {
+      "package_identifier": "Appeon.PowerBuilderRuntime2022R3"
+    },
+    {
+      "package_identifier": "Appeon.PowerServerToolkit2022R3-MR03"
+    },
+    {
+      "package_identifier": "Appest.Dida"
+    },
+    {
+      "package_identifier": "Appest.TickTick"
+    },
+    {
+      "package_identifier": "Apple.AirPort"
+    },
+    {
+      "package_identifier": "Apple.AppleApplicationSupport.x64"
+    },
+    {
+      "package_identifier": "Apple.AppleApplicationSupport.x86"
+    },
+    {
+      "package_identifier": "Apple.AppleMobileDeviceSupport"
+    },
+    {
+      "package_identifier": "Apple.AppleSoftwareUpdate"
+    },
+    {
+      "package_identifier": "Apple.Bonjour"
+    },
+    {
+      "package_identifier": "Apple.BonjourPrintServices"
+    },
+    {
+      "package_identifier": "Apple.DVDorCDSharing"
+    },
+    {
+      "package_identifier": "Apple.ProResRAWforWindows"
+    },
+    {
+      "package_identifier": "Apple.QuickTime"
+    },
+    {
+      "package_identifier": "Apple.Safari"
+    },
+    {
+      "package_identifier": "Apple.WindowsMigrationAssistant"
+    },
+    {
+      "package_identifier": "Apple.iCloud"
+    },
+    {
+      "package_identifier": "Apple.iTunes"
+    },
+    {
+      "package_identifier": "Approximatrix.SimplyFortran"
+    },
+    {
+      "package_identifier": "Approximatrix.WebFortran"
+    },
+    {
+      "package_identifier": "AprelTech.HVManager"
+    },
+    {
+      "package_identifier": "AprelTech.PowerManager"
+    },
+    {
+      "package_identifier": "AprelTech.SilentInstallBuilder"
+    },
+    {
+      "package_identifier": "AprelTech.SilentInstallBuilder.Beta"
+    },
+    {
+      "package_identifier": "Apryse.Able2Extract.Professional"
+    },
+    {
+      "package_identifier": "Apryse.XodoPDFReader"
+    },
+    {
+      "package_identifier": "Apryse.XodoPDFStudio"
+    },
+    {
+      "package_identifier": "ArashiVisionInc.Insta360Studio"
+    },
+    {
+      "package_identifier": "ArcanaDevelopment.adTempus.5.Console"
+    },
+    {
+      "package_identifier": "Archi.Archi"
+    },
+    {
+      "package_identifier": "ArcticLine.JetScreenshot"
+    },
+    {
+      "package_identifier": "Arctype.Arctype"
+    },
+    {
+      "package_identifier": "ArduinoSA.IDE.beta"
+    },
+    {
+      "package_identifier": "ArduinoSA.IDE.rc"
+    },
+    {
+      "package_identifier": "Ares.Ares"
+    },
+    {
+      "package_identifier": "Argente.Utilities"
+    },
+    {
+      "package_identifier": "Argotronic.ArgusMonitor"
+    },
+    {
+      "package_identifier": "Arixcel.ArixcelExplorer"
+    },
+    {
+      "package_identifier": "Arm.ArmGnuToolchain"
+    },
+    {
+      "package_identifier": "Arm.ArmPerformanceLibraries"
+    },
+    {
+      "package_identifier": "Arm.GnuArmEmbeddedToolchain"
+    },
+    {
+      "package_identifier": "Arm.WindowsPerf"
+    },
+    {
+      "package_identifier": "Arm.WindowsPerf.Beta"
+    },
+    {
+      "package_identifier": "ArmagetronAdvanced.ArmagetronAdvanced"
+    },
+    {
+      "package_identifier": "ArobasMusic.GuitarPro.6"
+    },
+    {
+      "package_identifier": "ArobasMusic.GuitarPro.7"
+    },
+    {
+      "package_identifier": "ArobasMusic.GuitarPro.7.Soundbanks"
+    },
+    {
+      "package_identifier": "ArobasMusic.GuitarPro.8"
+    },
+    {
+      "package_identifier": "ArrayFire.ArrayFire"
+    },
+    {
+      "package_identifier": "ArrayNetworks.MotionPro"
+    },
+    {
+      "package_identifier": "Artha.Artha"
+    },
+    {
+      "package_identifier": "Articulate.Articulate360"
+    },
+    {
+      "package_identifier": "ArtifexSoftware.mutool"
+    },
+    {
+      "package_identifier": "ArtisteerLimited.Nicepage"
+    },
+    {
+      "package_identifier": "ArtisticStyle.ArtisticStyle"
+    },
+    {
+      "package_identifier": "Artsoft.RocksNDiamonds"
+    },
+    {
+      "package_identifier": "Asana.Asana"
+    },
+    {
+      "package_identifier": "AsaphaHalifa.AudioRelay"
+    },
+    {
+      "package_identifier": "Ascensio.AVSAudioConverter"
+    },
+    {
+      "package_identifier": "Ascensio.AVSAudioEditor"
+    },
+    {
+      "package_identifier": "Ascensio.AVSImageConverter"
+    },
+    {
+      "package_identifier": "Ascensio.AVSInstallPack"
+    },
+    {
+      "package_identifier": "Ascensio.AVSMediaPlayer"
+    },
+    {
+      "package_identifier": "Ascensio.AVSVideoConverter"
+    },
+    {
+      "package_identifier": "Ascensio.AVSVideoEditor"
+    },
+    {
+      "package_identifier": "Ascensio.AVSVideoReMaker"
+    },
+    {
+      "package_identifier": "AshleyStone.DefaultAudio"
+    },
+    {
+      "package_identifier": "AshleyStone.SitdownMW"
+    },
+    {
+      "package_identifier": "AsiasoftOnline.PlayparkDownloader"
+    },
+    {
+      "package_identifier": "AstroComma.AstroGrep"
+    },
+    {
+      "package_identifier": "Astronet.Scholaread"
+    },
+    {
+      "package_identifier": "AstuteGraphics.AstuteManager"
+    },
+    {
+      "package_identifier": "Asus.ArmouryCrate"
+    },
+    {
+      "package_identifier": "Asus.DisplayWidgetCenter"
+    },
+    {
+      "package_identifier": "Atari800Win.PLus"
+    },
+    {
+      "package_identifier": "Atlassian.AtlassianCLI"
+    },
+    {
+      "package_identifier": "Atlassian.Bitbucket"
+    },
+    {
+      "package_identifier": "Atlassian.Confluence"
+    },
+    {
+      "package_identifier": "Atlassian.JiraSoftwareLTS"
+    },
+    {
+      "package_identifier": "Atlassian.ServiceManagementLTS"
+    },
+    {
+      "package_identifier": "Atlassian.Sourcetree"
+    },
+    {
+      "package_identifier": "Atnel.mkclipse"
+    },
+    {
+      "package_identifier": "Atola.FindandMount"
+    },
+    {
+      "package_identifier": "Atola.MultiDrive"
+    },
+    {
+      "package_identifier": "Atomi.ActivePresenter"
+    },
+    {
+      "package_identifier": "AtomicJar.Testcontainers"
+    },
+    {
+      "package_identifier": "AtomixProductions.VirtualDJ"
+    },
+    {
+      "package_identifier": "Atrix.AtrixLauncher"
+    },
+    {
+      "package_identifier": "Audacious.MediaPlayer"
+    },
+    {
+      "package_identifier": "Audient.EVO"
+    },
+    {
+      "package_identifier": "Audient.Sono"
+    },
+    {
+      "package_identifier": "Audient.iD"
+    },
+    {
+      "package_identifier": "Audinate.DanteVia"
+    },
+    {
+      "package_identifier": "Audinate.DanteVirtualSoundcard"
+    },
+    {
+      "package_identifier": "AudioCodes.ConfigurationBuilder"
+    },
+    {
+      "package_identifier": "AudioCodes.INIViewerEditor"
+    },
+    {
+      "package_identifier": "AudioCodes.SBCConfigurationWizard"
+    },
+    {
+      "package_identifier": "AudioCodes.SyslogViewer"
+    },
+    {
+      "package_identifier": "Audius.Audius"
+    },
+    {
+      "package_identifier": "AuraMarker.Lattics"
+    },
+    {
+      "package_identifier": "Auslogics.BitReplica"
+    },
+    {
+      "package_identifier": "Auslogics.BoostSpeed"
+    },
+    {
+      "package_identifier": "Auslogics.ChillMate"
+    },
+    {
+      "package_identifier": "Auslogics.DiskDefrag"
+    },
+    {
+      "package_identifier": "Auslogics.DriverUpdater"
+    },
+    {
+      "package_identifier": "Auslogics.DuplicateFileFinder"
+    },
+    {
+      "package_identifier": "Auslogics.FileRecovery"
+    },
+    {
+      "package_identifier": "Auslogics.RegistryCleaner"
+    },
+    {
+      "package_identifier": "Auslogics.RegistryDefrag"
+    },
+    {
+      "package_identifier": "Auslogics.SSDOptimizer"
+    },
+    {
+      "package_identifier": "Auslogics.VideoGrabber"
+    },
+    {
+      "package_identifier": "Auslogics.WindowsSlimmer"
+    },
+    {
+      "package_identifier": "AutoDWG.DWGSeeCAD"
+    },
+    {
+      "package_identifier": "AutoDWG.DWGSeePro"
+    },
+    {
+      "package_identifier": "AutoIt.AutoIt"
+    },
+    {
+      "package_identifier": "AutoIt.SciTE4AutoIt3"
+    },
+    {
+      "package_identifier": "Autodesk.AutodeskAccess"
+    },
+    {
+      "package_identifier": "Autodesk.DesignReview"
+    },
+    {
+      "package_identifier": "Autodesk.DesktopApp"
+    },
+    {
+      "package_identifier": "Autodesk.DesktopConnector"
+    },
+    {
+      "package_identifier": "Autodesk.EAGLE"
+    },
+    {
+      "package_identifier": "Autodesk.LicensingService"
+    },
+    {
+      "package_identifier": "Autodesk.NavisworksFreedom.2026"
+    },
+    {
+      "package_identifier": "Automattic.PocketCasts"
+    },
+    {
+      "package_identifier": "Automox.AutomoxAgent"
+    },
+    {
+      "package_identifier": "AvaCC.AvaDesktop"
+    },
+    {
+      "package_identifier": "Avanquest.SodaPDFDesktop"
+    },
+    {
+      "package_identifier": "Avanquestpdfforge.PDFArchitect"
+    },
+    {
+      "package_identifier": "Avanquestpdfforge.PDFCreator-Free"
+    },
+    {
+      "package_identifier": "Avanquestpdfforge.PDFCreator-Professional"
+    },
+    {
+      "package_identifier": "Avanquestpdfforge.PDFCreator-Server"
+    },
+    {
+      "package_identifier": "Avanquestpdfforge.PDFCreator-Terminal-Server"
+    },
+    {
+      "package_identifier": "Avaya.AvayaWorkplace"
+    },
+    {
+      "package_identifier": "AviSynth.AviSynth"
+    },
+    {
+      "package_identifier": "Avocode.Avocode"
+    },
+    {
+      "package_identifier": "Avogadro.Avogadro"
+    },
+    {
+      "package_identifier": "AwthWathje.SteaScree"
+    },
+    {
+      "package_identifier": "AxCrypt.AxCrypt"
+    },
+    {
+      "package_identifier": "AxelRietschin.FastPictureViewer.Professional"
+    },
+    {
+      "package_identifier": "Axialis.CursorWorkshop"
+    },
+    {
+      "package_identifier": "Axialis.IconGenerator"
+    },
+    {
+      "package_identifier": "Axialis.IconVectors"
+    },
+    {
+      "package_identifier": "Axialis.IconWorkshop"
+    },
+    {
+      "package_identifier": "Axialis.ScreensaverProducer"
+    },
+    {
+      "package_identifier": "AxiomaticSystems.Bento4"
+    },
+    {
+      "package_identifier": "AxisCommunicationsAB.FilePlayerLauncher"
+    },
+    {
+      "package_identifier": "Axosoft.GitKraken"
+    },
+    {
+      "package_identifier": "Axure.AxureRP.10"
+    },
+    {
+      "package_identifier": "Axure.AxureRP.11"
+    },
+    {
+      "package_identifier": "Axure.AxureRP.9"
+    },
+    {
+      "package_identifier": "Azeus.Convene"
+    },
+    {
+      "package_identifier": "Azul.IcedTea-Web"
+    },
+    {
+      "package_identifier": "Azul.Zulu.10.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.11.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.11.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.12.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.12.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.13.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.13.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.14.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.15.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.15.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.16.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.16.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.17.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.17.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.18.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.18.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.19.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.20.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.21.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.21.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.22.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.23.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.24.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.25.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.25.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.6.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.7.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.7.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.8.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.8.JRE"
+    },
+    {
+      "package_identifier": "Azul.Zulu.9.JDK"
+    },
+    {
+      "package_identifier": "Azul.Zulu.9.JRE"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.11.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.15.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.17.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.17.JRE"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.18.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.19.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.20.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.21.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.21.JRE"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.22.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.23.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.24.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.25.JDK"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.25.JRE"
+    },
+    {
+      "package_identifier": "Azul.ZuluFX.8.JDK"
+    },
+    {
+      "package_identifier": "B-trust.BISS"
+    },
+    {
+      "package_identifier": "B4CK.B4CK"
+    },
+    {
+      "package_identifier": "BCM.SecEditCtl"
+    },
+    {
+      "package_identifier": "BDRThermea.ServiceTool"
+    },
+    {
+      "package_identifier": "BJLive!.LumineaRemote"
+    },
+    {
+      "package_identifier": "BLife.CustomCursor"
+    },
+    {
+      "package_identifier": "BOC.SecEditCtl"
+    },
+    {
+      "package_identifier": "BOMIST.BOMIST"
+    },
+    {
+      "package_identifier": "BOSS.ToneStudio.GT1"
+    },
+    {
+      "package_identifier": "BRAK.beAClientSecurity"
+    },
+    {
+      "package_identifier": "BUT.NetfoxDetective"
+    },
+    {
+      "package_identifier": "BYOND.BYOND"
+    },
+    {
+      "package_identifier": "BZFlag.BZFlag"
+    },
+    {
+      "package_identifier": "Babble.babblevoiceDesktop"
+    },
+    {
+      "package_identifier": "BackstaffSoftware.InstallBuilder"
+    },
+    {
+      "package_identifier": "BackstaffSoftware.InstallBuilder.Enterprise"
+    },
+    {
+      "package_identifier": "BackstaffSoftware.InstallBuilder.Professional"
+    },
+    {
+      "package_identifier": "BackstaffSoftware.InstallBuilder.Qt"
+    },
+    {
+      "package_identifier": "BackstaffSoftware.InstallBuilder.Qt.Enterprise"
+    },
+    {
+      "package_identifier": "BackstaffSoftware.InstallBuilder.Qt.Professional"
+    },
+    {
+      "package_identifier": "Badlion.BadlionClient"
+    },
+    {
+      "package_identifier": "Baidu.BaiduNetdisk"
+    },
+    {
+      "package_identifier": "Baidu.BaiduPinyin"
+    },
+    {
+      "package_identifier": "Baidu.BaiduSIAssistant"
+    },
+    {
+      "package_identifier": "Baidu.BaiduSIMeeting"
+    },
+    {
+      "package_identifier": "Baidu.BaiduSpeechInput"
+    },
+    {
+      "package_identifier": "Baidu.BaiduTranslate"
+    },
+    {
+      "package_identifier": "Baidu.BaiduWenku"
+    },
+    {
+      "package_identifier": "Baidu.Comate"
+    },
+    {
+      "package_identifier": "Baidu.SwanIDE"
+    },
+    {
+      "package_identifier": "Baidu.TeraBox"
+    },
+    {
+      "package_identifier": "BakaXL.BakaXL"
+    },
+    {
+      "package_identifier": "BalazsTihanyi.NClass"
+    },
+    {
+      "package_identifier": "BaldurKarlsson.RenderDoc"
+    },
+    {
+      "package_identifier": "Balsamiq.Wireframes"
+    },
+    {
+      "package_identifier": "Banbuds.VsWhitty"
+    },
+    {
+      "package_identifier": "BandLab.Cakewalk"
+    },
+    {
+      "package_identifier": "Bandai.Reml"
+    },
+    {
+      "package_identifier": "BandicamCompany.Bandicam"
+    },
+    {
+      "package_identifier": "BandicamCompany.BandicamMPEG-1Decoder"
+    },
+    {
+      "package_identifier": "BandicamCompany.Bandicut"
+    },
+    {
+      "package_identifier": "Bandisoft.BandiView"
+    },
+    {
+      "package_identifier": "Bandisoft.Bandizip"
+    },
+    {
+      "package_identifier": "Bandisoft.Honeyview"
+    },
+    {
+      "package_identifier": "Baota.AingDesk"
+    },
+    {
+      "package_identifier": "BartelsMedia.MacroRecorder"
+    },
+    {
+      "package_identifier": "BartelsMedia.PhraseExpress"
+    },
+    {
+      "package_identifier": "BartelsMedia.ShareMouse"
+    },
+    {
+      "package_identifier": "BasDriessen.Aurora"
+    },
+    {
+      "package_identifier": "BasecampLLC.Basecamp3"
+    },
+    {
+      "package_identifier": "Basedash.Basedash"
+    },
+    {
+      "package_identifier": "Basilisk.Basilisk"
+    },
+    {
+      "package_identifier": "Bauerapps.RightNote"
+    },
+    {
+      "package_identifier": "Baxi.MyBaxiPRO"
+    },
+    {
+      "package_identifier": "Baxi.ServiceTool"
+    },
+    {
+      "package_identifier": "Bay12Games.DwarfFortressClassic"
+    },
+    {
+      "package_identifier": "BayerischesLandesamtfuerSteuern.ElsterAuthenticator"
+    },
+    {
+      "package_identifier": "Bazwise.FolderSizeExplorer"
+    },
+    {
+      "package_identifier": "Bdrive.RcloneView"
+    },
+    {
+      "package_identifier": "Beamr.JPEGminiPro"
+    },
+    {
+      "package_identifier": "BearWare.dk.TeamTalk5"
+    },
+    {
+      "package_identifier": "BedaKosata.BKChem"
+    },
+    {
+      "package_identifier": "BeeBEEP.BeeBEEP"
+    },
+    {
+      "package_identifier": "Beeper.Beeper"
+    },
+    {
+      "package_identifier": "Belarc.Advisor"
+    },
+    {
+      "package_identifier": "Belfius.BelfiusConnector"
+    },
+    {
+      "package_identifier": "BelgianGovernment.eIDViewer"
+    },
+    {
+      "package_identifier": "BelgianGovernment.eIDmiddleware"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.11"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.11.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.11.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.12"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.12.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.13"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.13.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.13.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.14"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.14.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.14.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.15"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.15.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.15.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.16"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.16.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.16.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.17"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.17.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.17.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.18"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.18.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.18.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.19"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.19.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.19.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.20"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.20.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.20.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.21"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.21.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.21.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.22"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.22.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.22.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.23"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.23.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.23.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.24"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.24.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.24.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.25"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.25.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.25.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.8"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.8.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJDK.8.Lite"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.11"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.11.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.13"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.13.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.14"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.14.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.15"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.15.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.16"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.16.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.17"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.17.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.18"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.18.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.19"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.19.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.20"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.20.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.21"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.21.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.22"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.22.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.23"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.23.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.24"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.24.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.25"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.25.Full"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.8"
+    },
+    {
+      "package_identifier": "BellSoft.LibericaJRE.8.Full"
+    },
+    {
+      "package_identifier": "BelledonneCommunications.Linphone"
+    },
+    {
+      "package_identifier": "BenHollis.PNGGauntlet"
+    },
+    {
+      "package_identifier": "BenQ.InstaShare"
+    },
+    {
+      "package_identifier": "BenQ.InstaShare2"
+    },
+    {
+      "package_identifier": "BenthicSoftware.GoldSqall.1"
+    },
+    {
+      "package_identifier": "BenthicSoftware.GoldSqall.2"
+    },
+    {
+      "package_identifier": "BenthicSoftware.Golden.6"
+    },
+    {
+      "package_identifier": "BenthicSoftware.Golden.7"
+    },
+    {
+      "package_identifier": "BenthicSoftware.Golden.8"
+    },
+    {
+      "package_identifier": "BenthicSoftware.Goldview.4"
+    },
+    {
+      "package_identifier": "BenthicSoftware.ImpExpPro.1"
+    },
+    {
+      "package_identifier": "BenthicSoftware.PLEdit.6"
+    },
+    {
+      "package_identifier": "BenthicSoftware.PLEdit.7"
+    },
+    {
+      "package_identifier": "Berkeley.BYOB"
+    },
+    {
+      "package_identifier": "Beseda.Convy"
+    },
+    {
+      "package_identifier": "BestNotes.BestNotes"
+    },
+    {
+      "package_identifier": "Besware.Artweaver.7.Free"
+    },
+    {
+      "package_identifier": "Besware.Artweaver.7.Plus"
+    },
+    {
+      "package_identifier": "Besware.Artweaver.8.Free"
+    },
+    {
+      "package_identifier": "Besware.Artweaver.8.Plus"
+    },
+    {
+      "package_identifier": "Bethesda.Launcher"
+    },
+    {
+      "package_identifier": "Betterbird.Betterbird"
+    },
+    {
+      "package_identifier": "BeyondATC.Client.EarlyAccess"
+    },
+    {
+      "package_identifier": "BeyondATC.TrafficMap"
+    },
+    {
+      "package_identifier": "BeyondCode.Herd"
+    },
+    {
+      "package_identifier": "BicomSystems.Communicator"
+    },
+    {
+      "package_identifier": "BicomSystems.gloCOM"
+    },
+    {
+      "package_identifier": "Bilibili.Bcut"
+    },
+    {
+      "package_identifier": "Bilibili.Bilibili"
+    },
+    {
+      "package_identifier": "Bilibili.Livehime"
+    },
+    {
+      "package_identifier": "Billfish.Billfish"
+    },
+    {
+      "package_identifier": "Bin-Huang.Chatbox"
+    },
+    {
+      "package_identifier": "BinaryFortress.ClipboardFusion"
+    },
+    {
+      "package_identifier": "BinaryFortress.CloudShow"
+    },
+    {
+      "package_identifier": "BinaryFortress.DisplayFusion"
+    },
+    {
+      "package_identifier": "BinaryFortress.FileSeek"
+    },
+    {
+      "package_identifier": "BinaryFortress.HashTools"
+    },
+    {
+      "package_identifier": "BinaryFortress.LogFusion"
+    },
+    {
+      "package_identifier": "BinaryFortress.TrayStatus"
+    },
+    {
+      "package_identifier": "BinaryFortress.VoiceBot"
+    },
+    {
+      "package_identifier": "BinaryFortress.WindowInspector"
+    },
+    {
+      "package_identifier": "BinaryMark.AdvancedFileFinder"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchDocs"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchEncodingConverter"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchFileEncrypt"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchFileManager"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchFileRename"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchFileReplace"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchFileSplitJoin"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchFiles"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchHexEditor"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchImageConverter"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchImageEnhancer"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchImageResizer"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchImageSplitter"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchImageWatermarker"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchImages"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchPhotoFace"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchRegEx"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchTextFileEditor"
+    },
+    {
+      "package_identifier": "BinaryMark.BatchWordReplace"
+    },
+    {
+      "package_identifier": "BinaryMark.BiorhythmsCalculator"
+    },
+    {
+      "package_identifier": "BinaryMark.ColorPickerPro"
+    },
+    {
+      "package_identifier": "BinaryMark.FileHashGenerator"
+    },
+    {
+      "package_identifier": "BinaryMark.PasswordGenerator"
+    },
+    {
+      "package_identifier": "BinaryMark.RandomNumberGenerator"
+    },
+    {
+      "package_identifier": "BinaryMark.StreamingVideoDownloader"
+    },
+    {
+      "package_identifier": "BinaryMark.TextToMp3Converter"
+    },
+    {
+      "package_identifier": "BiniSoft.WindowsFirewallControl"
+    },
+    {
+      "package_identifier": "BioSilico.EssayWriter"
+    },
+    {
+      "package_identifier": "BioSilico.IdeaMapper"
+    },
+    {
+      "package_identifier": "BioSilico.IdeaMapper.HigherEd"
+    },
+    {
+      "package_identifier": "BioSilico.IdeaMapper.K12"
+    },
+    {
+      "package_identifier": "BioSilico.IdeaMapper.Pro"
+    },
+    {
+      "package_identifier": "BioSilico.MicroBreak"
+    },
+    {
+      "package_identifier": "Biognosys.Spectronaut"
+    },
+    {
+      "package_identifier": "BirdBrain.BlueBirdConnector"
+    },
+    {
+      "package_identifier": "Bit4id.Firma4ng.InfoCamere"
+    },
+    {
+      "package_identifier": "Bit4id.SignDesktop.InfoCamere"
+    },
+    {
+      "package_identifier": "Bit4id.UniversalMiddleware"
+    },
+    {
+      "package_identifier": "BitGuardian.BitDriverUpdater"
+    },
+    {
+      "package_identifier": "BitGuardian.BitGameBooster"
+    },
+    {
+      "package_identifier": "BitRecover.AadhaarCardPasswordRemover"
+    },
+    {
+      "package_identifier": "BitRecover.WindowsLiveMailConverter"
+    },
+    {
+      "package_identifier": "BitSum.Coreprio"
+    },
+    {
+      "package_identifier": "BitSum.ParkControl"
+    },
+    {
+      "package_identifier": "BitSum.ProcessLasso"
+    },
+    {
+      "package_identifier": "BitSum.ProcessLasso.Beta"
+    },
+    {
+      "package_identifier": "BitTorrentLimited.uTorrentWeb"
+    },
+    {
+      "package_identifier": "BitcoinCoreProject.BitcoinCore"
+    },
+    {
+      "package_identifier": "Bitdefender.Bitdefender"
+    },
+    {
+      "package_identifier": "Bitfocus.Companion"
+    },
+    {
+      "package_identifier": "Bitvise.SSH.Client"
+    },
+    {
+      "package_identifier": "Bitvise.SSH.Server"
+    },
+    {
+      "package_identifier": "BlackCatSystems.Atomic"
+    },
+    {
+      "package_identifier": "BlastWave.BlastShield"
+    },
+    {
+      "package_identifier": "BleachBit.BleachBit"
+    },
+    {
+      "package_identifier": "BlenderFoundation.Blender"
+    },
+    {
+      "package_identifier": "BlenderFoundation.Blender.LTS.4.2"
+    },
+    {
+      "package_identifier": "BlenderFoundation.Blender.LTS.4.5"
+    },
+    {
+      "package_identifier": "Blitz.Blitz"
+    },
+    {
+      "package_identifier": "Blix.BlueMail"
+    },
+    {
+      "package_identifier": "Blizzard.BattleNet"
+    },
+    {
+      "package_identifier": "Bloomberg.BloombergTerminal"
+    },
+    {
+      "package_identifier": "BluePointLilac.ContextMenuManager"
+    },
+    {
+      "package_identifier": "BlueStack.BlueStacks"
+    },
+    {
+      "package_identifier": "Bluebeam.BluebeamOCR.21"
+    },
+    {
+      "package_identifier": "Bluebeam.Revu.20"
+    },
+    {
+      "package_identifier": "Bluebeam.Revu.21"
+    },
+    {
+      "package_identifier": "Blueberry.FBX"
+    },
+    {
+      "package_identifier": "Blueberry.FlashBackPro"
+    },
+    {
+      "package_identifier": "Blueberry.FlashbackExpress.6"
+    },
+    {
+      "package_identifier": "Blueberry.FlashbackExpress.7"
+    },
+    {
+      "package_identifier": "Blueberry.FlashbackVideoConverter"
+    },
+    {
+      "package_identifier": "Bluefish.Bluefish"
+    },
+    {
+      "package_identifier": "Bluemaxima.NewgroundsAuditorium"
+    },
+    {
+      "package_identifier": "BobK4CY.Logger32"
+    },
+    {
+      "package_identifier": "Bome.SendSX"
+    },
+    {
+      "package_identifier": "Bonnefon.glogg"
+    },
+    {
+      "package_identifier": "BookxSoftware.BookxNotePro"
+    },
+    {
+      "package_identifier": "Bopsoft.Listary"
+    },
+    {
+      "package_identifier": "Borvid.HttpMasterExpress"
+    },
+    {
+      "package_identifier": "Borvid.HttpMasterProfessional"
+    },
+    {
+      "package_identifier": "Bose.Updater"
+    },
+    {
+      "package_identifier": "Bosyun.BoardMix"
+    },
+    {
+      "package_identifier": "Bosyun.BoardMix.CN"
+    },
+    {
+      "package_identifier": "Bosyun.Pixso"
+    },
+    {
+      "package_identifier": "Bosyun.Pixso.CN"
+    },
+    {
+      "package_identifier": "Bosyun.PixsoLocalFont"
+    },
+    {
+      "package_identifier": "BotProductions.IconViewer"
+    },
+    {
+      "package_identifier": "BotProductions.PSPThumbnailHandler"
+    },
+    {
+      "package_identifier": "Botkind.AllwaySync"
+    },
+    {
+      "package_identifier": "Box.Box"
+    },
+    {
+      "package_identifier": "Box.BoxForOffice"
+    },
+    {
+      "package_identifier": "Box.BoxSync"
+    },
+    {
+      "package_identifier": "Box.BoxTools"
+    },
+    {
+      "package_identifier": "BoxlightCorporation.LYNXWhiteboard"
+    },
+    {
+      "package_identifier": "Boxstar.DeepVocal"
+    },
+    {
+      "package_identifier": "Boxstar.DeepVocalToolBox"
+    },
+    {
+      "package_identifier": "BranchBlocks.Branch"
+    },
+    {
+      "package_identifier": "Brave.Brave.Dev"
+    },
+    {
+      "package_identifier": "Brave.BraveUpdater"
+    },
+    {
+      "package_identifier": "BreakPointSoftware.HexWorkshop"
+    },
+    {
+      "package_identifier": "Bria.Bria"
+    },
+    {
+      "package_identifier": "BrianApps.Sizer"
+    },
+    {
+      "package_identifier": "BrianApps.Sizer.Dev"
+    },
+    {
+      "package_identifier": "BrickLink.PartDesigner"
+    },
+    {
+      "package_identifier": "BrickLink.Studio"
+    },
+    {
+      "package_identifier": "BrickLink.Studio.EarlyAccess"
+    },
+    {
+      "package_identifier": "BrightSign.BAconnected"
+    },
+    {
+      "package_identifier": "BrightSign.BrightAuthor"
+    },
+    {
+      "package_identifier": "BrightlySoftware.AsseticPredictor"
+    },
+    {
+      "package_identifier": "BrinkSoftware.IbisCalculerenVoorBouw"
+    },
+    {
+      "package_identifier": "BrinkSoftware.IbisCalculerenVoorInstallatie"
+    },
+    {
+      "package_identifier": "BrinkSoftware.IbisVoorInfra"
+    },
+    {
+      "package_identifier": "Brinno.BrinnoConnect"
+    },
+    {
+      "package_identifier": "Brinno.BrinnoVideoPlayer"
+    },
+    {
+      "package_identifier": "Brio.FolderSize"
+    },
+    {
+      "package_identifier": "Brosix.Brosix"
+    },
+    {
+      "package_identifier": "Brother.BRAdmin.Professional.4"
+    },
+    {
+      "package_identifier": "Brother.iPrintScan"
+    },
+    {
+      "package_identifier": "Brotje.ServiceTool"
+    },
+    {
+      "package_identifier": "BrowserStack.BrowserStackLocal"
+    },
+    {
+      "package_identifier": "BrunnerBI.MeasureKiller"
+    },
+    {
+      "package_identifier": "BrunoBanelli.PCI-Z"
+    },
+    {
+      "package_identifier": "BrutalChess.BrutalChess"
+    },
+    {
+      "package_identifier": "Bullzip.BullzipPDFStudio"
+    },
+    {
+      "package_identifier": "Bullzip.PDFPrinter"
+    },
+    {
+      "package_identifier": "Bunny-Wabbit.ISOCreator"
+    },
+    {
+      "package_identifier": "Burnaware.BurnAwareFree"
+    },
+    {
+      "package_identifier": "Burnaware.BurnAwarePremium"
+    },
+    {
+      "package_identifier": "Burnaware.BurnAwarePro"
+    },
+    {
+      "package_identifier": "Burnaware.PDFShaper.Free"
+    },
+    {
+      "package_identifier": "Burnaware.PDFShaper.Premium"
+    },
+    {
+      "package_identifier": "Burnaware.PDFShaper.Ultimate"
+    },
+    {
+      "package_identifier": "ButterflyEffect.Monica"
+    },
+    {
+      "package_identifier": "ByteDance.CapCut"
+    },
+    {
+      "package_identifier": "ByteDance.Dola"
+    },
+    {
+      "package_identifier": "ByteDance.Doubao"
+    },
+    {
+      "package_identifier": "ByteDance.Douyin"
+    },
+    {
+      "package_identifier": "ByteDance.DouyinIDE"
+    },
+    {
+      "package_identifier": "ByteDance.DouyinIM"
+    },
+    {
+      "package_identifier": "ByteDance.EffectHouse"
+    },
+    {
+      "package_identifier": "ByteDance.FeiLian"
+    },
+    {
+      "package_identifier": "ByteDance.Feishu"
+    },
+    {
+      "package_identifier": "ByteDance.Feishu.MSI"
+    },
+    {
+      "package_identifier": "ByteDance.FeishuRooms"
+    },
+    {
+      "package_identifier": "ByteDance.JianyingPro"
+    },
+    {
+      "package_identifier": "ByteDance.Lark"
+    },
+    {
+      "package_identifier": "ByteDance.LarkRooms"
+    },
+    {
+      "package_identifier": "ByteDance.Resso"
+    },
+    {
+      "package_identifier": "ByteDance.SodaMusic"
+    },
+    {
+      "package_identifier": "ByteDance.StreamingTool"
+    },
+    {
+      "package_identifier": "ByteDance.TOSBrowser"
+    },
+    {
+      "package_identifier": "ByteDance.Trae"
+    },
+    {
+      "package_identifier": "ByteDance.Trae.CN"
+    },
+    {
+      "package_identifier": "ByteDance.XiguaVideo"
+    },
+    {
+      "package_identifier": "ByteDance.tosutil"
+    },
+    {
+      "package_identifier": "Bytello.BytelloShare"
+    },
+    {
+      "package_identifier": "C-PartnerSystemhausGmbH.DocuToolbox"
+    },
+    {
+      "package_identifier": "C-PartnerSystemhausGmbH.QuickFinder"
+    },
+    {
+      "package_identifier": "CABS.SalesPrix"
+    },
+    {
+      "package_identifier": "CABS.ScanPrix"
+    },
+    {
+      "package_identifier": "CAI.CASecureBrowser"
+    },
+    {
+      "package_identifier": "CBS.Rainbow"
+    },
+    {
+      "package_identifier": "CBackup.CBackup"
+    },
+    {
+      "package_identifier": "CCL.NetLogo"
+    },
+    {
+      "package_identifier": "CCPGames.EVEOnline"
+    },
+    {
+      "package_identifier": "CCRMA.ChucK"
+    },
+    {
+      "package_identifier": "CDESoftware.BLS-2025"
+    },
+    {
+      "package_identifier": "CDESoftware.BLS-2026"
+    },
+    {
+      "package_identifier": "CDESoftware.BTM-2023"
+    },
+    {
+      "package_identifier": "CDESoftware.BTM-2026"
+    },
+    {
+      "package_identifier": "CDESoftware.MBD-2025"
+    },
+    {
+      "package_identifier": "CDESoftware.MBD-2026"
+    },
+    {
+      "package_identifier": "CDESoftware.TBRAC-2024"
+    },
+    {
+      "package_identifier": "CEB.CEBEBankAssistant"
+    },
+    {
+      "package_identifier": "CEWE.dm-Fotowelt"
+    },
+    {
+      "package_identifier": "CGSecurity.TestDisk"
+    },
+    {
+      "package_identifier": "CHERRY.CHERRYKEYS"
+    },
+    {
+      "package_identifier": "CHERRY.UTILITY"
+    },
+    {
+      "package_identifier": "CHIRPSoftware.CHIRP-legacy"
+    },
+    {
+      "package_identifier": "CHIRPSoftware.CHIRP-next"
+    },
+    {
+      "package_identifier": "CI010.XMinecraftLauncher"
+    },
+    {
+      "package_identifier": "CINCSoftware.Workstation"
+    },
+    {
+      "package_identifier": "CISDI.Qingtui"
+    },
+    {
+      "package_identifier": "CLPM.CLPM"
+    },
+    {
+      "package_identifier": "CMI.LehrerOfficeDesktop"
+    },
+    {
+      "package_identifier": "CMIE.ProwessIQ"
+    },
+    {
+      "package_identifier": "CMU.CLAN"
+    },
+    {
+      "package_identifier": "CNRISTI.QuteMol"
+    },
+    {
+      "package_identifier": "COAS.Donkey"
+    },
+    {
+      "package_identifier": "COAS.SemantaModeler"
+    },
+    {
+      "package_identifier": "COMPELSONLaboratories.CameraBallistics"
+    },
+    {
+      "package_identifier": "COMPELSONLaboratories.MOBILedit!SIMClone"
+    },
+    {
+      "package_identifier": "CONZEInformatik.Vistrax"
+    },
+    {
+      "package_identifier": "COVERCorp.Holoearth"
+    },
+    {
+      "package_identifier": "COWON.jetAudio"
+    },
+    {
+      "package_identifier": "CPUID.CPU-Z"
+    },
+    {
+      "package_identifier": "CPUID.CPU-Z.AORUS"
+    },
+    {
+      "package_identifier": "CPUID.CPU-Z.ASR"
+    },
+    {
+      "package_identifier": "CPUID.CPU-Z.CM"
+    },
+    {
+      "package_identifier": "CPUID.CPU-Z.GBT"
+    },
+    {
+      "package_identifier": "CPUID.CPU-Z.MSI"
+    },
+    {
+      "package_identifier": "CPUID.CPU-Z.PHANTOM"
+    },
+    {
+      "package_identifier": "CPUID.CPU-Z.ROG"
+    },
+    {
+      "package_identifier": "CPUID.CPU-Z.TAICHI"
+    },
+    {
+      "package_identifier": "CPUID.HWMonitor"
+    },
+    {
+      "package_identifier": "CPUID.powerMAX"
+    },
+    {
+      "package_identifier": "CREALOGIX.PayEye"
+    },
+    {
+      "package_identifier": "CTerm.CTerm"
+    },
+    {
+      "package_identifier": "CWEcomputerservices.GSAK"
+    },
+    {
+      "package_identifier": "CZNIC.Datovka"
+    },
+    {
+      "package_identifier": "CabinInteractive.HAMRSPro"
+    },
+    {
+      "package_identifier": "CacheFarms.SkeeBall"
+    },
+    {
+      "package_identifier": "Cal.Cal"
+    },
+    {
+      "package_identifier": "CambridgeUniversityPress.CambridgeReader"
+    },
+    {
+      "package_identifier": "CandyCreamAlgorithm.KanatoMell"
+    },
+    {
+      "package_identifier": "Canon.GPCL6_V4_PrinterDriver_V21.00"
+    },
+    {
+      "package_identifier": "Canon.i-SENSYS.MF4010-MF4018"
+    },
+    {
+      "package_identifier": "Canonical.Juju"
+    },
+    {
+      "package_identifier": "Canonical.Ubuntu"
+    },
+    {
+      "package_identifier": "Canonical.Ubuntu.1804"
+    },
+    {
+      "package_identifier": "Canonical.Ubuntu.2004"
+    },
+    {
+      "package_identifier": "Canonical.Ubuntu.2204"
+    },
+    {
+      "package_identifier": "Canonical.Ubuntu.2404"
+    },
+    {
+      "package_identifier": "Canva.Affinity"
+    },
+    {
+      "package_identifier": "Canva.Canva"
+    },
+    {
+      "package_identifier": "Canva.Canva.CN"
+    },
+    {
+      "package_identifier": "Caphyon.AdvancedInstaller"
+    },
+    {
+      "package_identifier": "Caphyon.Hover"
+    },
+    {
+      "package_identifier": "Caphyon.PacKit"
+    },
+    {
+      "package_identifier": "CapricornConsultingGmbH.Vigoon"
+    },
+    {
+      "package_identifier": "Carbide3D.CarbideCreate"
+    },
+    {
+      "package_identifier": "CardPresso.ID-All"
+    },
+    {
+      "package_identifier": "CareScribe.CaptionEd"
+    },
+    {
+      "package_identifier": "CareScribe.TalkType"
+    },
+    {
+      "package_identifier": "Carifred.ClearDiskInfo"
+    },
+    {
+      "package_identifier": "CarlWenrich.PythonTkGuiBuilder"
+    },
+    {
+      "package_identifier": "Carrier.BlockLoad"
+    },
+    {
+      "package_identifier": "Carrier.BuildingSystemOptimizer"
+    },
+    {
+      "package_identifier": "Carrier.EngineeringEconomicAnalysis"
+    },
+    {
+      "package_identifier": "Carrier.HourlyAnalysisProgram"
+    },
+    {
+      "package_identifier": "Carrier.PLVPro"
+    },
+    {
+      "package_identifier": "Carrier.RefrigerantPipingDesign"
+    },
+    {
+      "package_identifier": "Carrier.SystemDesignLoad"
+    },
+    {
+      "package_identifier": "CartamundiDigital.Fundels"
+    },
+    {
+      "package_identifier": "Castr.Castr"
+    },
+    {
+      "package_identifier": "CatConnect.SotaConnect"
+    },
+    {
+      "package_identifier": "Catacombae.HFSExplorer"
+    },
+    {
+      "package_identifier": "CatnipGames.ShroudoftheAvatar"
+    },
+    {
+      "package_identifier": "CatoNetworks.CatoClient"
+    },
+    {
+      "package_identifier": "Catsxp.Catsxp"
+    },
+    {
+      "package_identifier": "CeVIO.CeVIOAI"
+    },
+    {
+      "package_identifier": "CeVIO.CeVIOCS7"
+    },
+    {
+      "package_identifier": "CeVIO.SatoSasara.Sing"
+    },
+    {
+      "package_identifier": "CeVIO.SatoSasara.Talk"
+    },
+    {
+      "package_identifier": "CeVIO.SuzukiTsudumi.Sing"
+    },
+    {
+      "package_identifier": "CeVIO.SuzukiTsudumi.Talk"
+    },
+    {
+      "package_identifier": "CedricLouvrier.Pinga"
+    },
+    {
+      "package_identifier": "CedricLouvrier.Pingo"
+    },
+    {
+      "package_identifier": "Celsys.ClipStudioPaint"
+    },
+    {
+      "package_identifier": "CenSoft.HostTE"
+    },
+    {
+      "package_identifier": "CenSoft.TinyTERM"
+    },
+    {
+      "package_identifier": "CenSoft.TinyTERMEnterpriceTEServer"
+    },
+    {
+      "package_identifier": "CenSoft.TinyTERMPlusforWeb"
+    },
+    {
+      "package_identifier": "Cencit.BAS21"
+    },
+    {
+      "package_identifier": "Cendio.ThinLincClient"
+    },
+    {
+      "package_identifier": "CentStudio.CentBrowser"
+    },
+    {
+      "package_identifier": "CertifyTheWeb.CertifySSLManager"
+    },
+    {
+      "package_identifier": "Certum.SmartSignSimplySignDesktop"
+    },
+    {
+      "package_identifier": "CeruleanStudios.Trillian"
+    },
+    {
+      "package_identifier": "CeruleanStudios.Trillian.EXE"
+    },
+    {
+      "package_identifier": "Cfx.re.FiveM"
+    },
+    {
+      "package_identifier": "Cfx.re.RedM"
+    },
+    {
+      "package_identifier": "Chadsoft.CTools"
+    },
+    {
+      "package_identifier": "Chainguard.chainctl"
+    },
+    {
+      "package_identifier": "ChannelCorporation.ChannelTalkforDesktop"
+    },
+    {
+      "package_identifier": "CharruaSoft.CharruaPACS.Advanced"
+    },
+    {
+      "package_identifier": "CharruaSoft.CharruaPACS.Basic"
+    },
+    {
+      "package_identifier": "CharruaSoft.CharruaWorkStation"
+    },
+    {
+      "package_identifier": "CharruaSoft.CharruaWorklistServer"
+    },
+    {
+      "package_identifier": "CharruaSoft.PrintSCP"
+    },
+    {
+      "package_identifier": "CharruaSoft.TestSCU"
+    },
+    {
+      "package_identifier": "ChasseurdeBots.Warsow"
+    },
+    {
+      "package_identifier": "ChatZilla.ChatZilla"
+    },
+    {
+      "package_identifier": "CheckMAL.AppCheck"
+    },
+    {
+      "package_identifier": "ChefSoftware.ChefDK"
+    },
+    {
+      "package_identifier": "ChefSoftware.InfraClient"
+    },
+    {
+      "package_identifier": "ChefSoftware.Inspec"
+    },
+    {
+      "package_identifier": "ChefSoftware.Workstation"
+    },
+    {
+      "package_identifier": "ChemAxon.Marvin"
+    },
+    {
+      "package_identifier": "ChemAxon.instantjchem"
+    },
+    {
+      "package_identifier": "ChemAxon.jchemdotnetapi"
+    },
+    {
+      "package_identifier": "ChemTableSoftware.AutorunOrganizer"
+    },
+    {
+      "package_identifier": "ChemTableSoftware.FilesInspector"
+    },
+    {
+      "package_identifier": "ChemTableSoftware.RegOrganizer"
+    },
+    {
+      "package_identifier": "ChemTableSoftware.RegistryLife"
+    },
+    {
+      "package_identifier": "ChemTableSoftware.SoftOrganizer"
+    },
+    {
+      "package_identifier": "CherubicSoftware.SageThumbs"
+    },
+    {
+      "package_identifier": "Chillblast.CryoClick"
+    },
+    {
+      "package_identifier": "Chillblast.CryoSlate"
+    },
+    {
+      "package_identifier": "ChilliCream.BananaCakePop"
+    },
+    {
+      "package_identifier": "ChilliCream.Nitro"
+    },
+    {
+      "package_identifier": "ChrisBagwell.SoX"
+    },
+    {
+      "package_identifier": "ChrisLong.EZSignIt"
+    },
+    {
+      "package_identifier": "ChrisLong.NTFSHiddenDataFinder"
+    },
+    {
+      "package_identifier": "ChrisLong.SSESetup"
+    },
+    {
+      "package_identifier": "ChrisLong.SimpleDataBackup"
+    },
+    {
+      "package_identifier": "ChrisLong.TextMorph"
+    },
+    {
+      "package_identifier": "ChrisPirih.SkiFree"
+    },
+    {
+      "package_identifier": "ChristianKindahl.InfraRecorder"
+    },
+    {
+      "package_identifier": "Chromium.ChromeDriver"
+    },
+    {
+      "package_identifier": "ChronoplexSoftware.MyFamilyTree"
+    },
+    {
+      "package_identifier": "ChunghwaTelecom.HiCOSClient"
+    },
+    {
+      "package_identifier": "Ci.Flower"
+    },
+    {
+      "package_identifier": "CiderCollective.Cider"
+    },
+    {
+      "package_identifier": "Cisco.CiscoWebexMeetings"
+    },
+    {
+      "package_identifier": "Cisco.Jabber"
+    },
+    {
+      "package_identifier": "Cisco.JabberVDIAgent"
+    },
+    {
+      "package_identifier": "Cisco.NetworkRecordingPlayer"
+    },
+    {
+      "package_identifier": "Cisco.Proximity"
+    },
+    {
+      "package_identifier": "Cisco.UmbrellaRoamingClient"
+    },
+    {
+      "package_identifier": "Cisco.Webex"
+    },
+    {
+      "package_identifier": "Cisco.Webex.Bundle"
+    },
+    {
+      "package_identifier": "Cisco.WebexNetworkRecordingConverter"
+    },
+    {
+      "package_identifier": "Cisco.WebexRecorderAndPlayer"
+    },
+    {
+      "package_identifier": "Cisco.WebexWRFtoWMV"
+    },
+    {
+      "package_identifier": "Cisco.webex-outlook-plugin"
+    },
+    {
+      "package_identifier": "Citadel5-JP.GS-Base"
+    },
+    {
+      "package_identifier": "Citadel5-JP.GS-Calc"
+    },
+    {
+      "package_identifier": "Citrix.Workspace"
+    },
+    {
+      "package_identifier": "Citrix.Workspace.LTSR"
+    },
+    {
+      "package_identifier": "Cjcr-Software.EasyBlindScanPro"
+    },
+    {
+      "package_identifier": "Cjwdev.ADAccountResetTool"
+    },
+    {
+      "package_identifier": "Cjwdev.ADInfo.Free"
+    },
+    {
+      "package_identifier": "Cjwdev.ADPermissionsReporter.Free"
+    },
+    {
+      "package_identifier": "Cjwdev.ADPhotoEdit.Bulk.Trial"
+    },
+    {
+      "package_identifier": "Cjwdev.ADPhotoEdit.Free"
+    },
+    {
+      "package_identifier": "Cjwdev.ADTidy.Free"
+    },
+    {
+      "package_identifier": "Cjwdev.FilePermissionsCheck"
+    },
+    {
+      "package_identifier": "Cjwdev.GetLocalAdminsGUI"
+    },
+    {
+      "package_identifier": "Cjwdev.GroupManager.Free"
+    },
+    {
+      "package_identifier": "Cjwdev.ManagedServiceAccountsGUI"
+    },
+    {
+      "package_identifier": "Cjwdev.NTFSPermissionsReporter.Free"
+    },
+    {
+      "package_identifier": "Cjwdev.ProcessPrompt"
+    },
+    {
+      "package_identifier": "Cjwdev.ServiceCredentialsManager.Free"
+    },
+    {
+      "package_identifier": "Cjwdev.ServicePermissionsReporter"
+    },
+    {
+      "package_identifier": "ClamWin.ClamWin"
+    },
+    {
+      "package_identifier": "ClarivateAnalytics.EndNote"
+    },
+    {
+      "package_identifier": "ClawsMail.ClawsMail"
+    },
+    {
+      "package_identifier": "CleverCloud.CleverTools"
+    },
+    {
+      "package_identifier": "CleverFiles.DiskDrill"
+    },
+    {
+      "package_identifier": "Clevertouch.Clevershare"
+    },
+    {
+      "package_identifier": "Clevertouch.Clevershare.EXE"
+    },
+    {
+      "package_identifier": "ClickUp.ClickUp"
+    },
+    {
+      "package_identifier": "Clickteam.InstallCreator"
+    },
+    {
+      "package_identifier": "Clickteam.PatchMaker"
+    },
+    {
+      "package_identifier": "Clip2net.Clip2net"
+    },
+    {
+      "package_identifier": "ClockAssist.ClockAssist"
+    },
+    {
+      "package_identifier": "Clockify.Clockify"
+    },
+    {
+      "package_identifier": "CloneSpy.CloneSpy"
+    },
+    {
+      "package_identifier": "CloudApp.CloudApp"
+    },
+    {
+      "package_identifier": "CloudCompare.CloudCompare"
+    },
+    {
+      "package_identifier": "CloudFoundry.CLI.v7"
+    },
+    {
+      "package_identifier": "CloudFoundry.CLI.v8"
+    },
+    {
+      "package_identifier": "CloudImperiumGames.RSILauncher"
+    },
+    {
+      "package_identifier": "CloudMosaInc.PuffinSecureBrowser"
+    },
+    {
+      "package_identifier": "CloudOpsSL.K8Studio"
+    },
+    {
+      "package_identifier": "CloudStack.Msty"
+    },
+    {
+      "package_identifier": "CloudStack.Msty.CPU"
+    },
+    {
+      "package_identifier": "CloudTalk.Phone"
+    },
+    {
+      "package_identifier": "Cloudflare.Warp"
+    },
+    {
+      "package_identifier": "Cloudfleet.CLI"
+    },
+    {
+      "package_identifier": "CoScreen.CoScreen"
+    },
+    {
+      "package_identifier": "CocCoc.CocCoc"
+    },
+    {
+      "package_identifier": "Cockos.LICEcap"
+    },
+    {
+      "package_identifier": "Cockos.REAPER"
+    },
+    {
+      "package_identifier": "Cocos.CocosDashboard"
+    },
+    {
+      "package_identifier": "CodeBlocks.CodeBlocks"
+    },
+    {
+      "package_identifier": "CodeBlocks.CodeBlocks.MinGW"
+    },
+    {
+      "package_identifier": "CodeJelly.Launchy"
+    },
+    {
+      "package_identifier": "CodeLite.CodeLite"
+    },
+    {
+      "package_identifier": "CodeLyokoGames.IFSCL.Standalone"
+    },
+    {
+      "package_identifier": "CodeLyokoGames.KolossusLauncher"
+    },
+    {
+      "package_identifier": "CodeOrg.MakerApp"
+    },
+    {
+      "package_identifier": "CodeSector.DirectFolders"
+    },
+    {
+      "package_identifier": "CodeSector.TeraCopy"
+    },
+    {
+      "package_identifier": "CodeSystems.Turbo"
+    },
+    {
+      "package_identifier": "CodeSystems.TurboStudio"
+    },
+    {
+      "package_identifier": "Codebox.BitMeterOS"
+    },
+    {
+      "package_identifier": "CodecGuide.K-LiteCodecPack.Basic"
+    },
+    {
+      "package_identifier": "CodecGuide.K-LiteCodecPack.Full"
+    },
+    {
+      "package_identifier": "CodecGuide.K-LiteCodecPack.Mega"
+    },
+    {
+      "package_identifier": "CodecGuide.K-LiteCodecPack.Standard"
+    },
+    {
+      "package_identifier": "Codeium.Windsurf"
+    },
+    {
+      "package_identifier": "Codejunkies.PowerSaves"
+    },
+    {
+      "package_identifier": "Codemao.Lessons"
+    },
+    {
+      "package_identifier": "Codemao.SmartEditor"
+    },
+    {
+      "package_identifier": "Codemao.TurtleEditor.1"
+    },
+    {
+      "package_identifier": "Codemao.TurtleEditor.2"
+    },
+    {
+      "package_identifier": "Codemao.kitten.3"
+    },
+    {
+      "package_identifier": "Codemao.kitten.4"
+    },
+    {
+      "package_identifier": "CoderBag.QuickCPUx64"
+    },
+    {
+      "package_identifier": "Codice.PlasticSCM.CloudEdition"
+    },
+    {
+      "package_identifier": "Codice.PlasticSCM.Enterprise"
+    },
+    {
+      "package_identifier": "CoenFin.AuditfileConverterAndAnalyser"
+    },
+    {
+      "package_identifier": "CoenFin.BankStatementAnalyser"
+    },
+    {
+      "package_identifier": "CoenFin.MT940Creator"
+    },
+    {
+      "package_identifier": "CoenFin.PDFinvoice2UBL"
+    },
+    {
+      "package_identifier": "CoenFin.SEPACreator"
+    },
+    {
+      "package_identifier": "Cogin.QueueExplorer"
+    },
+    {
+      "package_identifier": "Cogin.QueueMonitor.Pro"
+    },
+    {
+      "package_identifier": "Cogin.QueueMonitor.Std"
+    },
+    {
+      "package_identifier": "Coinomi.CoinomiWallet"
+    },
+    {
+      "package_identifier": "ColdTurkeySoftware.ColdTurkeyBlocker"
+    },
+    {
+      "package_identifier": "Coldlake.StellarPlayer"
+    },
+    {
+      "package_identifier": "CollegeBoard.Bluebook"
+    },
+    {
+      "package_identifier": "CologneCodeCompany.XYplorer"
+    },
+    {
+      "package_identifier": "CologneCodeCompany.XYplorerPortable"
+    },
+    {
+      "package_identifier": "ColonyLabs.ScribeDesktopCapture"
+    },
+    {
+      "package_identifier": "ColorLogic.CoPrA"
+    },
+    {
+      "package_identifier": "ColorLogic.ColorAnt"
+    },
+    {
+      "package_identifier": "ColorLogic.ZePrA"
+    },
+    {
+      "package_identifier": "CometNetwork.BitComet"
+    },
+    {
+      "package_identifier": "ComfortSoftwareGroup.ComfortClipboardPro"
+    },
+    {
+      "package_identifier": "ComfortSoftwareGroup.ComfortKeysPro"
+    },
+    {
+      "package_identifier": "ComfortSoftwareGroup.ComfortOSK"
+    },
+    {
+      "package_identifier": "ComfortSoftwareGroup.FreeAlarmClock"
+    },
+    {
+      "package_identifier": "ComfortSoftwareGroup.FreeVirtualKeyboard"
+    },
+    {
+      "package_identifier": "ComfortSoftwareGroup.HotAlarmClock"
+    },
+    {
+      "package_identifier": "Comfy.ComfyUI-Desktop"
+    },
+    {
+      "package_identifier": "Comix.FastMeeting"
+    },
+    {
+      "package_identifier": "Comix.FastMeetingAVPlugins"
+    },
+    {
+      "package_identifier": "CommandLine.Wave"
+    },
+    {
+      "package_identifier": "CommunicationPlatform.MAX"
+    },
+    {
+      "package_identifier": "Comodo.ComodoDragon"
+    },
+    {
+      "package_identifier": "CompeGPS.TwoNavLand"
+    },
+    {
+      "package_identifier": "CompuBench.GFXBench"
+    },
+    {
+      "package_identifier": "Compuphase.Pawn"
+    },
+    {
+      "package_identifier": "Compuphase.Termite"
+    },
+    {
+      "package_identifier": "Comsci.100PcVatFreeBridge"
+    },
+    {
+      "package_identifier": "Concept2.Utility"
+    },
+    {
+      "package_identifier": "ConceptworldCorporation.RecentX"
+    },
+    {
+      "package_identifier": "ConeXware.PowerArchiver.2022"
+    },
+    {
+      "package_identifier": "Coninfer.ECLiPSeCLP.7.0"
+    },
+    {
+      "package_identifier": "Coninfer.ECLiPSeCLP.7.1"
+    },
+    {
+      "package_identifier": "ConnectWise.ConnectWiseManageClient64-bit"
+    },
+    {
+      "package_identifier": "Connective.ConnectiveSigningPlugins"
+    },
+    {
+      "package_identifier": "ConselhoNacionaldeJustica-CNJ.pje-office"
+    },
+    {
+      "package_identifier": "Constructor.Flat"
+    },
+    {
+      "package_identifier": "ContourDesign.ContourPointingDevices"
+    },
+    {
+      "package_identifier": "ContourDesign.ContourShuttle"
+    },
+    {
+      "package_identifier": "ControlUp.ControlUpAgent"
+    },
+    {
+      "package_identifier": "ControlUp.ControlUpAgentManager"
+    },
+    {
+      "package_identifier": "ControlUp.RemoteDX.Citrix"
+    },
+    {
+      "package_identifier": "ControlUp.RemoteDX.Microsoft"
+    },
+    {
+      "package_identifier": "ControlUp.RemoteDX.Omnissa"
+    },
+    {
+      "package_identifier": "ConvectivaTecnologia.RMCConvectiva"
+    },
+    {
+      "package_identifier": "Convertilla.Convertilla"
+    },
+    {
+      "package_identifier": "CopyTrans.Studio"
+    },
+    {
+      "package_identifier": "CoralCreek.SQLiteExpert.Personal"
+    },
+    {
+      "package_identifier": "CoralCreek.SQLiteExpert.Professional"
+    },
+    {
+      "package_identifier": "CoreFTP.CoreFTP"
+    },
+    {
+      "package_identifier": "CoreFTP.CoreFTPServer"
+    },
+    {
+      "package_identifier": "CoreFTP.MiniSFTPServer"
+    },
+    {
+      "package_identifier": "Corel.MindManager.23"
+    },
+    {
+      "package_identifier": "Corel.MindManager.24"
+    },
+    {
+      "package_identifier": "Corel.MindManager.25"
+    },
+    {
+      "package_identifier": "Corel.WinZip"
+    },
+    {
+      "package_identifier": "Corel.WinZip.CommandLineSupportAddOn"
+    },
+    {
+      "package_identifier": "Corel.WinZip.SelfExtractor"
+    },
+    {
+      "package_identifier": "Corsair.iCUE.3"
+    },
+    {
+      "package_identifier": "Corsair.iCUE.4"
+    },
+    {
+      "package_identifier": "Corsair.iCUE.5"
+    },
+    {
+      "package_identifier": "Couchbase.ServerCommunity"
+    },
+    {
+      "package_identifier": "Couchbase.ServerEnterprise"
+    },
+    {
+      "package_identifier": "Coupang.CoupangPOS"
+    },
+    {
+      "package_identifier": "CraftEdge.EasyCutStudio"
+    },
+    {
+      "package_identifier": "Craftware.Keyhac"
+    },
+    {
+      "package_identifier": "CrashPlan.CrashPlan"
+    },
+    {
+      "package_identifier": "Crazybump.Crazybump"
+    },
+    {
+      "package_identifier": "Creality.CRStudio"
+    },
+    {
+      "package_identifier": "Creality.CrealityPrint"
+    },
+    {
+      "package_identifier": "Creality.CrealityScan"
+    },
+    {
+      "package_identifier": "Creality.CrealityScan.4"
+    },
+    {
+      "package_identifier": "Creality.HALOTBOX"
+    },
+    {
+      "package_identifier": "CreativeForce.Hue"
+    },
+    {
+      "package_identifier": "CreativeForce.Kelvin"
+    },
+    {
+      "package_identifier": "CreativeForce.Luma"
+    },
+    {
+      "package_identifier": "CreativeForce.Triad"
+    },
+    {
+      "package_identifier": "CreativeTechnology.CreativeApp"
+    },
+    {
+      "package_identifier": "CreativeTechnology.OpenAL"
+    },
+    {
+      "package_identifier": "CreativeTechnology.SoundBlasterCommand"
+    },
+    {
+      "package_identifier": "Creosys.OBDAutoDoctor"
+    },
+    {
+      "package_identifier": "Crestron.AirMedia"
+    },
+    {
+      "package_identifier": "Crestron.AirMediaPeripherals"
+    },
+    {
+      "package_identifier": "CrisisGo.CrisisGo"
+    },
+    {
+      "package_identifier": "CrossPlusA.Balabolka"
+    },
+    {
+      "package_identifier": "Crossplane.CrossplaneCli"
+    },
+    {
+      "package_identifier": "Crucial.PortableSSDUtilitySoftware"
+    },
+    {
+      "package_identifier": "Crucial.StorageExecutive"
+    },
+    {
+      "package_identifier": "Crunchyroll.MasterofGarden"
+    },
+    {
+      "package_identifier": "CrystalArtSoftware.NewsLeecher"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalDiskInfo"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalDiskInfo.AoiEdition"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalDiskInfo.KureiKeiEdition"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalDiskInfo.ShizukuEdition"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalDiskMark"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalDiskMark.AoiEdition"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalDiskMark.ShizukuEdition"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalMark3D25"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalMarkRetro"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalMarkRetro.AoiEdition"
+    },
+    {
+      "package_identifier": "CrystalDewWorld.CrystalMarkRetro.ShizukuEdition"
+    },
+    {
+      "package_identifier": "CrystalIDEASoftware.AnyToISO"
+    },
+    {
+      "package_identifier": "CrystalIDEASoftware.Speedyfox"
+    },
+    {
+      "package_identifier": "CrystalRich.InternetOff"
+    },
+    {
+      "package_identifier": "CrystalRich.LockHunter"
+    },
+    {
+      "package_identifier": "CrystalRich.USBSafelyRemove"
+    },
+    {
+      "package_identifier": "CrystalRich.Zentimo"
+    },
+    {
+      "package_identifier": "CtrlPrint.CtrlPrintTransferManager"
+    },
+    {
+      "package_identifier": "Cube.CubePlatform"
+    },
+    {
+      "package_identifier": "CubeCodersLimited.AMPInstanceManager"
+    },
+    {
+      "package_identifier": "CubeSoft.CubeICE"
+    },
+    {
+      "package_identifier": "CubeSoft.CubePDF"
+    },
+    {
+      "package_identifier": "CubeSoft.CubePDFUtility"
+    },
+    {
+      "package_identifier": "CudaText.CudaText"
+    },
+    {
+      "package_identifier": "CurveSeries.CurveSeries"
+    },
+    {
+      "package_identifier": "Cwtch.Cwtch"
+    },
+    {
+      "package_identifier": "Cybelsoft.DriversCloud"
+    },
+    {
+      "package_identifier": "CyberCat.ADBAppControl"
+    },
+    {
+      "package_identifier": "CyberGhost.CyberGhost"
+    },
+    {
+      "package_identifier": "CyberHive.Connect"
+    },
+    {
+      "package_identifier": "CyberPowerSystemsInc.PowerPanelPersonal"
+    },
+    {
+      "package_identifier": "Cygwin.Cygwin"
+    },
+    {
+      "package_identifier": "Cygwin.CygwinSetup"
+    },
+    {
+      "package_identifier": "Cyotek.ColorPaletteEditor"
+    },
+    {
+      "package_identifier": "Cyotek.CopyTools"
+    },
+    {
+      "package_identifier": "Cyotek.SitemapCreator"
+    },
+    {
+      "package_identifier": "Cyotek.WebCopy"
+    },
+    {
+      "package_identifier": "Cypherix.Cryptainer.Lite.18"
+    },
+    {
+      "package_identifier": "Cypherix.Cryptainer.Lite.19"
+    },
+    {
+      "package_identifier": "Cypherix.Cryptainer.Personal.18"
+    },
+    {
+      "package_identifier": "Cypherix.Cryptainer.Personal.19"
+    },
+    {
+      "package_identifier": "Cypherix.Cryptainer.Pro.18"
+    },
+    {
+      "package_identifier": "Cypherix.Cryptainer.Pro.19"
+    },
+    {
+      "package_identifier": "Cypherix.DeCypherIT"
+    },
+    {
+      "package_identifier": "Cypherix.SecureIT"
+    },
+    {
+      "package_identifier": "Cytrence.Kiwi"
+    },
+    {
+      "package_identifier": "D-Link.DWA-X1850Driver"
+    },
+    {
+      "package_identifier": "D-Link.TFTPServer"
+    },
+    {
+      "package_identifier": "DATEV.Belegtransfer"
+    },
+    {
+      "package_identifier": "DATEV.SicherheitspaketCompact"
+    },
+    {
+      "package_identifier": "DATEV.SmartITConnect"
+    },
+    {
+      "package_identifier": "DBVis.DBVisualizer"
+    },
+    {
+      "package_identifier": "DBeaver.DBeaver.Enterprise"
+    },
+    {
+      "package_identifier": "DBeaver.DBeaver.Lite"
+    },
+    {
+      "package_identifier": "DBeaver.DBeaver.Team"
+    },
+    {
+      "package_identifier": "DBeaver.DBeaver.Ultimate"
+    },
+    {
+      "package_identifier": "DEngine.DoomsdayEngine.Candidate"
+    },
+    {
+      "package_identifier": "DEngine.DoomsdayEngine.Stable"
+    },
+    {
+      "package_identifier": "DFRobot.Mind+"
+    },
+    {
+      "package_identifier": "DG0JBJ.HDSDR"
+    },
+    {
+      "package_identifier": "DH2iCompany.DxEnterprise"
+    },
+    {
+      "package_identifier": "DIAL.DIALux-evo"
+    },
+    {
+      "package_identifier": "DJI.DJIAssistant2"
+    },
+    {
+      "package_identifier": "DJI.DJIAssistant2.ConsumerDronesSeries"
+    },
+    {
+      "package_identifier": "DJI.DJIAssistant2.EnterpriseSeries"
+    },
+    {
+      "package_identifier": "DJI.DJIAssistant2.FPV"
+    },
+    {
+      "package_identifier": "DJI.DJIAssistant2.ForAutopilot"
+    },
+    {
+      "package_identifier": "DJI.DJIAssistant2.ForBatteryStation"
+    },
+    {
+      "package_identifier": "DJI.DJIAssistant2.ForMG"
+    },
+    {
+      "package_identifier": "DJI.DJIAssistant2.ForMatrice"
+    },
+    {
+      "package_identifier": "DJI.DJIAssistant2.ForMavic"
+    },
+    {
+      "package_identifier": "DJI.DJIAssistant2.ForPhantom"
+    },
+    {
+      "package_identifier": "DJI.DJITerra"
+    },
+    {
+      "package_identifier": "DK1TB.SatPC32"
+    },
+    {
+      "package_identifier": "DMM.GamePlayer"
+    },
+    {
+      "package_identifier": "DMT.DMT840MDControllerSoftware"
+    },
+    {
+      "package_identifier": "DMT.DMTDeviceEnabler"
+    },
+    {
+      "package_identifier": "DMT.DMTDriverPackage"
+    },
+    {
+      "package_identifier": "DMT.MyoDAQ"
+    },
+    {
+      "package_identifier": "DMT.MyoNORM"
+    },
+    {
+      "package_identifier": "DMT.MyoPULL"
+    },
+    {
+      "package_identifier": "DMT.MyoPULSE"
+    },
+    {
+      "package_identifier": "DMT.MyoVIEW"
+    },
+    {
+      "package_identifier": "DNAGenics.DNAKitStudio"
+    },
+    {
+      "package_identifier": "DOSBox.DOSBox"
+    },
+    {
+      "package_identifier": "DRDTeam.Risen3D"
+    },
+    {
+      "package_identifier": "DSoundSoft.AISingers"
+    },
+    {
+      "package_identifier": "DSoundSoft.AISingersWeb"
+    },
+    {
+      "package_identifier": "DSwiss.SecureSafe"
+    },
+    {
+      "package_identifier": "DVDFlick.DVDFlick"
+    },
+    {
+      "package_identifier": "DVSTSEOOD.QOps"
+    },
+    {
+      "package_identifier": "DW.Spectrum.Client"
+    },
+    {
+      "package_identifier": "DW.Spectrum.Server"
+    },
+    {
+      "package_identifier": "DXsoft.TrueTTY"
+    },
+    {
+      "package_identifier": "DYMO.DYMOConnect"
+    },
+    {
+      "package_identifier": "DYMO.DYMOID"
+    },
+    {
+      "package_identifier": "DYMO.DYMOLabel"
+    },
+    {
+      "package_identifier": "DYMO.DYMOScale"
+    },
+    {
+      "package_identifier": "DYMO.PrintServerControlCenter"
+    },
+    {
+      "package_identifier": "DZEDSystems.Dragonframe"
+    },
+    {
+      "package_identifier": "DaMtech.PasswordGenerator"
+    },
+    {
+      "package_identifier": "Dagger.Cli"
+    },
+    {
+      "package_identifier": "Dahua.SmartPSSLite"
+    },
+    {
+      "package_identifier": "DaimlerTruck.FleetboardCockpit"
+    },
+    {
+      "package_identifier": "DaiyuuNobori.Win10Pcap"
+    },
+    {
+      "package_identifier": "Dalux.Dalux"
+    },
+    {
+      "package_identifier": "Dalux.Dalux.MSI"
+    },
+    {
+      "package_identifier": "Danfoss.CCMS"
+    },
+    {
+      "package_identifier": "Danfoss.CoolConfig"
+    },
+    {
+      "package_identifier": "Danfoss.Coolselector.2"
+    },
+    {
+      "package_identifier": "Danfoss.MyDrive.Insight"
+    },
+    {
+      "package_identifier": "Danfoss.TTServiceMonitoringTools"
+    },
+    {
+      "package_identifier": "Dangbei.XiaowangScreenshot"
+    },
+    {
+      "package_identifier": "DanielGehriger.MSI2XML"
+    },
+    {
+      "package_identifier": "DaouTech.DaouMessenger"
+    },
+    {
+      "package_identifier": "DaringDevelopmentInc.Horizon"
+    },
+    {
+      "package_identifier": "DasKeyboard.DasKeyboard"
+    },
+    {
+      "package_identifier": "Dashlane.Dashlane"
+    },
+    {
+      "package_identifier": "DataPower.SaveWizardforPS4MAX"
+    },
+    {
+      "package_identifier": "DataTools.CATCLI"
+    },
+    {
+      "package_identifier": "Databricks.SparkODBCDriver"
+    },
+    {
+      "package_identifier": "Datacomp.BIMvision"
+    },
+    {
+      "package_identifier": "Datadog.Agent"
+    },
+    {
+      "package_identifier": "Dataflare.Dataflare"
+    },
+    {
+      "package_identifier": "Datalust.Seq"
+    },
+    {
+      "package_identifier": "DatawellBV.Waves5"
+    },
+    {
+      "package_identifier": "Datronicsoft.SpacedeskDriver.Server"
+    },
+    {
+      "package_identifier": "Datronicsoft.SpacedeskViewer.Client.Beta"
+    },
+    {
+      "package_identifier": "Datto.CloudContinuityAgent"
+    },
+    {
+      "package_identifier": "Datto.WindowsAgent"
+    },
+    {
+      "package_identifier": "Datto.Workplace"
+    },
+    {
+      "package_identifier": "Datto.WorkplaceServer"
+    },
+    {
+      "package_identifier": "Daum.PotPlayer"
+    },
+    {
+      "package_identifier": "DavidJoffe.DaveGnukem"
+    },
+    {
+      "package_identifier": "DavidMeeker.FEMM"
+    },
+    {
+      "package_identifier": "DavidNorgren.Mine-imator"
+    },
+    {
+      "package_identifier": "DavidRector.Linkage"
+    },
+    {
+      "package_identifier": "DavidTHOIRON.FotoSketcher"
+    },
+    {
+      "package_identifier": "DavyTriponney.Polyphone"
+    },
+    {
+      "package_identifier": "DeDietrich.PRO"
+    },
+    {
+      "package_identifier": "DeaDBeeF.DeaDBeeF"
+    },
+    {
+      "package_identifier": "Debian.Debian"
+    },
+    {
+      "package_identifier": "Dedoose.Dedoose"
+    },
+    {
+      "package_identifier": "DeepCool.DeepCool"
+    },
+    {
+      "package_identifier": "DeepL.DeepL"
+    },
+    {
+      "package_identifier": "Deezer.Deezer"
+    },
+    {
+      "package_identifier": "DefangLabs.Defang"
+    },
+    {
+      "package_identifier": "Delinea.DelineaConnectionManager"
+    },
+    {
+      "package_identifier": "Delinea.PrivilegeManagerAgents"
+    },
+    {
+      "package_identifier": "Delinea.ThycoticAgent"
+    },
+    {
+      "package_identifier": "Delinea.ThycoticApplicationControlAgent"
+    },
+    {
+      "package_identifier": "Delinea.ThycoticDirectoryServicesAgent"
+    },
+    {
+      "package_identifier": "Delinea.ThycoticLocalSecurityAgent"
+    },
+    {
+      "package_identifier": "Dell.CommandConfigure"
+    },
+    {
+      "package_identifier": "Dell.CommandUpdate"
+    },
+    {
+      "package_identifier": "Dell.CommandUpdate.Universal"
+    },
+    {
+      "package_identifier": "Dell.DisplayAndPeripheralManager"
+    },
+    {
+      "package_identifier": "Dell.DisplayManager"
+    },
+    {
+      "package_identifier": "Dell.Optimizer"
+    },
+    {
+      "package_identifier": "Dell.PeripheralManager"
+    },
+    {
+      "package_identifier": "Dell.SystemUpdate"
+    },
+    {
+      "package_identifier": "DeltaChat.DeltaChat"
+    },
+    {
+      "package_identifier": "Deltek.Maconomy"
+    },
+    {
+      "package_identifier": "DelugeTeam.Deluge"
+    },
+    {
+      "package_identifier": "DelugeTeam.DelugeBeta"
+    },
+    {
+      "package_identifier": "Denemo.Denemo"
+    },
+    {
+      "package_identifier": "DenisZhitnyakov.DolphinAnty"
+    },
+    {
+      "package_identifier": "DennisBareis.MAKEMSI"
+    },
+    {
+      "package_identifier": "Descript.Descript"
+    },
+    {
+      "package_identifier": "DeskShare.FTPManagerLite"
+    },
+    {
+      "package_identifier": "DeskShare.IPCameraViewer"
+    },
+    {
+      "package_identifier": "DeskSoft.DesktopPlant"
+    },
+    {
+      "package_identifier": "DeskSoft.EarthView"
+    },
+    {
+      "package_identifier": "DeskSoft.HardCopyPro"
+    },
+    {
+      "package_identifier": "DeskSoft.SmartCapture"
+    },
+    {
+      "package_identifier": "DeskSoft.TypeButler"
+    },
+    {
+      "package_identifier": "DeskSoft.WindowManager"
+    },
+    {
+      "package_identifier": "DeskTime.Desktop"
+    },
+    {
+      "package_identifier": "Devart.TMetric"
+    },
+    {
+      "package_identifier": "DevinCook.Flowgorithm"
+    },
+    {
+      "package_identifier": "Devolutions.Agent"
+    },
+    {
+      "package_identifier": "Devolutions.Gateway"
+    },
+    {
+      "package_identifier": "Devolutions.Launcher"
+    },
+    {
+      "package_identifier": "Devolutions.RemoteDesktopManager"
+    },
+    {
+      "package_identifier": "Devolutions.RemoteDesktopManagerAgent"
+    },
+    {
+      "package_identifier": "Devolutions.ServerConsole"
+    },
+    {
+      "package_identifier": "Devolutions.UniGetUI"
+    },
+    {
+      "package_identifier": "Devolutions.Workspace"
+    },
+    {
+      "package_identifier": "Dextronet.MindCollected"
+    },
+    {
+      "package_identifier": "Dialpad.Dialpad"
+    },
+    {
+      "package_identifier": "Dialpad.DialpadMeetings"
+    },
+    {
+      "package_identifier": "DieKeure.MolEnBeer"
+    },
+    {
+      "package_identifier": "DigiDNA.iMazing"
+    },
+    {
+      "package_identifier": "DigiDNA.iMazingHEICConverter"
+    },
+    {
+      "package_identifier": "DigiDNA.iMazingProfileEditor"
+    },
+    {
+      "package_identifier": "DigiPen.NitronicRush"
+    },
+    {
+      "package_identifier": "Digiexam.Digiexam"
+    },
+    {
+      "package_identifier": "DigitalCreations.MaxTo"
+    },
+    {
+      "package_identifier": "DigitalDevices.DD-TV"
+    },
+    {
+      "package_identifier": "DigitalExtremes.Soulframe"
+    },
+    {
+      "package_identifier": "DigitalExtremes.Warframe"
+    },
+    {
+      "package_identifier": "DigitalScholar.Zotero"
+    },
+    {
+      "package_identifier": "DigitalScience.Papers"
+    },
+    {
+      "package_identifier": "DigitalVolcanoSoftware.DuplicateCleaner.4.Free"
+    },
+    {
+      "package_identifier": "DigitalVolcanoSoftware.DuplicateCleaner.4.Pro"
+    },
+    {
+      "package_identifier": "DigitalVolcanoSoftware.DuplicateCleaner.5"
+    },
+    {
+      "package_identifier": "DigitalVolcanoSoftware.HashTool"
+    },
+    {
+      "package_identifier": "DigitalVolcanoSoftware.TaskCanvas"
+    },
+    {
+      "package_identifier": "DigitalVolcanoSoftware.TextCrawler"
+    },
+    {
+      "package_identifier": "DigitalVolcanoSoftware.TextCrawler.Pro"
+    },
+    {
+      "package_identifier": "Diladele.WebProxy"
+    },
+    {
+      "package_identifier": "DimitriVanHeesch.Doxygen"
+    },
+    {
+      "package_identifier": "DinamoNetworks.HSMDinamo"
+    },
+    {
+      "package_identifier": "Dio.PureCodec"
+    },
+    {
+      "package_identifier": "Dioss.DiosseIDMiddleware"
+    },
+    {
+      "package_identifier": "Dioss.DiosseIDMiddleware.Server"
+    },
+    {
+      "package_identifier": "DirSoft.ARPro"
+    },
+    {
+      "package_identifier": "DirkBoettcher.Ahnenblatt"
+    },
+    {
+      "package_identifier": "DirkBoettcher.Ahnenblatt.Free"
+    },
+    {
+      "package_identifier": "DirkJansen.MailCheck2"
+    },
+    {
+      "package_identifier": "Discord.Discord"
+    },
+    {
+      "package_identifier": "Discord.Discord.Canary"
+    },
+    {
+      "package_identifier": "Discord.Discord.Canary.arm64"
+    },
+    {
+      "package_identifier": "Discord.Discord.Canary.x86"
+    },
+    {
+      "package_identifier": "Discord.Discord.Development"
+    },
+    {
+      "package_identifier": "Discord.Discord.Development.arm64"
+    },
+    {
+      "package_identifier": "Discord.Discord.Development.x86"
+    },
+    {
+      "package_identifier": "Discord.Discord.PTB"
+    },
+    {
+      "package_identifier": "Discord.Discord.PTB.arm64"
+    },
+    {
+      "package_identifier": "Discord.Discord.PTB.x86"
+    },
+    {
+      "package_identifier": "Discord.Discord.arm64"
+    },
+    {
+      "package_identifier": "Discord.Discord.x86"
+    },
+    {
+      "package_identifier": "DiskInternals.AccessRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.AddressBookRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.BootableRecoveryCD"
+    },
+    {
+      "package_identifier": "DiskInternals.CD-DVDRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.DVRRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.EFSRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.ExcelRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.LinuxReader"
+    },
+    {
+      "package_identifier": "DiskInternals.LinuxRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.MSSQLRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.MailRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.MailRecoveryExpress"
+    },
+    {
+      "package_identifier": "DiskInternals.MySQLRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.NTFSRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.OfficeRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.OutlookRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.PartitionRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.RAIDRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.RecoveryServer"
+    },
+    {
+      "package_identifier": "DiskInternals.Uneraser"
+    },
+    {
+      "package_identifier": "DiskInternals.VMFSRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.VideoRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.WordRecovery"
+    },
+    {
+      "package_identifier": "DiskInternals.ZIPRepair"
+    },
+    {
+      "package_identifier": "Diskuv.OCaml"
+    },
+    {
+      "package_identifier": "Diskuv.dk"
+    },
+    {
+      "package_identifier": "DisplayLink.GraphicsDriver"
+    },
+    {
+      "package_identifier": "DisplayLink.GraphicsDriver.HotDesking"
+    },
+    {
+      "package_identifier": "DisruptiveInnovations.BlueGriffon"
+    },
+    {
+      "package_identifier": "DjVuLibre.DjView"
+    },
+    {
+      "package_identifier": "Dlang.DMD"
+    },
+    {
+      "package_identifier": "DmitryKozhinov.IconEdit2"
+    },
+    {
+      "package_identifier": "DoD.STIGViewer"
+    },
+    {
+      "package_identifier": "Docker.DockerCLI"
+    },
+    {
+      "package_identifier": "Docker.DockerDesktop"
+    },
+    {
+      "package_identifier": "Docker.DockerDesktopEdge"
+    },
+    {
+      "package_identifier": "DocuSign.DocusignEdit"
+    },
+    {
+      "package_identifier": "DocuSign.DocusignPKI"
+    },
+    {
+      "package_identifier": "DocumizeInc.Zerabase"
+    },
+    {
+      "package_identifier": "Doist.Todoist"
+    },
+    {
+      "package_identifier": "DolphinComputerAccess.EasyReader"
+    },
+    {
+      "package_identifier": "DolphinEmulator.Dolphin"
+    },
+    {
+      "package_identifier": "DominikReichl.KeePass"
+    },
+    {
+      "package_identifier": "DominikReichl.KeePass.Classic"
+    },
+    {
+      "package_identifier": "DonationCoder.FindandRunRobot"
+    },
+    {
+      "package_identifier": "DonationCoder.ScreenshotCaptor"
+    },
+    {
+      "package_identifier": "Donkz.RemoteDesktopPlus"
+    },
+    {
+      "package_identifier": "DoomExplorer.DoomExplorer"
+    },
+    {
+      "package_identifier": "DoubleGIS.2GIS"
+    },
+    {
+      "package_identifier": "Douyu.DouyuLive"
+    },
+    {
+      "package_identifier": "Doxie.Doxie"
+    },
+    {
+      "package_identifier": "Doxim.StriataReader"
+    },
+    {
+      "package_identifier": "Doxim.StriataReader.EXE"
+    },
+    {
+      "package_identifier": "Draftable.Draftable"
+    },
+    {
+      "package_identifier": "DrayTek.SmartVPN"
+    },
+    {
+      "package_identifier": "DreamSourceLab.DSView"
+    },
+    {
+      "package_identifier": "DreamSourceLab.DSWave"
+    },
+    {
+      "package_identifier": "Dreamtonics.SynthesizerVStudio2Pro"
+    },
+    {
+      "package_identifier": "DrobinskiMaciejStrongRecovery.MultiExtractor"
+    },
+    {
+      "package_identifier": "Dropbox.Capture"
+    },
+    {
+      "package_identifier": "Dropbox.Dropbox"
+    },
+    {
+      "package_identifier": "Dropbox.Dropbox.MSI"
+    },
+    {
+      "package_identifier": "Drovio.Drovio"
+    },
+    {
+      "package_identifier": "DrumlinSecurity.DrumlinPublisher"
+    },
+    {
+      "package_identifier": "DrumlinSecurity.JavelinPDFReader.3"
+    },
+    {
+      "package_identifier": "DrumlinSecurity.JavelinPDFReader.3.Pro"
+    },
+    {
+      "package_identifier": "Drumstick.dmidiplayer"
+    },
+    {
+      "package_identifier": "Druva.ADConnector"
+    },
+    {
+      "package_identifier": "Druva.inSync"
+    },
+    {
+      "package_identifier": "DualitySoftware.DSClock"
+    },
+    {
+      "package_identifier": "DubbInc.DubbDesktop"
+    },
+    {
+      "package_identifier": "DucFabulous.UltraViewer"
+    },
+    {
+      "package_identifier": "DuckDuckGo.DesktopBrowser"
+    },
+    {
+      "package_identifier": "Dunes.WinNc"
+    },
+    {
+      "package_identifier": "DuoSecurity.Duo2FAAuthenticationforWindows"
+    },
+    {
+      "package_identifier": "DuoSecurity.DuoDesktop"
+    },
+    {
+      "package_identifier": "DuoSecurity.DuoDeviceHealth"
+    },
+    {
+      "package_identifier": "Dutchview.Flexwhere"
+    },
+    {
+      "package_identifier": "DuxburySystems.DBT"
+    },
+    {
+      "package_identifier": "Dynalist.Dynalist"
+    },
+    {
+      "package_identifier": "Dynare.Dynare"
+    },
+    {
+      "package_identifier": "EAZYPETITIONLLC.eazyPetition"
+    },
+    {
+      "package_identifier": "ECSoftware.Help+Manual.10"
+    },
+    {
+      "package_identifier": "ECSoftware.Help+Manual.9"
+    },
+    {
+      "package_identifier": "ECSoftware.Help+ManualTranslationAssistant"
+    },
+    {
+      "package_identifier": "ECSoftware.HelpXplain"
+    },
+    {
+      "package_identifier": "ECSoftware.SnipSVG"
+    },
+    {
+      "package_identifier": "ECSoftware.eWriter"
+    },
+    {
+      "package_identifier": "ECSoftware.eWriterViewer"
+    },
+    {
+      "package_identifier": "EDPB.WebsiteAuditTool"
+    },
+    {
+      "package_identifier": "EEO.CamIn"
+    },
+    {
+      "package_identifier": "EEO.ClassIn"
+    },
+    {
+      "package_identifier": "EEO.ClassInX"
+    },
+    {
+      "package_identifier": "EFDSoftware.HDTunePro"
+    },
+    {
+      "package_identifier": "EIZO.ScreenInStyle"
+    },
+    {
+      "package_identifier": "EMCO.MSIPackageBuilder.12"
+    },
+    {
+      "package_identifier": "EMCO.PingMonitor.9"
+    },
+    {
+      "package_identifier": "EMCO.RemoteInstaller.6"
+    },
+    {
+      "package_identifier": "EMCO.RemoteShutdown.7"
+    },
+    {
+      "package_identifier": "EMCO.UnlockIT"
+    },
+    {
+      "package_identifier": "EMCOSoftware.PingMonitor"
+    },
+    {
+      "package_identifier": "EMOJI-FZCO.VoiceHotKey"
+    },
+    {
+      "package_identifier": "ENERCALC.ENERCALC"
+    },
+    {
+      "package_identifier": "ENVI-met.ENVI-met"
+    },
+    {
+      "package_identifier": "EPA.SWMM"
+    },
+    {
+      "package_identifier": "EPOS.EPOSConnect"
+    },
+    {
+      "package_identifier": "EPSON.EpsonConnectPrinterSetup"
+    },
+    {
+      "package_identifier": "EPSON.EpsonNetConfig.Portable"
+    },
+    {
+      "package_identifier": "EPSON.EpsonScan2"
+    },
+    {
+      "package_identifier": "EPSON.MyEpsonPortal"
+    },
+    {
+      "package_identifier": "EPSON.PhotoPlus"
+    },
+    {
+      "package_identifier": "EPSON.PrinterConnectionChecker"
+    },
+    {
+      "package_identifier": "EPSON.PrinterDriverSecuritySupportTool"
+    },
+    {
+      "package_identifier": "EPSON.Scan.OCRComponent"
+    },
+    {
+      "package_identifier": "EPSON.Scan.PDFExtensions"
+    },
+    {
+      "package_identifier": "EPSON.SoftwareUpdater"
+    },
+    {
+      "package_identifier": "EPSON.iProjection"
+    },
+    {
+      "package_identifier": "ES-Computing.EditPlus"
+    },
+    {
+      "package_identifier": "ES-DE.EmulationStation-DE"
+    },
+    {
+      "package_identifier": "ESBConsultancy.ESBCalc"
+    },
+    {
+      "package_identifier": "ESBConsultancy.ESBCalc.Pro.Trial"
+    },
+    {
+      "package_identifier": "ESBConsultancy.ESBDateCalc.Pro.Trial"
+    },
+    {
+      "package_identifier": "ESBConsultancy.ESBFinCalc.Pro.Trial"
+    },
+    {
+      "package_identifier": "ESBConsultancy.ESBProgCalc.Pro.Trial"
+    },
+    {
+      "package_identifier": "ESBConsultancy.ESBUnitConv"
+    },
+    {
+      "package_identifier": "ESBConsultancy.ESBUnitConv.Pro.Trial"
+    },
+    {
+      "package_identifier": "ESET.AVRemover"
+    },
+    {
+      "package_identifier": "ESET.EndpointAntivirus"
+    },
+    {
+      "package_identifier": "ESET.EndpointSecurity"
+    },
+    {
+      "package_identifier": "ESET.Nod32"
+    },
+    {
+      "package_identifier": "ESET.Security"
+    },
+    {
+      "package_identifier": "ESET.Security.SmallBusiness"
+    },
+    {
+      "package_identifier": "ESUNBank.WebATMService"
+    },
+    {
+      "package_identifier": "EShare.EShare"
+    },
+    {
+      "package_identifier": "EShare.EShare.EXE"
+    },
+    {
+      "package_identifier": "ETXSoftwareInc.DuckDns"
+    },
+    {
+      "package_identifier": "EXEMSI.MSIWrapper"
+    },
+    {
+      "package_identifier": "EXPSystems.PDFreDirect"
+    },
+    {
+      "package_identifier": "EZBSystems.EasyBoot"
+    },
+    {
+      "package_identifier": "EZBSystems.UltraISO"
+    },
+    {
+      "package_identifier": "Eagle1.PrettyMark"
+    },
+    {
+      "package_identifier": "EagleDynamics.DCSWorldOpenBeta"
+    },
+    {
+      "package_identifier": "Earthshine.DashcamViewer"
+    },
+    {
+      "package_identifier": "EaseUS.BackupCenter"
+    },
+    {
+      "package_identifier": "EaseUS.ChatTrans"
+    },
+    {
+      "package_identifier": "EaseUS.MobiMover"
+    },
+    {
+      "package_identifier": "EaseUS.PartitionMaster"
+    },
+    {
+      "package_identifier": "EaseUS.RecExperts"
+    },
+    {
+      "package_identifier": "EaseUS.TodoBackup"
+    },
+    {
+      "package_identifier": "EaseUS.TodoPCTrans"
+    },
+    {
+      "package_identifier": "Easeware.DriverEasy"
+    },
+    {
+      "package_identifier": "Eassos.CuteRecovery"
+    },
+    {
+      "package_identifier": "Eassos.DiskGenius"
+    },
+    {
+      "package_identifier": "East-Tec.ColorVeil"
+    },
+    {
+      "package_identifier": "EastMoney.EastMoney"
+    },
+    {
+      "package_identifier": "EastMoney.EastmoneySpeciality"
+    },
+    {
+      "package_identifier": "EasternGraphics.pCon-basket"
+    },
+    {
+      "package_identifier": "EasternGraphics.pCon-planner.ME"
+    },
+    {
+      "package_identifier": "EasternGraphics.pCon-planner.Plugin.Acoustics"
+    },
+    {
+      "package_identifier": "EasternGraphics.pCon-planner.Plugin.BatchRenderingService"
+    },
+    {
+      "package_identifier": "EasternGraphics.pCon-planner.Plugin.VR-Viewer"
+    },
+    {
+      "package_identifier": "EasternGraphics.pCon-planner.Pro"
+    },
+    {
+      "package_identifier": "EasternGraphics.pCon-planner.STD"
+    },
+    {
+      "package_identifier": "Easy2Convert.png2dds"
+    },
+    {
+      "package_identifier": "EasyABC.EasyABC"
+    },
+    {
+      "package_identifier": "Easybits.MagicDesktop.Kiosk"
+    },
+    {
+      "package_identifier": "EberhardWerle.QuickGamma"
+    },
+    {
+      "package_identifier": "Eccam.ReqView"
+    },
+    {
+      "package_identifier": "EchoLink.EchoLink"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.CPP"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.Committers"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.DSL"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.EmbedCPP"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.Inst"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.JEE"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.Java"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.Modeling"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.PHP"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.RCP"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Eclipse.Scout"
+    },
+    {
+      "package_identifier": "EclipseFoundation.Mosquitto"
+    },
+    {
+      "package_identifier": "EclipseFoundation.SUMO"
+    },
+    {
+      "package_identifier": "EclipseFoundation.TheiaBlueprint"
+    },
+    {
+      "package_identifier": "EclipseFoundation.TheiaIDE"
+    },
+    {
+      "package_identifier": "Ecosia.EcosiaBrowser"
+    },
+    {
+      "package_identifier": "EditoraGloboSA.ValorPRO"
+    },
+    {
+      "package_identifier": "EdrawSoft.EdrawInfo"
+    },
+    {
+      "package_identifier": "EdrawSoft.EdrawInfo.CN"
+    },
+    {
+      "package_identifier": "EdrawSoft.EdrawMax"
+    },
+    {
+      "package_identifier": "EdrawSoft.EdrawMax.CN"
+    },
+    {
+      "package_identifier": "EdrawSoft.EdrawMind"
+    },
+    {
+      "package_identifier": "EdrawSoft.EdrawMind.CN"
+    },
+    {
+      "package_identifier": "EdrawSoft.EdrawProj"
+    },
+    {
+      "package_identifier": "EdrawSoft.EdrawProj.CN"
+    },
+    {
+      "package_identifier": "EdrawSoft.OrgCharting"
+    },
+    {
+      "package_identifier": "EdrawSoft.OrgCharting.CN"
+    },
+    {
+      "package_identifier": "EdrawSoft.ViewerComponent.Diagram"
+    },
+    {
+      "package_identifier": "EdrawSoft.ViewerComponent.Excel"
+    },
+    {
+      "package_identifier": "EdrawSoft.ViewerComponent.Office"
+    },
+    {
+      "package_identifier": "EdrawSoft.ViewerComponent.PDF"
+    },
+    {
+      "package_identifier": "EdrawSoft.ViewerComponent.Word"
+    },
+    {
+      "package_identifier": "Educator.Engine"
+    },
+    {
+      "package_identifier": "EfficientElements.Presentations"
+    },
+    {
+      "package_identifier": "Egnyte.Addin"
+    },
+    {
+      "package_identifier": "Egnyte.EgnyteDesktopApp"
+    },
+    {
+      "package_identifier": "Egnyte.EgnyteWebEdit"
+    },
+    {
+      "package_identifier": "EiffelSoftware.EiffelStudio.Stable"
+    },
+    {
+      "package_identifier": "ElaborateBytes.VirtualCloneDrive"
+    },
+    {
+      "package_identifier": "Elastic.Auditbeat"
+    },
+    {
+      "package_identifier": "Elastic.Elasticsearch"
+    },
+    {
+      "package_identifier": "Elastic.Filebeat"
+    },
+    {
+      "package_identifier": "Elastic.Functionbeat"
+    },
+    {
+      "package_identifier": "Elastic.Heartbeat"
+    },
+    {
+      "package_identifier": "Elastic.Metricbeat"
+    },
+    {
+      "package_identifier": "Elastic.Packetbeat"
+    },
+    {
+      "package_identifier": "Elastic.Winlogbeat"
+    },
+    {
+      "package_identifier": "Elcomsoft.AdvancedEFSPasswordRecovery"
+    },
+    {
+      "package_identifier": "Elcomsoft.AdvancedOfficePasswordRecovery"
+    },
+    {
+      "package_identifier": "Elcomsoft.AdvancedPDFPasswordRecovery"
+    },
+    {
+      "package_identifier": "Elcomsoft.ArchivePassword"
+    },
+    {
+      "package_identifier": "Elcomsoft.BlackberryBackup"
+    },
+    {
+      "package_identifier": "Elcomsoft.CloudeXplorer"
+    },
+    {
+      "package_identifier": "Elcomsoft.ElcomsoftUpdater"
+    },
+    {
+      "package_identifier": "Elcomsoft.ForensicDiskDecryptor"
+    },
+    {
+      "package_identifier": "Elcomsoft.IMPassword"
+    },
+    {
+      "package_identifier": "Elcomsoft.InternetPassword"
+    },
+    {
+      "package_identifier": "Elcomsoft.IntuitPassword"
+    },
+    {
+      "package_identifier": "Elcomsoft.PasswordDigger"
+    },
+    {
+      "package_identifier": "Elcomsoft.PasswordRecovery"
+    },
+    {
+      "package_identifier": "Elcomsoft.PhoneBreaker"
+    },
+    {
+      "package_identifier": "Elcomsoft.PhoneViewer"
+    },
+    {
+      "package_identifier": "Elcomsoft.ProactivePasswordAuditor"
+    },
+    {
+      "package_identifier": "Elcomsoft.SQLPassword"
+    },
+    {
+      "package_identifier": "Elcomsoft.SagePassword"
+    },
+    {
+      "package_identifier": "Elcomsoft.WirelessSecurityAuditor"
+    },
+    {
+      "package_identifier": "Elcomsoft.eXplorerforWhatsApp"
+    },
+    {
+      "package_identifier": "ElectronicArts.EADesktop"
+    },
+    {
+      "package_identifier": "ElectronicArts.Origin"
+    },
+    {
+      "package_identifier": "ElectronicTeam.Flexihub"
+    },
+    {
+      "package_identifier": "ElectronicTeam.SerialOverEthernet"
+    },
+    {
+      "package_identifier": "ElectronicTeam.USBNetworkGate"
+    },
+    {
+      "package_identifier": "ElectronicTeam.VirtualSerialPortDriver"
+    },
+    {
+      "package_identifier": "Electrum.Electrum"
+    },
+    {
+      "package_identifier": "Element.Element"
+    },
+    {
+      "package_identifier": "ElementLabs.LMStudio"
+    },
+    {
+      "package_identifier": "ElementTechnologie.openElement"
+    },
+    {
+      "package_identifier": "Elgato.4KCaptureUtility"
+    },
+    {
+      "package_identifier": "Elgato.CameraHub"
+    },
+    {
+      "package_identifier": "Elgato.ControlCenter"
+    },
+    {
+      "package_identifier": "Elgato.EpocCam"
+    },
+    {
+      "package_identifier": "Elgato.GameCapture.4K60ProMK2"
+    },
+    {
+      "package_identifier": "Elgato.GameCapture.HD"
+    },
+    {
+      "package_identifier": "Elgato.GameCapture.HD60S"
+    },
+    {
+      "package_identifier": "Elgato.StreamDeck"
+    },
+    {
+      "package_identifier": "Elgato.Studio"
+    },
+    {
+      "package_identifier": "Elgato.WaveLink"
+    },
+    {
+      "package_identifier": "EliFulkerson.Archtype"
+    },
+    {
+      "package_identifier": "EliFulkerson.tcping"
+    },
+    {
+      "package_identifier": "EliasFotinis.DeskPins"
+    },
+    {
+      "package_identifier": "Eliot.UEExplorer"
+    },
+    {
+      "package_identifier": "Elsevier.MendeleyReferenceManager"
+    },
+    {
+      "package_identifier": "ElstenSoftware.Astiga"
+    },
+    {
+      "package_identifier": "Eltima.SerialPortMonitor"
+    },
+    {
+      "package_identifier": "EmbravaPtyLtd.EmbravaConnect"
+    },
+    {
+      "package_identifier": "EmoteInteractive.RemoteMouse"
+    },
+    {
+      "package_identifier": "Empoche.Empoche"
+    },
+    {
+      "package_identifier": "Emsisoft.EmergencyKit"
+    },
+    {
+      "package_identifier": "Emulationstation.Emulationstation"
+    },
+    {
+      "package_identifier": "Emurasoft.EmEditor"
+    },
+    {
+      "package_identifier": "Endicia.EndiciaConnect"
+    },
+    {
+      "package_identifier": "Enigma.VirtualBox"
+    },
+    {
+      "package_identifier": "Enreach.Contact"
+    },
+    {
+      "package_identifier": "Enreach.SwyxIt"
+    },
+    {
+      "package_identifier": "Entropy6.XMeters"
+    },
+    {
+      "package_identifier": "EpicGames.EpicGamesLauncher"
+    },
+    {
+      "package_identifier": "EpicGames.EpicOnlineServicesSDK.CSharp"
+    },
+    {
+      "package_identifier": "Epilogue.EpilogueOperator"
+    },
+    {
+      "package_identifier": "Epsitec.Colobot"
+    },
+    {
+      "package_identifier": "Eraser.Eraser"
+    },
+    {
+      "package_identifier": "Ergosoft.ErgoFAKT_V5"
+    },
+    {
+      "package_identifier": "EricRaijmakers.Vidiot"
+    },
+    {
+      "package_identifier": "Esko.CapePack"
+    },
+    {
+      "package_identifier": "Estmob.SendAnywhere"
+    },
+    {
+      "package_identifier": "Ethereum.geth"
+    },
+    {
+      "package_identifier": "EuSoft.Dehelper"
+    },
+    {
+      "package_identifier": "EuSoft.Eshelper"
+    },
+    {
+      "package_identifier": "EuSoft.Eudic"
+    },
+    {
+      "package_identifier": "EuSoft.Frhelper"
+    },
+    {
+      "package_identifier": "EuropeanCommission.EUROMOD"
+    },
+    {
+      "package_identifier": "EvenBalance.PunkBusterServiceInstaller"
+    },
+    {
+      "package_identifier": "EverEdit.EverEdit"
+    },
+    {
+      "package_identifier": "Everbridge.Everbridge360"
+    },
+    {
+      "package_identifier": "Evernote.Evernote"
+    },
+    {
+      "package_identifier": "Evernote.Evernote.CN"
+    },
+    {
+      "package_identifier": "EvgenyCherpak.RemoteHelperApp"
+    },
+    {
+      "package_identifier": "Evoluent.EvoluentMouseManager"
+    },
+    {
+      "package_identifier": "Evolus.Pencil"
+    },
+    {
+      "package_identifier": "Evope.Evope"
+    },
+    {
+      "package_identifier": "ExBinProject.BinEd"
+    },
+    {
+      "package_identifier": "ExacqTechnologies.exacqVisionClient"
+    },
+    {
+      "package_identifier": "Exclaimer.CloudSignatureUpdateAgent"
+    },
+    {
+      "package_identifier": "ExpressVPN.ExpressVPN"
+    },
+    {
+      "package_identifier": "ExtendOffice.OfficeTab"
+    },
+    {
+      "package_identifier": "ExtendOffice.OfficeTab.Enterprise"
+    },
+    {
+      "package_identifier": "Extensis.ConnectFonts"
+    },
+    {
+      "package_identifier": "ExtremeTuxRacer.ExtremeTuxRacer"
+    },
+    {
+      "package_identifier": "Eziriz.DotNetReactor"
+    },
+    {
+      "package_identifier": "F-Secure.Freedome"
+    },
+    {
+      "package_identifier": "F6CTE.MultiPSK"
+    },
+    {
+      "package_identifier": "FACEITLTD.FACEITAC"
+    },
+    {
+      "package_identifier": "FACEITLTD.FACEITClient"
+    },
+    {
+      "package_identifier": "FAI-Solution.move-window-between-desktops"
+    },
+    {
+      "package_identifier": "FEITIAN.SKManager"
+    },
+    {
+      "package_identifier": "FIVEInformatik.TaxWare"
+    },
+    {
+      "package_identifier": "FNMT.ConfiguradorFNMT"
+    },
+    {
+      "package_identifier": "FNPrg.BookCAT"
+    },
+    {
+      "package_identifier": "FNPrg.CATVids"
+    },
+    {
+      "package_identifier": "FNPrg.CATraxx"
+    },
+    {
+      "package_identifier": "FSC-SOFT.VoiceMacro"
+    },
+    {
+      "package_identifier": "FTB.App"
+    },
+    {
+      "package_identifier": "FULI.PhoXoSee"
+    },
+    {
+      "package_identifier": "FabricMC.FabricInstaller"
+    },
+    {
+      "package_identifier": "FactSet.FactSetWorkstation"
+    },
+    {
+      "package_identifier": "FactorMystic.DefaultProgramsEditor"
+    },
+    {
+      "package_identifier": "FadeIn.FadeIn"
+    },
+    {
+      "package_identifier": "Faithlife.Logos"
+    },
+    {
+      "package_identifier": "Falcosoft.SoundfontMidiPlayer"
+    },
+    {
+      "package_identifier": "Famatech.AdvancedIPScanner"
+    },
+    {
+      "package_identifier": "Famatech.Radmin.Client"
+    },
+    {
+      "package_identifier": "Famatech.Radmin.Server"
+    },
+    {
+      "package_identifier": "Famatech.RadminVPN"
+    },
+    {
+      "package_identifier": "Fangamer.Deltarune"
+    },
+    {
+      "package_identifier": "FarManager.FarManager"
+    },
+    {
+      "package_identifier": "FaronStudio.PixPlant"
+    },
+    {
+      "package_identifier": "FastCopy.FastCopy"
+    },
+    {
+      "package_identifier": "FastCopy.IPMsg"
+    },
+    {
+      "package_identifier": "FastStone.Capture"
+    },
+    {
+      "package_identifier": "FastStone.Viewer"
+    },
+    {
+      "package_identifier": "Fathom.Fathom"
+    },
+    {
+      "package_identifier": "FeatherWallet.Feather"
+    },
+    {
+      "package_identifier": "Febooti.AutomationWorkshop"
+    },
+    {
+      "package_identifier": "Febooti.CommandLineEmail"
+    },
+    {
+      "package_identifier": "Febooti.Hash&CRC"
+    },
+    {
+      "package_identifier": "Febooti.HexEditor"
+    },
+    {
+      "package_identifier": "FeePerfect.Feem.Beta"
+    },
+    {
+      "package_identifier": "FelipeEFdeCastro.Klavaro"
+    },
+    {
+      "package_identifier": "FellowInsights.Fellow"
+    },
+    {
+      "package_identifier": "Fenzhi.tagLyst"
+    },
+    {
+      "package_identifier": "Feodor2.Mypal"
+    },
+    {
+      "package_identifier": "FerroSoftware.FtpUse"
+    },
+    {
+      "package_identifier": "Figma.Figma"
+    },
+    {
+      "package_identifier": "Figma.FigmaAgent"
+    },
+    {
+      "package_identifier": "Fiji.ImageJ"
+    },
+    {
+      "package_identifier": "File-New-Project.EarTrumpet"
+    },
+    {
+      "package_identifier": "FileCloud.FileCloudDrive"
+    },
+    {
+      "package_identifier": "FileFormatDotInfo.UnicodeInput"
+    },
+    {
+      "package_identifier": "FileOpen.Client"
+    },
+    {
+      "package_identifier": "FileOpenSystems.FileOpenClient"
+    },
+    {
+      "package_identifier": "FileVoyager.FileVoyager"
+    },
+    {
+      "package_identifier": "FilenCloud.FilenSync"
+    },
+    {
+      "package_identifier": "FilesCommunity.Files"
+    },
+    {
+      "package_identifier": "FilesCommunity.FilesPreview"
+    },
+    {
+      "package_identifier": "Filestar.Filestar"
+    },
+    {
+      "package_identifier": "FinalWire.AIDA64.Business"
+    },
+    {
+      "package_identifier": "FinalWire.AIDA64.Engineer"
+    },
+    {
+      "package_identifier": "FinalWire.AIDA64.Extreme"
+    },
+    {
+      "package_identifier": "FinancialID.BankID"
+    },
+    {
+      "package_identifier": "FineprintSoftware.FinePrint"
+    },
+    {
+      "package_identifier": "FineprintSoftware.pdfFactory"
+    },
+    {
+      "package_identifier": "FineprintSoftware.pdfFactory.Pro"
+    },
+    {
+      "package_identifier": "Fing.Fing"
+    },
+    {
+      "package_identifier": "Fiorilli.FiorilliWebExtensionClient"
+    },
+    {
+      "package_identifier": "FireAlpaca.FireAlpaca"
+    },
+    {
+      "package_identifier": "FireDaemon.CertifyOne"
+    },
+    {
+      "package_identifier": "FireDaemon.FireDaemonFusion"
+    },
+    {
+      "package_identifier": "FireDaemon.FireDaemonLozenge"
+    },
+    {
+      "package_identifier": "FireDaemon.FireDaemonPro"
+    },
+    {
+      "package_identifier": "FireDaemon.FireDaemonZero"
+    },
+    {
+      "package_identifier": "FireDaemon.OpenSSL"
+    },
+    {
+      "package_identifier": "Firetrust.MailWasher.Free"
+    },
+    {
+      "package_identifier": "Firetrust.MailWasher.Pro"
+    },
+    {
+      "package_identifier": "FischertechnikGMBH.ROBOPro"
+    },
+    {
+      "package_identifier": "Fitbit.FitbitOSSimulator"
+    },
+    {
+      "package_identifier": "FlashPatchTeam.CleanFlashPlayerInstaller"
+    },
+    {
+      "package_identifier": "FlashPeak.Slimjet"
+    },
+    {
+      "package_identifier": "Flashforge.FlashPrint"
+    },
+    {
+      "package_identifier": "Flashforge.Orca-Flashforge"
+    },
+    {
+      "package_identifier": "FlawlessWidescreen.FlawlessWidescreen"
+    },
+    {
+      "package_identifier": "FlaxEngine.Flax"
+    },
+    {
+      "package_identifier": "Flexense.DiskBoss"
+    },
+    {
+      "package_identifier": "Flexense.DiskBossEnterprise"
+    },
+    {
+      "package_identifier": "Flexense.DiskBossPro"
+    },
+    {
+      "package_identifier": "Flexense.DiskBossServer"
+    },
+    {
+      "package_identifier": "Flexense.DiskBossUltimate"
+    },
+    {
+      "package_identifier": "Flexense.DiskPulse"
+    },
+    {
+      "package_identifier": "Flexense.DiskPulseEnterprise"
+    },
+    {
+      "package_identifier": "Flexense.DiskPulsePro"
+    },
+    {
+      "package_identifier": "Flexense.DiskPulseServer"
+    },
+    {
+      "package_identifier": "Flexense.DiskSavvy"
+    },
+    {
+      "package_identifier": "Flexense.DiskSavvyEnterprise"
+    },
+    {
+      "package_identifier": "Flexense.DiskSavvyPro"
+    },
+    {
+      "package_identifier": "Flexense.DiskSavvyServer"
+    },
+    {
+      "package_identifier": "Flexense.DiskSavvyUltimate"
+    },
+    {
+      "package_identifier": "Flexense.DiskSorter"
+    },
+    {
+      "package_identifier": "Flexense.DiskSorterEnterprise"
+    },
+    {
+      "package_identifier": "Flexense.DiskSorterPro"
+    },
+    {
+      "package_identifier": "Flexense.DiskSorterServer"
+    },
+    {
+      "package_identifier": "Flexense.DiskSorterUltimate"
+    },
+    {
+      "package_identifier": "Flexense.DupScout"
+    },
+    {
+      "package_identifier": "Flexense.DupScoutEnterprise"
+    },
+    {
+      "package_identifier": "Flexense.DupScoutPro"
+    },
+    {
+      "package_identifier": "Flexense.DupScoutServer"
+    },
+    {
+      "package_identifier": "Flexense.DupScoutUltimate"
+    },
+    {
+      "package_identifier": "Flexense.SyncBreeze"
+    },
+    {
+      "package_identifier": "Flexense.SyncBreezeEnterprise"
+    },
+    {
+      "package_identifier": "Flexense.SyncBreezePro"
+    },
+    {
+      "package_identifier": "Flexense.SyncBreezeServer"
+    },
+    {
+      "package_identifier": "Flexense.SyncBreezeUltimate"
+    },
+    {
+      "package_identifier": "Flexense.SysGauge"
+    },
+    {
+      "package_identifier": "Flexense.SysGaugePro"
+    },
+    {
+      "package_identifier": "Flexense.SysGaugeServer"
+    },
+    {
+      "package_identifier": "Flexense.SysGaugeUltimate"
+    },
+    {
+      "package_identifier": "Flexense.VXSearch"
+    },
+    {
+      "package_identifier": "Flexense.VXSearchEnterprise"
+    },
+    {
+      "package_identifier": "Flexense.VXSearchPro"
+    },
+    {
+      "package_identifier": "Flexense.VXSearchServer"
+    },
+    {
+      "package_identifier": "Flexense.VXSearchUltimate"
+    },
+    {
+      "package_identifier": "FlightGear.FlightGear"
+    },
+    {
+      "package_identifier": "Flinto.ReadyRunner"
+    },
+    {
+      "package_identifier": "FlipperDevicesInc.qFlipper"
+    },
+    {
+      "package_identifier": "FlockFZ.Flock"
+    },
+    {
+      "package_identifier": "FlorianHeidenreich.Mp3tag"
+    },
+    {
+      "package_identifier": "FlorianHoech.DisplayCAL"
+    },
+    {
+      "package_identifier": "FlowJo.FlowJo"
+    },
+    {
+      "package_identifier": "GAI.FileShows"
+    },
+    {
+      "package_identifier": "GAI.GAI"
+    },
+    {
+      "package_identifier": "GCStudio.DemonstrationsPack"
+    },
+    {
+      "package_identifier": "GDGSoftware.PaquetBuilder"
+    },
+    {
+      "package_identifier": "GEOSLOPE.GeoStudio"
+    },
+    {
+      "package_identifier": "GIGABYTE.BIOS"
+    },
+    {
+      "package_identifier": "GIGABYTE.DRMFixTool"
+    },
+    {
+      "package_identifier": "GIGABYTE.RGBFusion"
+    },
+    {
+      "package_identifier": "GIMP.GIMP.2"
+    },
+    {
+      "package_identifier": "GIMP.GIMP.3"
+    },
+    {
+      "package_identifier": "GIMP.GIMP.Nightly"
+    },
+    {
+      "package_identifier": "GIMP.Help.3"
+    },
+    {
+      "package_identifier": "GISInternals.GDAL"
+    },
+    {
+      "package_identifier": "GISInternals.GDAL.ECW"
+    },
+    {
+      "package_identifier": "GISInternals.GDAL.FileGDB"
+    },
+    {
+      "package_identifier": "GISInternals.GDAL.MrSID"
+    },
+    {
+      "package_identifier": "GISInternals.GDAL.Oracle"
+    },
+    {
+      "package_identifier": "GLab.GLab"
+    },
+    {
+      "package_identifier": "GNE.DualMonitorTools"
+    },
+    {
+      "package_identifier": "GNU.Emacs"
+    },
+    {
+      "package_identifier": "GNU.Gforth"
+    },
+    {
+      "package_identifier": "GNU.Nano"
+    },
+    {
+      "package_identifier": "GNU.Octave"
+    },
+    {
+      "package_identifier": "GNU.Solfege"
+    },
+    {
+      "package_identifier": "GNU.TeXmacs"
+    },
+    {
+      "package_identifier": "GNU.datamash"
+    },
+    {
+      "package_identifier": "GOG.Galaxy"
+    },
+    {
+      "package_identifier": "GOMLab.GOMPlayer"
+    },
+    {
+      "package_identifier": "GPAC.GPAC"
+    },
+    {
+      "package_identifier": "GPSoftware.DirectoryOpus"
+    },
+    {
+      "package_identifier": "GPower.GPower"
+    },
+    {
+      "package_identifier": "GRZ.MeshCAM"
+    },
+    {
+      "package_identifier": "GSLBiotech.SnapGene"
+    },
+    {
+      "package_identifier": "Gabia.HiworksMessenger"
+    },
+    {
+      "package_identifier": "GadgetsRevived.GadgetsRevived"
+    },
+    {
+      "package_identifier": "GaduGadu.GaduGadu"
+    },
+    {
+      "package_identifier": "Gadwin.DiagramStudio"
+    },
+    {
+      "package_identifier": "Gadwin.GeForms"
+    },
+    {
+      "package_identifier": "Gadwin.PrintScreen"
+    },
+    {
+      "package_identifier": "Gadwin.PrintScreen.Pro"
+    },
+    {
+      "package_identifier": "Gadwin.ScreenRecorder"
+    },
+    {
+      "package_identifier": "Gadwin.WebSnapshot"
+    },
+    {
+      "package_identifier": "GaijinNetwork.CRSED"
+    },
+    {
+      "package_identifier": "GaijinNetwork.Crossout"
+    },
+    {
+      "package_identifier": "GaijinNetwork.Enlisted"
+    },
+    {
+      "package_identifier": "GaijinNetwork.StarConflict"
+    },
+    {
+      "package_identifier": "GaijinNetwork.WarThunder"
+    },
+    {
+      "package_identifier": "Gainward.EXPERTool"
+    },
+    {
+      "package_identifier": "Gajim.Gajim"
+    },
+    {
+      "package_identifier": "GalvanizeInc.GalvanizeCirrus"
+    },
+    {
+      "package_identifier": "Gamani.GIFMovieGear"
+    },
+    {
+      "package_identifier": "GamePP.GamePP"
+    },
+    {
+      "package_identifier": "GamePP.GamePPLite"
+    },
+    {
+      "package_identifier": "GameSir.GameSirConnect"
+    },
+    {
+      "package_identifier": "GameSir.GameSirT4kApp"
+    },
+    {
+      "package_identifier": "Gamebanana.Modboy"
+    },
+    {
+      "package_identifier": "GanttProject.GanttProject"
+    },
+    {
+      "package_identifier": "Gaoding.Gaoding"
+    },
+    {
+      "package_identifier": "GardenGnome.GGPKGViewer"
+    },
+    {
+      "package_identifier": "GardenGnome.Object2VR"
+    },
+    {
+      "package_identifier": "GardenGnome.Pano2VR"
+    },
+    {
+      "package_identifier": "Garena.Garena"
+    },
+    {
+      "package_identifier": "Garmin.BaseCamp"
+    },
+    {
+      "package_identifier": "Garmin.Express"
+    },
+    {
+      "package_identifier": "GaryBentley.QuollWriter"
+    },
+    {
+      "package_identifier": "GasolineAlleyInc.FutabaMinato"
+    },
+    {
+      "package_identifier": "GauzyTech.NeatConverter"
+    },
+    {
+      "package_identifier": "GauzyTech.NeatReader"
+    },
+    {
+      "package_identifier": "Gcndevelopment.GNURadio"
+    },
+    {
+      "package_identifier": "GeekUninstaller.GeekUninstaller"
+    },
+    {
+      "package_identifier": "Geeks3D.FurMark.1"
+    },
+    {
+      "package_identifier": "Geeks3D.FurMark.2"
+    },
+    {
+      "package_identifier": "Geert-JanBesjes.wxMUN"
+    },
+    {
+      "package_identifier": "GeneralArcade.SDL2GamepadTool"
+    },
+    {
+      "package_identifier": "GeneralOutline.Outline"
+    },
+    {
+      "package_identifier": "Genesys.GenesysCloud"
+    },
+    {
+      "package_identifier": "Genesys.GenesysCloudBackgroundAssistant"
+    },
+    {
+      "package_identifier": "Genymobile.Genymotion"
+    },
+    {
+      "package_identifier": "GeoGebra.CASCalculator"
+    },
+    {
+      "package_identifier": "GeoGebra.CalculatorSuite"
+    },
+    {
+      "package_identifier": "GeoGebra.Classic"
+    },
+    {
+      "package_identifier": "GeoGebra.Classic.5"
+    },
+    {
+      "package_identifier": "GeoGebra.Geometry"
+    },
+    {
+      "package_identifier": "GeoGebra.GraphingCalculator"
+    },
+    {
+      "package_identifier": "GeorgieLabs.SoundWireServer"
+    },
+    {
+      "package_identifier": "Geph.Geph"
+    },
+    {
+      "package_identifier": "Getscreenme.Dashboard.Beta"
+    },
+    {
+      "package_identifier": "Ghisler.TotalCommander"
+    },
+    {
+      "package_identifier": "GiMeSpace.RAMTempFolder"
+    },
+    {
+      "package_identifier": "GiMeSpace.RAMTempFolderPro"
+    },
+    {
+      "package_identifier": "GibsonResearchCorporation.ValiDrive"
+    },
+    {
+      "package_identifier": "GillesVollantSoftware.WinImage"
+    },
+    {
+      "package_identifier": "Ginger.GingerWriter"
+    },
+    {
+      "package_identifier": "GitButler.GitButler"
+    },
+    {
+      "package_identifier": "GitHub.GitHubDesktop"
+    },
+    {
+      "package_identifier": "Gitea.tea"
+    },
+    {
+      "package_identifier": "Gitlab.Runner"
+    },
+    {
+      "package_identifier": "GiulioSorrentino.Backgrounds"
+    },
+    {
+      "package_identifier": "GiulioSorrentino.BackgroundsOtto"
+    },
+    {
+      "package_identifier": "GiulioSorrentino.astroni"
+    },
+    {
+      "package_identifier": "Glarysoft.AbsoluteUninstaller"
+    },
+    {
+      "package_identifier": "Glarysoft.FileRecoveryFree"
+    },
+    {
+      "package_identifier": "Glarysoft.GlaryUtilities"
+    },
+    {
+      "package_identifier": "GlassWire.GlassWire"
+    },
+    {
+      "package_identifier": "GlassWire.GlassWire.Lite"
+    },
+    {
+      "package_identifier": "GlavSoft.RemoteRipple"
+    },
+    {
+      "package_identifier": "GlavSoft.TightVNC"
+    },
+    {
+      "package_identifier": "GlenSawyer.MP3Gain"
+    },
+    {
+      "package_identifier": "GlennDelahoy.SnappyDriverInstallerOrigin"
+    },
+    {
+      "package_identifier": "GlennDelahoy.SnappyDriverInstallerOrigin.BackupDrivers"
+    },
+    {
+      "package_identifier": "GlobalMarineNet.AO10003"
+    },
+    {
+      "package_identifier": "GlobalMarineNet.DfW"
+    },
+    {
+      "package_identifier": "GlobalMarineNet.IridiumSurvey"
+    },
+    {
+      "package_identifier": "GlobalRelay.GlobalRelay"
+    },
+    {
+      "package_identifier": "Glodon.CADReader"
+    },
+    {
+      "package_identifier": "Glodon.CADReader.CN"
+    },
+    {
+      "package_identifier": "GloopProgramming.Gloop"
+    },
+    {
+      "package_identifier": "Gluon.SceneBuilder.18"
+    },
+    {
+      "package_identifier": "GnuPG.GnuPG"
+    },
+    {
+      "package_identifier": "GnuPG.Gpg4win"
+    },
+    {
+      "package_identifier": "GnuPG.Gpg4win.Beta"
+    },
+    {
+      "package_identifier": "GnuWin32.Bison"
+    },
+    {
+      "package_identifier": "GnuWin32.Cpio"
+    },
+    {
+      "package_identifier": "GnuWin32.DiffUtils"
+    },
+    {
+      "package_identifier": "GnuWin32.File"
+    },
+    {
+      "package_identifier": "GnuWin32.FindUtils"
+    },
+    {
+      "package_identifier": "GnuWin32.Flex"
+    },
+    {
+      "package_identifier": "GnuWin32.GetText"
+    },
+    {
+      "package_identifier": "GnuWin32.Gperf"
+    },
+    {
+      "package_identifier": "GnuWin32.Grep"
+    },
+    {
+      "package_identifier": "GnuWin32.Gzip"
+    },
+    {
+      "package_identifier": "GnuWin32.M4"
+    },
+    {
+      "package_identifier": "GnuWin32.Make"
+    },
+    {
+      "package_identifier": "GnuWin32.Patch"
+    },
+    {
+      "package_identifier": "GnuWin32.Tar"
+    },
+    {
+      "package_identifier": "GnuWin32.Tree"
+    },
+    {
+      "package_identifier": "GnuWin32.UnZip"
+    },
+    {
+      "package_identifier": "GnuWin32.Which"
+    },
+    {
+      "package_identifier": "GnuWin32.Zip"
+    },
+    {
+      "package_identifier": "GoCD.Agent"
+    },
+    {
+      "package_identifier": "GoCD.Server"
+    },
+    {
+      "package_identifier": "GoLang.Go"
+    },
+    {
+      "package_identifier": "GoTo.GoTo"
+    },
+    {
+      "package_identifier": "GoTo.GoToAssistAgentDesktopConsole"
+    },
+    {
+      "package_identifier": "GoTo.GoToMeeting"
+    },
+    {
+      "package_identifier": "GoTo.GoToOpener"
+    },
+    {
+      "package_identifier": "GoTo.LogMeInClient"
+    },
+    {
+      "package_identifier": "GoTo.LogMeInResolveDesktopConsole"
+    },
+    {
+      "package_identifier": "GoldSim.TechnologyGroup.GoldSim"
+    },
+    {
+      "package_identifier": "GoldWave.GoldWave"
+    },
+    {
+      "package_identifier": "Golde.PurplePen"
+    },
+    {
+      "package_identifier": "GoodGameMods.Minion"
+    },
+    {
+      "package_identifier": "Google.AdsEditor"
+    },
+    {
+      "package_identifier": "Google.AndroidStudio"
+    },
+    {
+      "package_identifier": "Google.AndroidStudio.Beta"
+    },
+    {
+      "package_identifier": "Google.AndroidStudio.Canary"
+    },
+    {
+      "package_identifier": "Google.Antigravity"
+    },
+    {
+      "package_identifier": "Google.Chrome"
+    },
+    {
+      "package_identifier": "Google.Chrome.Beta"
+    },
+    {
+      "package_identifier": "Google.Chrome.Beta.EXE"
+    },
+    {
+      "package_identifier": "Google.Chrome.Canary"
+    },
+    {
+      "package_identifier": "Google.Chrome.Dev"
+    },
+    {
+      "package_identifier": "Google.Chrome.Dev.EXE"
+    },
+    {
+      "package_identifier": "Google.Chrome.EXE"
+    },
+    {
+      "package_identifier": "Google.ChromeOSReadinessToolBundle"
+    },
+    {
+      "package_identifier": "Google.ChromeRemoteDesktopHost"
+    },
+    {
+      "package_identifier": "Google.CloudSDK"
+    },
+    {
+      "package_identifier": "Google.CredentialProviderForWindows"
+    },
+    {
+      "package_identifier": "Google.DartSDK"
+    },
+    {
+      "package_identifier": "Google.EarthPro"
+    },
+    {
+      "package_identifier": "Google.GoogleDesktop"
+    },
+    {
+      "package_identifier": "Google.GoogleDrive"
+    },
+    {
+      "package_identifier": "Google.GoogleUpdater"
+    },
+    {
+      "package_identifier": "Google.GoogleWebDesigner"
+    },
+    {
+      "package_identifier": "Google.JapaneseIME"
+    },
+    {
+      "package_identifier": "Google.Libwebp"
+    },
+    {
+      "package_identifier": "Google.Pinyin"
+    },
+    {
+      "package_identifier": "Google.PlatformTools"
+    },
+    {
+      "package_identifier": "Google.PlayGames"
+    },
+    {
+      "package_identifier": "Google.QuickShare"
+    },
+    {
+      "package_identifier": "Google.Talk"
+    },
+    {
+      "package_identifier": "Google.VPNByGoogleOne"
+    },
+    {
+      "package_identifier": "Google.WorkspaceSyncForMicrosoftOutlook"
+    },
+    {
+      "package_identifier": "GottCode.FocusWriter"
+    },
+    {
+      "package_identifier": "GovernmentOfThePRC.GuangdongProvince.YueZhengYi"
+    },
+    {
+      "package_identifier": "GovernmentOfThePRC.HeNan.ZhengZhou.ZhengZhengDing"
+    },
+    {
+      "package_identifier": "GovernmentOfThePRC.NDRC.NDRC"
+    },
+    {
+      "package_identifier": "GovernmentOfThePRC.SAT.ETB.WithholdingSide"
+    },
+    {
+      "package_identifier": "GovernmentOfThePRC.ZheJiangProvince.ZheZhengDing"
+    },
+    {
+      "package_identifier": "GoyalSoftech.Website2APKBuilderPro"
+    },
+    {
+      "package_identifier": "Graebert.AresCommander.2022"
+    },
+    {
+      "package_identifier": "Graebert.AresCommander.2023"
+    },
+    {
+      "package_identifier": "Graebert.AresCommander.2024"
+    },
+    {
+      "package_identifier": "Graebert.AresCommander.2025"
+    },
+    {
+      "package_identifier": "Graebert.AresCommander.2026"
+    },
+    {
+      "package_identifier": "Graebert.AresElectrical.2026"
+    },
+    {
+      "package_identifier": "Graebert.AresMap.2022"
+    },
+    {
+      "package_identifier": "Graebert.AresMap.2023"
+    },
+    {
+      "package_identifier": "Graebert.AresMechanical.2022"
+    },
+    {
+      "package_identifier": "Graebert.AresMechanical.2023"
+    },
+    {
+      "package_identifier": "Graebert.AresMechanical.2024"
+    },
+    {
+      "package_identifier": "Graebert.AresMechanical.2025"
+    },
+    {
+      "package_identifier": "Graebert.AresMechanical.2026"
+    },
+    {
+      "package_identifier": "GraemeGill.ArgyllCMS"
+    },
+    {
+      "package_identifier": "GrafanaLabs.Grafana.Enterprise"
+    },
+    {
+      "package_identifier": "GrafanaLabs.Grafana.OSS"
+    },
+    {
+      "package_identifier": "Grammarly.Grammarly"
+    },
+    {
+      "package_identifier": "Grammarly.Grammarly.Office"
+    },
+    {
+      "package_identifier": "Granola.Granola"
+    },
+    {
+      "package_identifier": "GraphPad.Prism"
+    },
+    {
+      "package_identifier": "Graphisoft.BIMxDesktopViewer"
+    },
+    {
+      "package_identifier": "Graphviz.Graphviz"
+    },
+    {
+      "package_identifier": "Grasshopper.Grasshopper"
+    },
+    {
+      "package_identifier": "Gravitational.Teleport"
+    },
+    {
+      "package_identifier": "Gravitational.TeleportConnect"
+    },
+    {
+      "package_identifier": "Greatis.A1RunGuard"
+    },
+    {
+      "package_identifier": "Greatis.BootLogXP"
+    },
+    {
+      "package_identifier": "Greatis.BootRacer"
+    },
+    {
+      "package_identifier": "Greatis.BootRescue"
+    },
+    {
+      "package_identifier": "Greatis.DesktopKeeper"
+    },
+    {
+      "package_identifier": "Greatis.DesktopSecretLock.Premium"
+    },
+    {
+      "package_identifier": "Greatis.DesktopSecretLock.Standard"
+    },
+    {
+      "package_identifier": "Greatis.EdgeResetButton"
+    },
+    {
+      "package_identifier": "Greatis.GWXStopper"
+    },
+    {
+      "package_identifier": "Greatis.IQIYIRemover"
+    },
+    {
+      "package_identifier": "Greatis.RegRun.Gold"
+    },
+    {
+      "package_identifier": "Greatis.RegRun.Platinum"
+    },
+    {
+      "package_identifier": "Greatis.RegRun.Reanimator"
+    },
+    {
+      "package_identifier": "Greatis.RegRun.RegRunCK"
+    },
+    {
+      "package_identifier": "Greatis.RegRun.Standard"
+    },
+    {
+      "package_identifier": "Greatis.StartScreenUnlimited"
+    },
+    {
+      "package_identifier": "Greatis.StopUpdates10"
+    },
+    {
+      "package_identifier": "Greatis.UnHackMe.Beta"
+    },
+    {
+      "package_identifier": "Greatis.UnHackMe.Stable"
+    },
+    {
+      "package_identifier": "Greatis.WinDowse"
+    },
+    {
+      "package_identifier": "GreenLinkNetworks.GreenlinkSP"
+    },
+    {
+      "package_identifier": "GreenfootTeam.Greenfoot"
+    },
+    {
+      "package_identifier": "GregVanMullem.MathGV"
+    },
+    {
+      "package_identifier": "GreycLab.GMIC-Qt.GIMP"
+    },
+    {
+      "package_identifier": "Greynut.Luxafor"
+    },
+    {
+      "package_identifier": "Greynut.LuxaforPomodoroTimer"
+    },
+    {
+      "package_identifier": "Greynut.LuxaforSmartButton"
+    },
+    {
+      "package_identifier": "Grunt.Grunt"
+    },
+    {
+      "package_identifier": "Gstarsoft.DWGFastView"
+    },
+    {
+      "package_identifier": "Guilded.Guilded"
+    },
+    {
+      "package_identifier": "GuinpinSoft.MakeMKV"
+    },
+    {
+      "package_identifier": "Guru3D.Afterburner"
+    },
+    {
+      "package_identifier": "Guru3D.Afterburner.Beta"
+    },
+    {
+      "package_identifier": "Guru3D.RTSS"
+    },
+    {
+      "package_identifier": "H-BAU.FERBOXDesign"
+    },
+    {
+      "package_identifier": "H-BAU.ISODESIGN"
+    },
+    {
+      "package_identifier": "H3C.H3CShare"
+    },
+    {
+      "package_identifier": "HARMAN.AdobeAIR"
+    },
+    {
+      "package_identifier": "HBK.MicrophoneViewer"
+    },
+    {
+      "package_identifier": "HBK.TEDS-Editor"
+    },
+    {
+      "package_identifier": "HDDGURU.HDDLLFTool"
+    },
+    {
+      "package_identifier": "HDDGURU.HDDRawCopyTool"
+    },
+    {
+      "package_identifier": "HDOS.HDOSLauncher"
+    },
+    {
+      "package_identifier": "HFRElectronics.ZeusRadio"
+    },
+    {
+      "package_identifier": "HHDSoftware.AutomatedSerialTerminal"
+    },
+    {
+      "package_identifier": "HHDSoftware.DeviceMonitoringStudio"
+    },
+    {
+      "package_identifier": "HHDSoftware.DupeCare"
+    },
+    {
+      "package_identifier": "HHDSoftware.FreeHexEditorNeo"
+    },
+    {
+      "package_identifier": "HHDSoftware.HexEditorNeo"
+    },
+    {
+      "package_identifier": "HHDSoftware.VirtualSerialPortTools"
+    },
+    {
+      "package_identifier": "HHDSoftware.VirtualUSBTools"
+    },
+    {
+      "package_identifier": "HIKARI-FIELD.HIKARI-FIELD-CLIENT"
+    },
+    {
+      "package_identifier": "HMCL.HMCL.Dev.CNB"
+    },
+    {
+      "package_identifier": "HMCL.HMCL.Dev.Maven"
+    },
+    {
+      "package_identifier": "HMCL.HMCL.Dev.Maven.TencentCloudMirror"
+    },
+    {
+      "package_identifier": "HMCL.HMCL.Stable.CNB"
+    },
+    {
+      "package_identifier": "HMCL.HMCL.Stable.Maven"
+    },
+    {
+      "package_identifier": "HMCL.HMCL.Stable.Maven.TencentCloudMirror"
+    },
+    {
+      "package_identifier": "HMS.AnybusDefenderCompactManager"
+    },
+    {
+      "package_identifier": "HMS.IxxatCanAnalyser"
+    },
+    {
+      "package_identifier": "HMS.Talk2MConnectionChecker"
+    },
+    {
+      "package_identifier": "HMS.eBuddy"
+    },
+    {
+      "package_identifier": "HMSoft.HMNISEdit"
+    },
+    {
+      "package_identifier": "HORI.DeviceManager"
+    },
+    {
+      "package_identifier": "HP.AnywarePCoIPClient"
+    },
+    {
+      "package_identifier": "HP.ConnectivityKit"
+    },
+    {
+      "package_identifier": "HP.HPCMSL"
+    },
+    {
+      "package_identifier": "HP.HPClick"
+    },
+    {
+      "package_identifier": "HP.HPCloudRecoveryTool"
+    },
+    {
+      "package_identifier": "HP.HPImageDiags.4"
+    },
+    {
+      "package_identifier": "HP.HPImageDiags.5"
+    },
+    {
+      "package_identifier": "HP.HPImageDiags.ReportViewer"
+    },
+    {
+      "package_identifier": "HP.ImageAssistant"
+    },
+    {
+      "package_identifier": "HP.PrimeVirtualCalculator"
+    },
+    {
+      "package_identifier": "HPInc.HPSupportAssistant"
+    },
+    {
+      "package_identifier": "Haali.WinUtils.lswitch"
+    },
+    {
+      "package_identifier": "HagelTechnologiesLtd.DUMeter"
+    },
+    {
+      "package_identifier": "HaiYing.OfficeAI"
+    },
+    {
+      "package_identifier": "HaimaCloud.HaimaCloud"
+    },
+    {
+      "package_identifier": "HalfBaked.HotPotatoes"
+    },
+    {
+      "package_identifier": "HamRadioDeluxe.HamRadioDeluxe"
+    },
+    {
+      "package_identifier": "HamsterRepublic.BobTheHamsterVGA"
+    },
+    {
+      "package_identifier": "HamsterRepublic.OHRRPGCE"
+    },
+    {
+      "package_identifier": "HandheldGroup.MaxGoWindows"
+    },
+    {
+      "package_identifier": "Hanwha.WisenetWAVEClient"
+    },
+    {
+      "package_identifier": "HanwhaVision.WisenetWAVEVMS.Server"
+    },
+    {
+      "package_identifier": "HaraldBoegeholz.h2testw"
+    },
+    {
+      "package_identifier": "Harbour.Harbour"
+    },
+    {
+      "package_identifier": "Hashicorp.Boundary"
+    },
+    {
+      "package_identifier": "Hashicorp.Consul"
+    },
+    {
+      "package_identifier": "Hashicorp.Nomad"
+    },
+    {
+      "package_identifier": "Hashicorp.Packer"
+    },
+    {
+      "package_identifier": "Hashicorp.Terraform"
+    },
+    {
+      "package_identifier": "Hashicorp.Terraform.Alpha"
+    },
+    {
+      "package_identifier": "Hashicorp.Terraform.Beta"
+    },
+    {
+      "package_identifier": "Hashicorp.Terraform.RC"
+    },
+    {
+      "package_identifier": "Hashicorp.TerraformLanguageServer"
+    },
+    {
+      "package_identifier": "Hashicorp.Vagrant"
+    },
+    {
+      "package_identifier": "Hashicorp.Vault"
+    },
+    {
+      "package_identifier": "Hashicorp.Waypoint"
+    },
+    {
+      "package_identifier": "Hasleo.BackupSuiteFree"
+    },
+    {
+      "package_identifier": "Havysoft.InnoExtractor"
+    },
+    {
+      "package_identifier": "HaystackSoftware.Arq"
+    },
+    {
+      "package_identifier": "HaystackSoftware.HaystackEditor"
+    },
+    {
+      "package_identifier": "HealthInfoNet.HINClient"
+    },
+    {
+      "package_identifier": "HeartbeatChat.Heartbeat"
+    },
+    {
+      "package_identifier": "Hearty.HeartyJournal"
+    },
+    {
+      "package_identifier": "Heaventools.FlexHex"
+    },
+    {
+      "package_identifier": "Heaventools.PEexplorer"
+    },
+    {
+      "package_identifier": "Heaventools.ResourceTuner"
+    },
+    {
+      "package_identifier": "Heaventools.ResourceTunerConsole"
+    },
+    {
+      "package_identifier": "Hedgewars.Hedgewars"
+    },
+    {
+      "package_identifier": "Hekasoft.Backup-Restore"
+    },
+    {
+      "package_identifier": "Heliai.BlackThunder"
+    },
+    {
+      "package_identifier": "HelioFM.HelioSequencer"
+    },
+    {
+      "package_identifier": "Hellofont.Hellofont"
+    },
+    {
+      "package_identifier": "Helm.Helm"
+    },
+    {
+      "package_identifier": "HelmutBuhler.8GadgetPack"
+    },
+    {
+      "package_identifier": "HendersonSoftware.CDRipper"
+    },
+    {
+      "package_identifier": "HenrikWenz.All-in-OneMessenger"
+    },
+    {
+      "package_identifier": "HermannSchinagl.LinkShellExtension"
+    },
+    {
+      "package_identifier": "HermannSchinagl.ln"
+    },
+    {
+      "package_identifier": "HeroHealth.HeroSidekick"
+    },
+    {
+      "package_identifier": "I2PHD-and-IK2CZL.Spectran"
+    },
+    {
+      "package_identifier": "IBESoftware.HelpNDoc"
+    },
+    {
+      "package_identifier": "IBM.Aspera"
+    },
+    {
+      "package_identifier": "J2S3.MerciApp"
+    },
+    {
+      "package_identifier": "JAMSoftware.FileList"
+    },
+    {
+      "package_identifier": "JAMSoftware.HeavyLoad"
+    },
+    {
+      "package_identifier": "JAMSoftware.TreeSize"
+    },
+    {
+      "package_identifier": "JAMSoftware.TreeSize.Free"
+    },
+    {
+      "package_identifier": "JAMSoftware.UltraSearch"
+    },
+    {
+      "package_identifier": "JD.HiOffice"
+    },
+    {
+      "package_identifier": "JFrog.Cli"
+    },
+    {
+      "package_identifier": "JHMSchaars.vDos"
+    },
+    {
+      "package_identifier": "JLC.EasyEDA"
+    },
+    {
+      "package_identifier": "JLC.EasyEDA.Pro"
+    },
+    {
+      "package_identifier": "JLC.LCEDA"
+    },
+    {
+      "package_identifier": "JLC.LCEDA.Pro"
+    },
+    {
+      "package_identifier": "JMMG.OCWin"
+    },
+    {
+      "package_identifier": "JMMG.TextFileEditor"
+    },
+    {
+      "package_identifier": "JORDAHL.JDSD"
+    },
+    {
+      "package_identifier": "JORDAHL.JORDAHLEXPERT"
+    },
+    {
+      "package_identifier": "JPSoft.tcmd"
+    },
+    {
+      "package_identifier": "JRiver.MediaCenter"
+    },
+    {
+      "package_identifier": "JTDX.JTDX"
+    },
+    {
+      "package_identifier": "JTKsoftware.JoyToKey"
+    },
+    {
+      "package_identifier": "JTL.Wawi"
+    },
+    {
+      "package_identifier": "Jabbla.SprintPlusViewer"
+    },
+    {
+      "package_identifier": "Jabra.Direct"
+    },
+    {
+      "package_identifier": "JacquelinPotier.AllDllsDependencies"
+    },
+    {
+      "package_identifier": "JacquelinPotier.CryptoStuff"
+    },
+    {
+      "package_identifier": "Jagex.OldSchoolRunescape"
+    },
+    {
+      "package_identifier": "Jagex.Runescape"
+    },
+    {
+      "package_identifier": "Jahastech.NxFilter"
+    },
+    {
+      "package_identifier": "JakobDev.jdAppStreamEdit"
+    },
+    {
+      "package_identifier": "JakobDev.jdDesktopEntryEdit"
+    },
+    {
+      "package_identifier": "JakobDev.jdMinecraftLauncher"
+    },
+    {
+      "package_identifier": "JakobDev.jdMrpackInstaller"
+    },
+    {
+      "package_identifier": "JakobDev.jdNBTExplorer"
+    },
+    {
+      "package_identifier": "JakobDev.jdReplace"
+    },
+    {
+      "package_identifier": "JakobDev.jdTextEdit"
+    },
+    {
+      "package_identifier": "JamesLarus.SPIM"
+    },
+    {
+      "package_identifier": "JamesWestman.Hourglass"
+    },
+    {
+      "package_identifier": "JamieOConnell.MIDI-OX"
+    },
+    {
+      "package_identifier": "Jamovi.Desktop.Current"
+    },
+    {
+      "package_identifier": "Jamovi.Desktop.Legacy"
+    },
+    {
+      "package_identifier": "Jamovi.Desktop.Solid"
+    },
+    {
+      "package_identifier": "JanFiala.PSPad.x64"
+    },
+    {
+      "package_identifier": "JanFiala.PSPad.x86"
+    },
+    {
+      "package_identifier": "JangaFX.EmberGen"
+    },
+    {
+      "package_identifier": "JangaFX.GameTextureViewer"
+    },
+    {
+      "package_identifier": "JanosMathe.HardDiskSentinel.Professional"
+    },
+    {
+      "package_identifier": "JanosMathe.HardDiskSentinel.Standard"
+    },
+    {
+      "package_identifier": "Japplis.AntCommander.Personal"
+    },
+    {
+      "package_identifier": "Japplis.AntCommander.Pro"
+    },
+    {
+      "package_identifier": "Japplis.AppletRunnerPro"
+    },
+    {
+      "package_identifier": "Japplis.ClipboardHistory"
+    },
+    {
+      "package_identifier": "Japplis.ClipboardHistory.Pro"
+    },
+    {
+      "package_identifier": "Japplis.ControlDashboard"
+    },
+    {
+      "package_identifier": "Japplis.ControlDashboard.Pro"
+    },
+    {
+      "package_identifier": "Japplis.Decoration"
+    },
+    {
+      "package_identifier": "Japplis.DesktopWatchmaker"
+    },
+    {
+      "package_identifier": "Japplis.DesktopWatchmaker.Widget"
+    },
+    {
+      "package_identifier": "Japplis.Dictaphone"
+    },
+    {
+      "package_identifier": "Japplis.DirectoryCrop"
+    },
+    {
+      "package_identifier": "Japplis.Discotheek"
+    },
+    {
+      "package_identifier": "Japplis.JLearnIt"
+    },
+    {
+      "package_identifier": "Japplis.M2RepoCleaner"
+    },
+    {
+      "package_identifier": "Japplis.Pastel"
+    },
+    {
+      "package_identifier": "Japplis.PostOnScreen"
+    },
+    {
+      "package_identifier": "Japplis.PostOnScreen.Pro"
+    },
+    {
+      "package_identifier": "Japplis.PosterFont"
+    },
+    {
+      "package_identifier": "Japplis.PosterFont.Light"
+    },
+    {
+      "package_identifier": "Japplis.ScreenHighlighter"
+    },
+    {
+      "package_identifier": "Japplis.ScreenHighlighter.Pro"
+    },
+    {
+      "package_identifier": "Japplis.ScreenshotCrop"
+    },
+    {
+      "package_identifier": "Japplis.SheetStats"
+    },
+    {
+      "package_identifier": "Japplis.SheetViewer"
+    },
+    {
+      "package_identifier": "Japplis.Toolbox"
+    },
+    {
+      "package_identifier": "Japplis.Toolbox.Pro"
+    },
+    {
+      "package_identifier": "Japplis.TreeDataExplorer"
+    },
+    {
+      "package_identifier": "Japplis.Treecell"
+    },
+    {
+      "package_identifier": "Japplis.VRPhotoConverter"
+    },
+    {
+      "package_identifier": "Japplis.Watch"
+    },
+    {
+      "package_identifier": "Japplis.Watch.Pro"
+    },
+    {
+      "package_identifier": "Japplis.WebsiteOptimizer"
+    },
+    {
+      "package_identifier": "JasnaPaka.MozBackup"
+    },
+    {
+      "package_identifier": "JavadMotallebi.NeatDownloadManager"
+    },
+    {
+      "package_identifier": "Jellyfin.Server"
+    },
+    {
+      "package_identifier": "JernejSimoncic.Wget"
+    },
+    {
+      "package_identifier": "Jeskola.Buzz"
+    },
+    {
+      "package_identifier": "JetBrains.Aqua.Preview"
+    },
+    {
+      "package_identifier": "JetBrains.CLion"
+    },
+    {
+      "package_identifier": "K-Software.DXLog.net"
+    },
+    {
+      "package_identifier": "KAMITSUBAKI.KAFU"
+    },
+    {
+      "package_identifier": "KBS.Kong"
+    },
+    {
+      "package_identifier": "KDE.Akregator"
+    },
+    {
+      "package_identifier": "KDE.Alkimia"
+    },
+    {
+      "package_identifier": "KDE.Amarok"
+    },
+    {
+      "package_identifier": "KDE.Ark"
+    },
+    {
+      "package_identifier": "KDE.Ark.AppX"
+    },
+    {
+      "package_identifier": "KDE.Blinken"
+    },
+    {
+      "package_identifier": "KDE.Bomber"
+    },
+    {
+      "package_identifier": "KDE.Bovo"
+    },
+    {
+      "package_identifier": "KDE.CrowTranslate"
+    },
+    {
+      "package_identifier": "KDE.Dolphin"
+    },
+    {
+      "package_identifier": "KDE.Elisa"
+    },
+    {
+      "package_identifier": "KDE.Falkon"
+    },
+    {
+      "package_identifier": "KDE.Filelight"
+    },
+    {
+      "package_identifier": "KDE.Filelight.AppX"
+    },
+    {
+      "package_identifier": "KDE.GCompris"
+    },
+    {
+      "package_identifier": "KDE.Glaxnimate"
+    },
+    {
+      "package_identifier": "KDE.Glaxnimate.AppX"
+    },
+    {
+      "package_identifier": "KDE.Granatier"
+    },
+    {
+      "package_identifier": "KDE.Haruna"
+    },
+    {
+      "package_identifier": "KDE.ISOImageWriter"
+    },
+    {
+      "package_identifier": "KDE.KAIChat"
+    },
+    {
+      "package_identifier": "KDE.KAlarm"
+    },
+    {
+      "package_identifier": "KDE.KAtomic"
+    },
+    {
+      "package_identifier": "KDE.KBlackbox"
+    },
+    {
+      "package_identifier": "KDE.KBlocks"
+    },
+    {
+      "package_identifier": "KDE.KBounce"
+    },
+    {
+      "package_identifier": "KDE.KBreakOut"
+    },
+    {
+      "package_identifier": "KDE.KBruch"
+    },
+    {
+      "package_identifier": "KDE.KDEConnect"
+    },
+    {
+      "package_identifier": "KDE.KDEConnect.AppX"
+    },
+    {
+      "package_identifier": "KDE.KDevelop"
+    },
+    {
+      "package_identifier": "KDE.KDiamond"
+    },
+    {
+      "package_identifier": "KDE.KDiff3"
+    },
+    {
+      "package_identifier": "KDE.KDiff3.AppX"
+    },
+    {
+      "package_identifier": "KDE.KFourInLine"
+    },
+    {
+      "package_identifier": "KDE.KGoldrunner"
+    },
+    {
+      "package_identifier": "KDE.KJumpingCube"
+    },
+    {
+      "package_identifier": "KDE.KMahjongg"
+    },
+    {
+      "package_identifier": "KDE.KMines"
+    },
+    {
+      "package_identifier": "KDE.KNetWalk"
+    },
+    {
+      "package_identifier": "KDE.KReversi"
+    },
+    {
+      "package_identifier": "KDE.KShisen"
+    },
+    {
+      "package_identifier": "KDE.KSnakeDuel"
+    },
+    {
+      "package_identifier": "KDE.KSpaceDuel"
+    },
+    {
+      "package_identifier": "KDE.KSquares"
+    },
+    {
+      "package_identifier": "KDE.KStars"
+    },
+    {
+      "package_identifier": "KDE.KStars.AppX"
+    },
+    {
+      "package_identifier": "KDE.KSudoku"
+    },
+    {
+      "package_identifier": "KDE.KTimeTracker"
+    },
+    {
+      "package_identifier": "KDE.KTuberling"
+    },
+    {
+      "package_identifier": "KDE.KTurtle"
+    },
+    {
+      "package_identifier": "KDE.Kaidan"
+    },
+    {
+      "package_identifier": "KDE.Kapman"
+    },
+    {
+      "package_identifier": "KDE.Karp"
+    },
+    {
+      "package_identifier": "KDE.Kasts"
+    },
+    {
+      "package_identifier": "KDE.Kasts.AppX"
+    },
+    {
+      "package_identifier": "KDE.Kate"
+    },
+    {
+      "package_identifier": "KDE.Kdenlive"
+    },
+    {
+      "package_identifier": "KDE.Kid3"
+    },
+    {
+      "package_identifier": "KDE.Kigo"
+    },
+    {
+      "package_identifier": "KDE.Kile"
+    },
+    {
+      "package_identifier": "KDE.Killbots"
+    },
+    {
+      "package_identifier": "KDE.Kiriki"
+    },
+    {
+      "package_identifier": "KDE.Kiten"
+    },
+    {
+      "package_identifier": "KDE.Klickety"
+    },
+    {
+      "package_identifier": "KDE.Klines"
+    },
+    {
+      "package_identifier": "KDE.Kolf"
+    },
+    {
+      "package_identifier": "KDE.Kollision"
+    },
+    {
+      "package_identifier": "KDE.Konsole"
+    },
+    {
+      "package_identifier": "KDE.Kontact"
+    },
+    {
+      "package_identifier": "KDE.Konversation"
+    },
+    {
+      "package_identifier": "KDE.Krita"
+    },
+    {
+      "package_identifier": "KDE.KritaShellExtension"
+    },
+    {
+      "package_identifier": "KDE.LSkat"
+    },
+    {
+      "package_identifier": "KDE.LabPlot"
+    },
+    {
+      "package_identifier": "KDE.LabPlot.AppX"
+    },
+    {
+      "package_identifier": "KDE.Lokalize"
+    },
+    {
+      "package_identifier": "KDE.Lokalize.AppX"
+    },
+    {
+      "package_identifier": "KDE.Marble"
+    },
+    {
+      "package_identifier": "KDE.Marknote"
+    },
+    {
+      "package_identifier": "KDE.Minuet"
+    },
+    {
+      "package_identifier": "KDE.NeoChat"
+    },
+    {
+      "package_identifier": "KDE.Okular"
+    },
+    {
+      "package_identifier": "KDE.Okular.AppX"
+    },
+    {
+      "package_identifier": "KDE.Parley"
+    },
+    {
+      "package_identifier": "KDE.Picmi"
+    },
+    {
+      "package_identifier": "KDE.PuMoKu"
+    },
+    {
+      "package_identifier": "KDE.RKWard"
+    },
+    {
+      "package_identifier": "KDE.Ruqola"
+    },
+    {
+      "package_identifier": "KDE.Ruqola.AppX"
+    },
+    {
+      "package_identifier": "KDE.Skrooge"
+    },
+    {
+      "package_identifier": "KDE.Tellico"
+    },
+    {
+      "package_identifier": "KDE.Tokodon"
+    },
+    {
+      "package_identifier": "KDE.Umbrello"
+    },
+    {
+      "package_identifier": "KDE.digiKam"
+    },
+    {
+      "package_identifier": "KDE.kmymoney"
+    },
+    {
+      "package_identifier": "KGSAI.CGoban"
+    },
+    {
+      "package_identifier": "KGSOnline.CGoban"
+    },
+    {
+      "package_identifier": "KIDASASoftware,Inc.MilestonesProfessional2019-64"
+    },
+    {
+      "package_identifier": "KIDASASoftware,Inc.MilestonesProfessional2021"
+    },
+    {
+      "package_identifier": "KIDASASoftware,Inc.MilestonesProfessional2023"
+    },
+    {
+      "package_identifier": "KIDASASoftware,Inc.MilestonesProfessional2025"
+    },
+    {
+      "package_identifier": "KLSSoft.BackupCraft"
+    },
+    {
+      "package_identifier": "KLayout.KLayout"
+    },
+    {
+      "package_identifier": "KN4CRD.JS8Call"
+    },
+    {
+      "package_identifier": "KNIMEAG.KNIMEAnalyticsPlatform"
+    },
+    {
+      "package_identifier": "KOG.Elsworld.en"
+    },
+    {
+      "package_identifier": "KOG.Elsworld.es"
+    },
+    {
+      "package_identifier": "KPN.HIPIN"
+    },
+    {
+      "package_identifier": "KVS.QUICKSURFACE"
+    },
+    {
+      "package_identifier": "Kafan.KafanInput"
+    },
+    {
+      "package_identifier": "Kafan.MiniBrowser"
+    },
+    {
+      "package_identifier": "Kairos.DuetDisplay"
+    },
+    {
+      "package_identifier": "Kakao.KakaoTalk"
+    },
+    {
+      "package_identifier": "KakaoEnterprise.KakaoWork"
+    },
+    {
+      "package_identifier": "KakaoEntertainmentCorp.MelonPlayer"
+    },
+    {
+      "package_identifier": "KamilSzymborski.WindowCenteringHelper"
+    },
+    {
+      "package_identifier": "Kapibala.Shuitun"
+    },
+    {
+      "package_identifier": "KarenWare.KarensReplicator"
+    },
+    {
+      "package_identifier": "Kaseya.LiveConnect"
+    },
+    {
+      "package_identifier": "KatjaHoffmann.TViewer"
+    },
+    {
+      "package_identifier": "Keboola.KeboolaCLI"
+    },
+    {
+      "package_identifier": "KeeperSecurity.KeeperDesktop"
+    },
+    {
+      "package_identifier": "KeeyaiSoft.Flame"
+    },
+    {
+      "package_identifier": "Kenkun.AviUtlExEdit2"
+    },
+    {
+      "package_identifier": "Kensington.DockWorks"
+    },
+    {
+      "package_identifier": "Kensington.FingerprintApplication"
+    },
+    {
+      "package_identifier": "Kensington.KensingtonKonnect"
+    },
+    {
+      "package_identifier": "Kensington.KensingtonWorks"
+    },
+    {
+      "package_identifier": "Kensington.TrueHue"
+    },
+    {
+      "package_identifier": "KevinOttalini.SimpleMTUTest"
+    },
+    {
+      "package_identifier": "Keybase.Keybase"
+    },
+    {
+      "package_identifier": "Keysight.OpenTAP"
+    },
+    {
+      "package_identifier": "Keysight.PathWaveLicenseManager"
+    },
+    {
+      "package_identifier": "Keysight.SoftwareManagerUtility"
+    },
+    {
+      "package_identifier": "Khoj.Khoj"
+    },
+    {
+      "package_identifier": "KhronosGroup.VulkanRT"
+    },
+    {
+      "package_identifier": "KhronosGroup.VulkanSDK"
+    },
+    {
+      "package_identifier": "KiCad.KiCad.Lite"
+    },
+    {
+      "package_identifier": "Kingdee.CloudHub"
+    },
+    {
+      "package_identifier": "KingsGroup.KingOfAvalon"
+    },
+    {
+      "package_identifier": "Kingsoft.KDocs"
+    },
+    {
+      "package_identifier": "Kingsoft.KMeeting"
+    },
+    {
+      "package_identifier": "Kingsoft.KingsoftPDF"
+    },
+    {
+      "package_identifier": "Kingsoft.PowerWord"
+    },
+    {
+      "package_identifier": "Kingsoft.WPSOffice"
+    },
+    {
+      "package_identifier": "Kingsoft.WPSOffice.CN"
+    },
+    {
+      "package_identifier": "Kingston.SSDManager"
+    },
+    {
+      "package_identifier": "KinookSoftware,Inc.CopyWiz"
+    },
+    {
+      "package_identifier": "KinookSoftware,Inc.UltraRecall"
+    },
+    {
+      "package_identifier": "KinookSoftware,Inc.VisualBuildProfessional"
+    },
+    {
+      "package_identifier": "KirraEnterprises.Presenter.Express"
+    },
+    {
+      "package_identifier": "KirraEnterprises.Presenter.Personal"
+    },
+    {
+      "package_identifier": "KirraEnterprises.Presenter.Premium"
+    },
+    {
+      "package_identifier": "KirraEnterprises.Presenter.Standard"
+    },
+    {
+      "package_identifier": "KitLib.Kite"
+    },
+    {
+      "package_identifier": "Kitemaker.Kitemaker"
+    },
+    {
+      "package_identifier": "Kitware.ParaView"
+    },
+    {
+      "package_identifier": "Kitware.ParaView.MPI"
+    },
+    {
+      "package_identifier": "Kitware.Slicer"
+    },
+    {
+      "package_identifier": "Kiwix.WikiMed"
+    },
+    {
+      "package_identifier": "Kiwix.WikiMed.Electron"
+    },
+    {
+      "package_identifier": "KizunaAIInc.kzn"
+    },
+    {
+      "package_identifier": "Knime.AnalyticsPlatform.LTS"
+    },
+    {
+      "package_identifier": "KoichiMomma.VESTA"
+    },
+    {
+      "package_identifier": "Kongkong.AskLink"
+    },
+    {
+      "package_identifier": "KonicaMinolta.UniversalPrinterDriverPCL6"
+    },
+    {
+      "package_identifier": "KpyM.TelnetSSHServer"
+    },
+    {
+      "package_identifier": "Kraken.KrakenDesktop"
+    },
+    {
+      "package_identifier": "Kubernetes.kubectl"
+    },
+    {
+      "package_identifier": "Kubus.BCFManager.AutoCAD.2025"
+    },
+    {
+      "package_identifier": "Kubus.BCFManager.Revit.2022"
+    },
+    {
+      "package_identifier": "Kubus.BCFManager.Revit.2023"
+    },
+    {
+      "package_identifier": "Kubus.BCFManager.Revit.2024"
+    },
+    {
+      "package_identifier": "Kubus.BCFManager.Revit.2025"
+    },
+    {
+      "package_identifier": "Kubus.BCFManager.Revit.2026"
+    },
+    {
+      "package_identifier": "Kubus.BCFManager.Standalone"
+    },
+    {
+      "package_identifier": "Kubus.BIMcollabInstaller"
+    },
+    {
+      "package_identifier": "Kubus.BIMcollabZoom"
+    },
+    {
+      "package_identifier": "Kumospace.Kumospace"
+    },
+    {
+      "package_identifier": "Kuro.Mery"
+    },
+    {
+      "package_identifier": "Kuro.Mery.Beta"
+    },
+    {
+      "package_identifier": "KurtZimmermann.EventLogViewer"
+    },
+    {
+      "package_identifier": "KurtZimmermann.SimilarImagesFinder"
+    },
+    {
+      "package_identifier": "Microsoft.PowerToys"
+    },
+    {
+      "package_identifier": "aSc.aScTimeTables"
+    },
+    {
+      "package_identifier": "abgox.InputTip"
+    },
+    {
+      "package_identifier": "accellence.vimacc"
+    },
+    {
+      "package_identifier": "accellence.vimaccEnterprise"
+    },
+    {
+      "package_identifier": "accellence.vimaccEnterprise_2215"
+    },
+    {
+      "package_identifier": "acrosync.DuplicacyWeb"
+    },
+    {
+      "package_identifier": "acrosync.acrosync"
+    },
+    {
+      "package_identifier": "actualsolution.VolumeLock"
+    },
+    {
+      "package_identifier": "airSlate.pdfFiller"
+    },
+    {
+      "package_identifier": "alelec.WSLUSBManager"
+    },
+    {
+      "package_identifier": "alexd.Metapad"
+    },
+    {
+      "package_identifier": "alexvallat.AlbumArtDownloader"
+    },
+    {
+      "package_identifier": "alfaview.alfaview"
+    },
+    {
+      "package_identifier": "aloneguid.markwright"
+    },
+    {
+      "package_identifier": "aluigi.QuickBMS"
+    },
+    {
+      "package_identifier": "ams.SolutionAG.ams.Client.X64"
+    },
+    {
+      "package_identifier": "andem81.Windroy"
+    },
+    {
+      "package_identifier": "anycam-io.AnyCam"
+    },
+    {
+      "package_identifier": "appmakes.Typora"
+    },
+    {
+      "package_identifier": "assetizr.assetizr"
+    },
+    {
+      "package_identifier": "atagon.com.kogiQA"
+    },
+    {
+      "package_identifier": "atsuover.Garcello"
+    },
+    {
+      "package_identifier": "axes4.PAC"
+    },
+    {
+      "package_identifier": "azurejoga.aurorawindowsoptimizer"
+    },
+    {
+      "package_identifier": "azurejoga.brasilacessivel"
+    },
+    {
+      "package_identifier": "badpanda.GifYourGame"
+    },
+    {
+      "package_identifier": "baremetalsoft.baretail"
+    },
+    {
+      "package_identifier": "basement-nl.Teach2000"
+    },
+    {
+      "package_identifier": "beyerdynamic.UpdateHub"
+    },
+    {
+      "package_identifier": "bitmediae-SolutionsGmbH.ITSClient"
+    },
+    {
+      "package_identifier": "bitwig.bitwig"
+    },
+    {
+      "package_identifier": "bloodrock.pkg-config-lite"
+    },
+    {
+      "package_identifier": "bluemars.ClipX"
+    },
+    {
+      "package_identifier": "bosse.filedisk"
+    },
+    {
+      "package_identifier": "bosse.httpdisk"
+    },
+    {
+      "package_identifier": "bosse.romfs"
+    },
+    {
+      "package_identifier": "bshuzhang.PPLink"
+    },
+    {
+      "package_identifier": "busylight.Teams"
+    },
+    {
+      "package_identifier": "byte-physics.ipt"
+    },
+    {
+      "package_identifier": "bztsrc.usbimager.wo"
+    },
+    {
+      "package_identifier": "c-egg.tenhou"
+    },
+    {
+      "package_identifier": "cURL.cURL"
+    },
+    {
+      "package_identifier": "cURL.trurl"
+    },
+    {
+      "package_identifier": "calibre.calibre"
+    },
+    {
+      "package_identifier": "calibre.calibre.portable"
+    },
+    {
+      "package_identifier": "canghaicheng.ZhuoMianShiJie"
+    },
+    {
+      "package_identifier": "capnproto.capnproto"
+    },
+    {
+      "package_identifier": "cb4960.Capture2Text"
+    },
+    {
+      "package_identifier": "cloudbase.qemu-img"
+    },
+    {
+      "package_identifier": "cloudnet.cloudnet"
+    },
+    {
+      "package_identifier": "cmlanche.lightningvine"
+    },
+    {
+      "package_identifier": "com.harelzadok.asmrun-installer"
+    },
+    {
+      "package_identifier": "connect2xGmbH.Tammy"
+    },
+    {
+      "package_identifier": "coti.mcxstudio"
+    },
+    {
+      "package_identifier": "ctrl-f.userdiag"
+    },
+    {
+      "package_identifier": "cyberscarecrow.cyberscarecrow"
+    },
+    {
+      "package_identifier": "cypherpunks.pidgin-otr"
+    },
+    {
+      "package_identifier": "dRofus.dRofus"
+    },
+    {
+      "package_identifier": "dRofus.dRofus.EXE"
+    },
+    {
+      "package_identifier": "dabrain34.GstPipelineStudio"
+    },
+    {
+      "package_identifier": "dbtLabs.dbtFusion"
+    },
+    {
+      "package_identifier": "den4b.Colors"
+    },
+    {
+      "package_identifier": "den4b.Hasher"
+    },
+    {
+      "package_identifier": "den4b.RandPass"
+    },
+    {
+      "package_identifier": "den4b.ReNamer"
+    },
+    {
+      "package_identifier": "den4b.Resizer"
+    },
+    {
+      "package_identifier": "den4b.Shutter"
+    },
+    {
+      "package_identifier": "dev47apps.DroidCam"
+    },
+    {
+      "package_identifier": "deviceTRUST.deviceTRUSTClientExtension"
+    },
+    {
+      "package_identifier": "dotse.bredbandskollen"
+    },
+    {
+      "package_identifier": "douzone.WEHAGO"
+    },
+    {
+      "package_identifier": "drakkan.SFTPGoEnterprise"
+    },
+    {
+      "package_identifier": "dreamus.flo"
+    },
+    {
+      "package_identifier": "drsaint.WixTool.Red"
+    },
+    {
+      "package_identifier": "drsaint.WixTool.Yellow"
+    },
+    {
+      "package_identifier": "dukus.digiCamControl"
+    },
+    {
+      "package_identifier": "dxatlas.CwSkimmer"
+    },
+    {
+      "package_identifier": "dxatlas.SSTVTools"
+    },
+    {
+      "package_identifier": "eBralec.eBralec"
+    },
+    {
+      "package_identifier": "eFMer.BoincTasks"
+    },
+    {
+      "package_identifier": "eMClient.eMClient"
+    },
+    {
+      "package_identifier": "eMachineShop.eMachineShop"
+    },
+    {
+      "package_identifier": "eMedley.examNBrowser"
+    },
+    {
+      "package_identifier": "eMule.eMule"
+    },
+    {
+      "package_identifier": "ePSXe.ePSXe"
+    },
+    {
+      "package_identifier": "eParaksts.eParakstitajs"
+    },
+    {
+      "package_identifier": "eParaksts.eParakstsTokenSigning"
+    },
+    {
+      "package_identifier": "eTeks.SweetHome3D"
+    },
+    {
+      "package_identifier": "eVenture.HideMe"
+    },
+    {
+      "package_identifier": "eduVPN.Client"
+    },
+    {
+      "package_identifier": "eibol.FFmpegBatchAVConverter"
+    },
+    {
+      "package_identifier": "ej-technologies.JProfiler.13"
+    },
+    {
+      "package_identifier": "ej-technologies.JProfiler.13.Agent"
+    },
+    {
+      "package_identifier": "ej-technologies.JProfiler.14"
+    },
+    {
+      "package_identifier": "ej-technologies.JProfiler.14.Agent"
+    },
+    {
+      "package_identifier": "ej-technologies.JProfiler.15"
+    },
+    {
+      "package_identifier": "ej-technologies.JProfiler.15.Agent"
+    },
+    {
+      "package_identifier": "ej-technologies.JProfiler.16"
+    },
+    {
+      "package_identifier": "ej-technologies.JProfiler.16.Agent"
+    },
+    {
+      "package_identifier": "ej-technologies.exe4j.9"
+    },
+    {
+      "package_identifier": "ej-technologies.install4j.10"
+    },
+    {
+      "package_identifier": "ej-technologies.install4j.11"
+    },
+    {
+      "package_identifier": "ej-technologies.install4j.9"
+    },
+    {
+      "package_identifier": "ej-technologies.perfino.4"
+    },
+    {
+      "package_identifier": "elves.elvish"
+    },
+    {
+      "package_identifier": "espeak.espeak"
+    },
+    {
+      "package_identifier": "everauto.zTasker"
+    },
+    {
+      "package_identifier": "evestudio.todo-list"
+    },
+    {
+      "package_identifier": "extrame.dget"
+    },
+    {
+      "package_identifier": "ezwinports.make"
+    },
+    {
+      "package_identifier": "gamigo.WildTangentGamesApp"
+    },
+    {
+      "package_identifier": "gaubert.gmvault"
+    },
+    {
+      "package_identifier": "gdiObjects.Perspective"
+    },
+    {
+      "package_identifier": "gdiObjects.fotoXplorer"
+    },
+    {
+      "package_identifier": "gdiObjects.xBar"
+    },
+    {
+      "package_identifier": "geeksoftwareGmbH.PDF24Creator"
+    },
+    {
+      "package_identifier": "getfloma.Floma"
+    },
+    {
+      "package_identifier": "glueckkanja.KONNEKT"
+    },
+    {
+      "package_identifier": "gmbertani.Echoes"
+    },
+    {
+      "package_identifier": "gmsh.gmsh"
+    },
+    {
+      "package_identifier": "gnif.LookingGlass"
+    },
+    {
+      "package_identifier": "gnome.Dia"
+    },
+    {
+      "package_identifier": "gnome.EasyTAG"
+    },
+    {
+      "package_identifier": "gnome.GNOMETranslationEditor"
+    },
+    {
+      "package_identifier": "gnome.Glade"
+    },
+    {
+      "package_identifier": "gnome.Planner"
+    },
+    {
+      "package_identifier": "gnome.gedit"
+    },
+    {
+      "package_identifier": "gnome.gitg"
+    },
+    {
+      "package_identifier": "gnome.gtkmm"
+    },
+    {
+      "package_identifier": "gnuplot.gnuplot"
+    },
+    {
+      "package_identifier": "gotson.Komga"
+    },
+    {
+      "package_identifier": "gretl.gretl"
+    },
+    {
+      "package_identifier": "gstreamerproject.gstreamer"
+    },
+    {
+      "package_identifier": "gvollant.Smartversion"
+    },
+    {
+      "package_identifier": "kSoft.Graphmatica"
+    },
+    {
+      "package_identifier": "karamem0.Capreze"
+    },
+    {
+      "package_identifier": "kelibiao.kelibiao"
+    },
+    {
+      "package_identifier": "kelteseth.ScreenPlay.Beta"
+    },
+    {
+      "package_identifier": "kevinberger-ch.SafePDFViewer"
+    },
+    {
+      "package_identifier": "klatexformula.klatexformula"
+    },
+    {
+      "package_identifier": "kmeleonbrowser.K-Meleon"
+    },
+    {
+      "package_identifier": "kobaltlabInc.HashPhotosTransfer"
+    },
+    {
+      "package_identifier": "kunobi-ninja.kunobi"
+    },
+    {
+      "package_identifier": "kymoto.InnoScriptStudio"
+    }
+  ]
+}

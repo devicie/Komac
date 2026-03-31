@@ -294,7 +294,10 @@ impl Installers for Msi {
                                 .all(|char| char.is_uppercase() || !char.is_alphabetic())
                                 && !key.starts_with("ARP")
                                 && !key.starts_with("WIXUI_")
-                                && !key.starts_with("AI_")
+                                && !key.starts_with("AI_") // Advanced Installer
+                                && !key.starts_with("VSD") // Visual Studio Installer
+                                && key != &"ALLUSERS"
+                                && key != &"REINSTALLMODE"
                         })
                         .map(|(key, value)| format!("{}=\"{}\"", key, value))
                         .collect::<Vec<_>>();
