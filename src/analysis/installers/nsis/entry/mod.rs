@@ -1056,7 +1056,9 @@ impl Entry {
                         match function.as_ref() {
                             "Call" => {
                                 if let Some(call) = state.stack.pop() {
-                                    state.mock_caller.call(&call);
+                                    let mut mock_caller = std::mem::take(&mut state.mock_caller);
+                                    mock_caller.call(state, &call);
+                                    state.mock_caller = mock_caller;
                                 }
                             }
                             "Int64Op" => {

@@ -1,5 +1,6 @@
-use super::ParsedCall;
+use super::ResolvedCall;
+use crate::analysis::installers::nsis::state::NsisState;
 
-pub trait Call {
-    fn call(&mut self, call: &ParsedCall) -> bool;
+pub(super) trait Call {
+    fn call(&mut self, state: &mut NsisState, call: &ResolvedCall<'_>) -> bool;
 }

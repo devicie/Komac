@@ -7,7 +7,7 @@ use std::{
     slice::Iter,
 };
 
-use camino::{Utf8Component, Utf8Path};
+use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
 use chrono::{DateTime, Utc};
 pub use entry::FsEntry;
 use indextree::{Arena, Node, NodeId};
@@ -31,6 +31,17 @@ impl FileSystem {
             arena,
             root,
             current_dir: root,
+        }
+    }
+
+    /// Normalizes a path, converting Windows backslash separators to forward slashes so that
+    /// camino parses the components correctly on non-Windows systems.
+    fn normalize(path: &Utf8Path) -> Utf8PathBuf {
+        let s = path.as_str();
+        if s.contains('\\') {
+            Utf8PathBuf::from(s.replace('\\', "/"))
+        } else {
+            path.to_path_buf()
         }
     }
 
@@ -67,6 +78,7 @@ impl FileSystem {
     where
         T: AsRef<Utf8Path>,
     {
+        let name = Self::normalize(name.as_ref());
         let mut current = match location {
             RelativeLocation::Root => self.root,
             RelativeLocation::Current => self.current_dir,
@@ -120,7 +132,8 @@ impl FileSystem {
         D: Into<Option<DateTime<Utc>>>,
         P: Into<u64>,
     {
-        let path = path.as_ref();
+        let path = Self::normalize(path.as_ref());
+        let path = path.as_path();
 
         let file_name = path.file_name()?;
 
@@ -149,6 +162,7 @@ impl FileSystem {
     where
         T: AsRef<Utf8Path>,
     {
+        let path = Self::normalize(path.as_ref());
         let mut current = match location {
             RelativeLocation::Root => self.root,
             RelativeLocation::Current => self.current_dir,
@@ -184,8 +198,6 @@ impl FileSystem {
     }
 
     /// Deletes a path.
-    ///
-    /// If `flags` contains [`SIMPLE`], the file is deleted relative to the current directory.
     /// If `flags` contains [`DIRECTORY`], the directory is deleted relative to the filesystem root.
     ///
     /// [`SIMPLE`]: DelFlags::SIMPLE
@@ -194,7 +206,8 @@ impl FileSystem {
     where
         T: AsRef<str> + Sized,
     {
-        let path = path.as_ref();
+        let path_normalized = path.as_ref().replace('\\', "/");
+        let path = path_normalized.as_str();
 
         // Return false if the path is empty; it cannot be deleted
         if path.is_empty() {

@@ -1,14 +1,12 @@
 use std::borrow::Borrow;
 
 use indexmap::IndexMap;
+use tracing::debug;
 
-use super::{Call, ParsedCall};
+use super::{Call, ResolvedCall, set_mock_version_struct, store_call_result};
+use crate::analysis::installers::nsis::state::NsisState;
 
 /// A mock [`Kernel32`] module.
-///
-/// Currently, only [`SetEnvironmentVariable`] is implemented.
-///
-/// [`SetEnvironmentVariable`]: Self::set_environment_variable
 #[derive(Clone, Debug)]
 pub struct Kernel32 {
     environment_variables: IndexMap<String, String>,
@@ -52,16 +50,67 @@ impl Kernel32 {
 }
 
 impl Call for Kernel32 {
-    fn call(&mut self, call: &ParsedCall) -> bool {
+    fn call(&mut self, state: &mut NsisState, call: &ResolvedCall<'_>) -> bool {
         match call.function() {
             "SetEnvironmentVariable" => {
-                self.set_environment_variable(
-                    call.arguments()[0],
-                    call.arguments().get(1).copied(),
-                );
+                let params = call.parameters();
+                let name = params.first().and_then(|p| p.source()).map(str::to_owned);
+                if let Some(name) = name {
+                    let value = params.get(1).and_then(|p| p.source()).map(str::to_owned);
+                    self.set_environment_variable(name, value);
+                }
+                store_call_result(state, call.return_destination(), "1");
                 true
             }
-            _ => false,
+            "GetVersionEx" => {
+                if let Some(key) = call
+                    .parameters()
+                    .first()
+                    .and_then(|p| p.source())
+                    .map(str::to_owned)
+                {
+                    set_mock_version_struct(key);
+                }
+                store_call_result(state, call.return_destination(), "1");
+                true
+            }
+            "IsWow64Process" => {
+                // Write FALSE (not running under WOW64) to the out-pointer destination.
+                if let Some(dest) = call.parameters().get(1).and_then(|p| p.destination()) {
+                    store_call_result(state, dest, "0");
+                }
+                store_call_result(state, call.return_destination(), "1");
+                true
+            }
+            "IsWow64Process2" => {
+                // pProcessMachine → IMAGE_FILE_MACHINE_UNKNOWN (0x0000).
+                if let Some(dest) = call.parameters().get(1).and_then(|p| p.destination()) {
+                    store_call_result(state, dest, "0");
+                }
+                // pNativeMachine → IMAGE_FILE_MACHINE_ARM64 (0xAA64 = 43620).
+                if let Some(dest) = call.parameters().get(2).and_then(|p| p.destination()) {
+                    store_call_result(state, dest, "43620");
+                }
+                store_call_result(state, call.return_destination(), "1");
+                true
+            }
+            "GetTickCount" => {
+                store_call_result(state, call.return_destination(), "0");
+                true
+            }
+            "GetLocalTime" | "GetSystemTime" => {
+                store_call_result(state, call.return_destination(), "0");
+                true
+            }
+            "GetCurrentProcess" => {
+                store_call_result(state, call.return_destination(), "-1");
+                true
+            }
+            function => {
+                debug!("System::Call: unhandled kernel32::{function}");
+                store_call_result(state, call.return_destination(), "0");
+                true
+            }
         }
     }
 }
