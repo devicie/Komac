@@ -4,12 +4,13 @@ use color_eyre::Result;
 use inno::{Inno, error::InnoError};
 use winget_types::installer::{Installer, InstallerType};
 
-use super::{super::Installers, Burn, Nsis, Squirrel};
+use super::{super::Installers, Burn, Nsis, SevenZipSfx, Squirrel};
 use crate::{
     analysis::installers::{
         burn::BurnError,
         nsis::NsisError,
         pe::{PE, VSVersionInfo},
+        sevenzip_sfx::SevenZipSfxError,
         squirrel::SquirrelError,
     },
     traits::IntoWingetArchitecture,
@@ -30,6 +31,7 @@ pub enum ExeType {
     Burn(Box<Burn>),
     Inno(Box<Inno>),
     Nsis(Nsis),
+    SevenZipSfx(SevenZipSfx),
     Squirrel(Squirrel),
     Generic(Box<Installer>),
 }
@@ -95,6 +97,20 @@ impl Exe {
             Err(error) => return Err(error.into()),
         }
 
+        match SevenZipSfx::new(&mut reader, &pe) {
+            Ok(sfx) => {
+                return Ok(Self {
+                    r#type: ExeType::SevenZipSfx(sfx),
+                    legal_copyright,
+                    product_name,
+                    company_name,
+                });
+            }
+            Err(SevenZipSfxError::NotSevenZipSfx) => {}
+            Err(SevenZipSfxError::NoRunProgram) => {}
+            Err(error) => return Err(error.into()),
+        }
+
         match Squirrel::new(&mut reader, &pe) {
             Ok(squirrel) => {
                 return Ok(Self {
@@ -140,6 +156,7 @@ impl Installers for Exe {
             ExeType::Burn(burn) => burn.installers(),
             ExeType::Inno(inno) => inno.installers(),
             ExeType::Nsis(nsis) => nsis.installers(),
+            ExeType::SevenZipSfx(sfx) => sfx.installers(),
             ExeType::Squirrel(squirrel) => squirrel.installers(),
             ExeType::Generic(installer) => vec![*installer.clone()],
         }
