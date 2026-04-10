@@ -7,7 +7,7 @@ use camino::Utf8Path;
 use color_eyre::eyre::{Result, bail};
 use winget_types::{
     PackageVersion,
-    installer::Installer,
+    installer::{Architecture, Installer},
     locale::{Copyright, PackageName, Publisher},
 };
 
@@ -52,8 +52,27 @@ impl<'reader, R: Read + Seek> Analyzer<'reader, R> {
             }
             EXE => {
                 let mut exe = Exe::new(reader)?;
+                let file_name_lower = file_name.to_lowercase();
+                let installers = exe
+                    .installers()
+                    .into_iter()
+                    .map(|mut installer| {
+                        if installer.architecture == Architecture::X86 {
+                            if file_name_lower.contains("arm64")
+                                || file_name_lower.contains("aarch64")
+                            {
+                                installer.architecture = Architecture::Arm64;
+                            } else if file_name_lower.contains("amd64")
+                                || file_name_lower.contains("x64")
+                            {
+                                installer.architecture = Architecture::X64;
+                            }
+                        }
+                        installer
+                    })
+                    .collect();
                 return Ok(Self {
-                    installers: exe.installers(),
+                    installers,
                     copyright: exe
                         .legal_copyright
                         .take()
