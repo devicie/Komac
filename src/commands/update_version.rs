@@ -29,7 +29,7 @@ use crate::{
     commands::utils::{
         SPINNER_TICK_RATE, SubmitOption, prompt_existing_pull_request, write_changes_to_dir,
     },
-    download::Downloader,
+    download::{DownloadedFile, Downloader},
     download_file::process_files,
     github::{
         GITHUB_HOST, GitHubError, WINGET_PKGS_FULL_NAME,
@@ -144,13 +144,23 @@ impl UpdateVersion {
             has_checked_existing_pr = true;
         }
 
-        let downloader = Downloader::new_with_concurrent(self.concurrent_downloads)?;
         let (mut manifests, mut github_values, mut files) = try_join!(
             github
                 .get_manifests(&self.package_identifier, latest_version)
                 .map_err(Error::new),
             self.fetch_github_values(&github).map_err(Error::new),
-            downloader.download(self.urls.iter().cloned()),
+            async {
+                if self.files.is_empty() {
+                    let downloader = Downloader::new_with_concurrent(self.concurrent_downloads)?;
+                    downloader.download(self.urls.iter().cloned()).await
+                } else {
+                    self.files
+                        .iter()
+                        .zip(self.urls.iter().cloned())
+                        .map(|(path, url)| DownloadedFile::from_local(path, url))
+                        .collect::<Result<Vec<_>>>()
+                }
+            },
         )?;
 
         let mut download_results = process_files(&mut files).await?;
