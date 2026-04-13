@@ -6,7 +6,7 @@ use winget_types::{
     locale::Tag,
 };
 
-use crate::{prompts::handle_inquire_error, traits::Name};
+use crate::{commands::utils::environment::CI, prompts::handle_inquire_error, traits::Name};
 
 pub trait ListPrompt: Name {
     const PLURAL_NAME: &'static str = Self::NAME;
@@ -49,6 +49,9 @@ where
     T: FromStr + ListPrompt + Ord,
     <T as FromStr>::Err: Display,
 {
+    if *CI {
+        return Ok(BTreeSet::new());
+    }
     const DELIMITERS: [char; 2] = [' ', ','];
     let items = Text::new(&format!("{}:", T::PLURAL_NAME))
         .with_help_message(T::HELP_MESSAGE)
