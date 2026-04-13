@@ -20,7 +20,7 @@ use winget_types::{
     },
 };
 
-use crate::{prompts::handle_inquire_error, traits::Name};
+use crate::{commands::utils::environment::CI, prompts::handle_inquire_error, traits::Name};
 
 pub trait TextPrompt: Name {
     const HELP_MESSAGE: Option<&'static str> = None;
@@ -102,6 +102,8 @@ where
 {
     if let Some(value) = parameter {
         Ok(Some(value))
+    } else if *CI {
+        Ok(default.as_ref().and_then(|d| d.as_ref().parse::<T>().ok()))
     } else {
         let message = format!("{}:", <T as Name>::NAME);
         let mut prompt = Text::new(&message).with_validator(|input: &str| {
@@ -143,6 +145,18 @@ where
 {
     if let Some(value) = parameter {
         Ok(value)
+    } else if *CI {
+        default
+            .as_ref()
+            .map(U::as_ref)
+            .unwrap_or_else(|| {
+                panic!(
+                    "{} is required but no default was provided in CI mode",
+                    T::NAME
+                )
+            })
+            .parse::<T>()
+            .map_err(|err| InquireError::from(CustomUserError::from(err.to_string())))
     } else {
         let mut prompt =
             Text::new(T::NAME).with_validator(|input: &str| match input.parse::<T>() {
