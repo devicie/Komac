@@ -25,14 +25,13 @@ use winget_types::{
 use crate::{
     analysis::installers::Zip,
     commands::utils::{
-        SPINNER_TICK_RATE, SubmitOption, prompt_existing_pull_request, write_changes_to_dir,
+        SPINNER_TICK_RATE, SubmitOption, should_abort_for_existing_pr, write_changes_to_dir,
     },
     download::Downloader,
     download_file::process_files,
     github::{
         GITHUB_HOST, GitHubError, WINGET_PKGS_FULL_NAME,
         client::{GitHub, GitHubValues},
-        graphql::get_existing_pull_request::PullRequest,
         utils::{PackagePath, pull_request::pr_changes},
     },
     manifests::Url,
@@ -134,7 +133,13 @@ impl UpdateVersion {
 
         let replace_version = self.resolve_replace_version(&versions, latest_version)?;
 
-        if self.should_abort_for_existing_pr(existing_pr)? {
+        if should_abort_for_existing_pr(
+            &self.package_identifier,
+            &self.package_version,
+            existing_pr,
+            self.skip_pr_check,
+            self.dry_run,
+        )? {
             return Ok(());
         }
 
@@ -348,25 +353,6 @@ impl UpdateVersion {
         }
 
         Ok(replace_version)
-    }
-
-    fn should_abort_for_existing_pr<T>(&self, existing_pr: T) -> Result<bool>
-    where
-        T: Into<Option<PullRequest>>,
-    {
-        if let Some(ref pull_request) = existing_pr.into()
-            && !self.skip_pr_check
-            && !self.dry_run
-            && !prompt_existing_pull_request(
-                &self.package_identifier,
-                &self.package_version,
-                pull_request,
-            )?
-        {
-            return Ok(true);
-        }
-
-        Ok(false)
     }
 
     async fn fetch_github_values(

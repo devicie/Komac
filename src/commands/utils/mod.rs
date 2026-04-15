@@ -46,6 +46,27 @@ pub fn prompt_existing_pull_request(
     }
 }
 
+pub fn should_abort_for_existing_pr<T>(
+    identifier: &PackageIdentifier,
+    version: &PackageVersion,
+    existing_pr: T,
+    skip_pr_check: bool,
+    dry_run: bool,
+) -> Result<bool>
+where
+    T: Into<Option<PullRequest>>,
+{
+    if let Some(ref pull_request) = existing_pr.into()
+        && !skip_pr_check
+        && !dry_run
+        && !prompt_existing_pull_request(identifier, version, pull_request)?
+    {
+        return Ok(true);
+    }
+
+    Ok(false)
+}
+
 pub async fn write_changes_to_dir(changes: &[(String, String)], output: &Utf8Path) -> Result<()> {
     fs::create_dir_all(output).await?;
     stream::iter(changes.iter())

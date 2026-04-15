@@ -33,7 +33,7 @@ use winget_types::{
 
 use crate::{
     commands::utils::{
-        SPINNER_TICK_RATE, SubmitOption, prompt_existing_pull_request, write_changes_to_dir,
+        SPINNER_TICK_RATE, SubmitOption, should_abort_for_existing_pr, write_changes_to_dir,
     },
     download::Downloader,
     download_file::process_files,
@@ -176,6 +176,8 @@ impl NewVersion {
 
         let existing_pr = github
             .get_existing_pull_request(&package_identifier, &package_version, false)
+        let existing_pr = github
+            .get_existing_pull_request(&package_identifier, &package_version)
             .await?;
 
         if should_abort_for_existing_pr(

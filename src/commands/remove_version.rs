@@ -14,6 +14,7 @@ use tokio::try_join;
 use winget_types::{PackageIdentifier, PackageVersion};
 
 use crate::{
+    commands::utils::should_abort_for_existing_pr,
     github::{WINGET_PKGS_FULL_NAME, client::GitHub},
     prompts::{handle_inquire_error, text::confirm_prompt},
     token::TokenManager,
@@ -95,6 +96,7 @@ impl RemoveVersion {
 
         let existing_pr = github
             .get_existing_pull_request(&self.package_identifier, &self.package_version, false)
+            .get_existing_pull_request(&self.package_identifier, &self.package_version)
             .await?
             .filter(|pull_request| pull_request.is_open());
 
