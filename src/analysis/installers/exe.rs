@@ -5,7 +5,7 @@ use inno::{Inno, error::InnoError};
 use tracing::debug;
 use winget_types::installer::{Installer, InstallerSwitches, InstallerType};
 
-use super::{super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Squirrel};
+use super::{super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Qt, Squirrel};
 use crate::{
     analysis::installers::{
         advanced::AdvancedInstallerError,
@@ -13,6 +13,7 @@ use crate::{
         installshield::InstallShieldError,
         nsis::NsisError,
         pe::{PE, VSVersionInfo},
+        qt::QtError,
         squirrel::SquirrelError,
     },
     traits::IntoWingetArchitecture,
@@ -35,6 +36,7 @@ pub enum ExeType {
     Inno(Box<Inno>),
     InstallShield(InstallShield),
     Nsis(Nsis),
+    Qt(Qt),
     Squirrel(Squirrel),
     Generic(Box<Installer>),
 }
@@ -126,6 +128,19 @@ impl Exe {
             Err(error) => return Err(error.into()),
         }
 
+        match Qt::new(&mut reader, &pe) {
+            Ok(qt) => {
+                return Ok(Self {
+                    r#type: ExeType::Qt(qt),
+                    legal_copyright,
+                    product_name,
+                    company_name,
+                });
+            }
+            Err(QtError::NotQtFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
         match Squirrel::new(&mut reader, &pe) {
             Ok(squirrel) => {
                 return Ok(Self {
@@ -199,6 +214,7 @@ impl Installers for Exe {
             ExeType::Inno(inno) => inno.installers(),
             ExeType::InstallShield(installshield) => installshield.installers(),
             ExeType::Nsis(nsis) => nsis.installers(),
+            ExeType::Qt(qt) => qt.installers(),
             ExeType::Squirrel(squirrel) => squirrel.installers(),
             ExeType::Generic(installer) => vec![*installer.clone()],
         }
