@@ -107,10 +107,23 @@ pub fn print_manifest(lock: &mut AutoStream<StdoutLock<'static>>, manifest: &str
     }
 }
 
+pub fn to_yaml_string<T>(value: &T) -> std::result::Result<String, serde_saphyr::ser::Error>
+where
+    T: Serialize,
+{
+    serde_saphyr::to_string_with_options(
+        value,
+        serde_saphyr::ser_options! {
+            // Match serde-yaml behavior: only multiline strings should use block scalar styles.
+            folded_wrap_chars: usize::MAX,
+        },
+    )
+}
+
 pub fn build_manifest_string<T>(
     manifest: &T,
     _created_with: Option<&str>,
-) -> serde_yaml::Result<String>
+) -> std::result::Result<String, serde_saphyr::ser::Error>
 where
     T: Manifest + Serialize,
 {
@@ -118,7 +131,7 @@ where
     let _ = writeln!(result, "{} v{}", crate_name!(), crate_version!());
     let _ = writeln!(result, "# yaml-language-server: $schema={}", T::SCHEMA);
     let _ = writeln!(result);
-    let _ = write!(result, "{}", serde_yaml::to_string(manifest)?);
+    let _ = write!(result, "{}", to_yaml_string(manifest)?);
     Ok(convert_to_crlf(&result).into_owned())
 }
 
