@@ -5,7 +5,9 @@ use inno::{Inno, error::InnoError};
 use tracing::debug;
 use winget_types::installer::{Installer, InstallerSwitches, InstallerType};
 
-use super::{super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Qt, Squirrel};
+use super::{
+    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Qt, SevenZipSfx, Squirrel,
+};
 use crate::{
     analysis::installers::{
         advanced::AdvancedInstallerError,
@@ -14,6 +16,7 @@ use crate::{
         nsis::NsisError,
         pe::{PE, VSVersionInfo},
         qt::QtError,
+        sevenzip_sfx::SevenZipSfxError,
         squirrel::SquirrelError,
     },
     traits::IntoWingetArchitecture,
@@ -37,6 +40,7 @@ pub enum ExeType {
     InstallShield(InstallShield),
     Nsis(Nsis),
     Qt(Qt),
+    SevenZipSfx(SevenZipSfx),
     Squirrel(Squirrel),
     Generic(Box<Installer>),
 }
@@ -141,6 +145,20 @@ impl Exe {
             Err(error) => return Err(error.into()),
         }
 
+        match SevenZipSfx::new(&mut reader, &pe) {
+            Ok(sfx) => {
+                return Ok(Self {
+                    r#type: ExeType::SevenZipSfx(sfx),
+                    legal_copyright,
+                    product_name,
+                    company_name,
+                });
+            }
+            Err(SevenZipSfxError::NotSevenZipSfx) => {}
+            Err(SevenZipSfxError::NoRunProgram) => {}
+            Err(error) => return Err(error.into()),
+        }
+
         match Squirrel::new(&mut reader, &pe) {
             Ok(squirrel) => {
                 return Ok(Self {
@@ -215,6 +233,7 @@ impl Installers for Exe {
             ExeType::InstallShield(installshield) => installshield.installers(),
             ExeType::Nsis(nsis) => nsis.installers(),
             ExeType::Qt(qt) => qt.installers(),
+            ExeType::SevenZipSfx(sfx) => sfx.installers(),
             ExeType::Squirrel(squirrel) => squirrel.installers(),
             ExeType::Generic(installer) => vec![*installer.clone()],
         }
