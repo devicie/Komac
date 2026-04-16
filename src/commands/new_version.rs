@@ -174,13 +174,17 @@ impl NewVersion {
 
         let package_version = required_prompt(self.package_version, None::<&str>)?;
 
-        if !self.skip_pr_check
-            && !self.dry_run
-            && let Some(pull_request) = github
-                .get_existing_pull_request(&package_identifier, &package_version)
-                .await?
-            && !prompt_existing_pull_request(&package_identifier, &package_version, &pull_request)?
-        {
+        let existing_pr = github
+            .get_existing_pull_request(&package_identifier, &package_version, false)
+            .await?;
+
+        if should_abort_for_existing_pr(
+            &package_identifier,
+            &package_version,
+            existing_pr,
+            self.skip_pr_check,
+            self.dry_run,
+        )? {
             return Ok(());
         }
 

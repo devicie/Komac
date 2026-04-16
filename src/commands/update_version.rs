@@ -114,6 +114,13 @@ impl UpdateVersion {
         let (versions, existing_pr) = try_join!(
             github.get_versions(&self.package_identifier),
             github.get_existing_pull_request(&self.package_identifier, &self.package_version),
+        let ((versions, font), existing_pr) = try_join!(
+            github.get_versions(&self.package_identifier, self.font.then_some(true)),
+            github.get_existing_pull_request(
+                &self.package_identifier,
+                &self.package_version,
+                false,
+            ),
         )?;
 
         let latest_version = versions.last().unwrap_or_else(|| unreachable!());

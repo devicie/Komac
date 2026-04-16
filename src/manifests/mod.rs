@@ -109,15 +109,12 @@ pub fn print_manifest(lock: &mut AutoStream<StdoutLock<'static>>, manifest: &str
 
 pub fn build_manifest_string<T>(
     manifest: &T,
-    created_with: Option<&str>,
+    _created_with: Option<&str>,
 ) -> serde_yaml::Result<String>
 where
     T: Manifest + Serialize,
 {
-    let mut result = String::from("# Created with ");
-    if let Some(created_with_tool) = created_with {
-        let _ = write!(result, "{created_with_tool} using ");
-    }
+    let mut result = String::from("# Created by Anthelion using ");
     let _ = writeln!(result, "{} v{}", crate_name!(), crate_version!());
     let _ = writeln!(result, "# yaml-language-server: $schema={}", T::SCHEMA);
     let _ = writeln!(result);

@@ -60,7 +60,13 @@ async fn main() -> Result<()> {
         Commands::List(list_versions) => list_versions.run().await,
         Commands::Show(show_version) => show_version.run().await,
         Commands::Sync(sync_fork) => sync_fork.run().await,
-        Commands::Complete(complete) => complete.run(),
+        Commands::Complete(complete) => complete.run_with(|shell| {
+            use clap::CommandFactory;
+            use clap_complete::generate;
+            let mut command = Cli::command();
+            let command_name = command.get_name().to_owned();
+            generate(shell, &mut command, command_name, &mut anstream::stdout());
+        }),
         Commands::Analyze(analyse) => analyse.run(),
         Commands::RemoveDeadVersions(remove_dead_versions) => remove_dead_versions.run().await,
         Commands::Submit(submit) => submit.run().await,

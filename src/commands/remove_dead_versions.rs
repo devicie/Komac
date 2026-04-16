@@ -255,7 +255,7 @@ async fn confirm_removal(
     auto: bool,
 ) -> Result<bool> {
     if let Some(pull_request) = github
-        .get_existing_pull_request(identifier, version)
+        .get_existing_pull_request(identifier, version, false)
         .await?
         && pull_request.is_open()
     {

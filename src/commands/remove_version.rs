@@ -92,6 +92,22 @@ impl RemoveVersion {
             "Latest version of {}: {latest_version}",
             &self.package_identifier
         );
+
+        let existing_pr = github
+            .get_existing_pull_request(&self.package_identifier, &self.package_version, false)
+            .await?
+            .filter(|pull_request| pull_request.is_open());
+
+        if should_abort_for_existing_pr(
+            &self.package_identifier,
+            &self.package_version,
+            existing_pr,
+            false,
+            false,
+        )? {
+            return Ok(());
+        }
+
         let deletion_reason = match self.deletion_reason {
             Some(reason) => reason,
             None => Text::new(&format!(
