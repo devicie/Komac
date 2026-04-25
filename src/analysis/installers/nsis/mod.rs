@@ -41,8 +41,14 @@ use super::{
     nsis::{
         entry::{Entry, EntryError},
         file_system::FsEntry,
-        first_header::FirstHeader,
-        header::{Compression, Decoder, Decompressed, Header},
+        first_header::{
+            FirstHeader,
+            HeaderFlags,
+        },
+        header::{
+            Compression, Decoder, Decompressed, Header, block::BlockHeaders,
+            flags::CommonHeaderFlags,
+        },
     },
     pe::{PE, utils::machine_from_exe_reader},
     utils::{LzmaStreamHeader, RELATIVE_PROGRAM_FILES_64, RELATIVE_TEMP_FOLDER},
@@ -82,6 +88,14 @@ impl Nsis {
         let data_offset = first_header_offset + size_of::<FirstHeader>() as u64;
 
         debug!(first_header_offset, ?first_header, data_offset);
+
+        // Installers with external data files cannot be analyzed inline
+        if first_header
+            .flags()
+            .intersects(HeaderFlags::BI_EXTERNAL_FILE)
+        {
+            return Err(NsisError::NotNsisFile);
+        }
 
         let Decompressed {
             data: decompressed_data,

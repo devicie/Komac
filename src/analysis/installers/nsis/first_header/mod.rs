@@ -3,7 +3,7 @@ mod signature;
 
 use std::{fmt, io};
 
-use flags::HeaderFlags;
+pub use flags::HeaderFlags;
 use signature::NsisSignature;
 use zerocopy::{Immutable, KnownLayout, LE, TryFromBytes, U32};
 
