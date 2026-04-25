@@ -5,10 +5,7 @@ use std::io::{Error, ErrorKind, Result};
 use itertools::Itertools;
 use zerocopy::{FromBytes, I32, Immutable, IntoBytes, KnownLayout, LE, U16, U32};
 
-use super::super::header::{
-    Header,
-    block::{BlockHeaders, BlockType},
-};
+use super::super::header::block::{BlockHeaders, BlockType};
 
 #[derive(Debug, FromBytes, KnownLayout, Immutable)]
 #[repr(C)]
@@ -26,8 +23,18 @@ impl LanguageTable {
         data: &'data [u8],
         blocks: &BlockHeaders,
     ) -> Result<&'data Self> {
-        blocks
-            .language_tables(data)
+        let lang_block_data = BlockType::LangTables.get(data, blocks);
+        let num_tables = blocks[BlockType::LangTables].num() as usize;
+        if num_tables == 0 || lang_block_data.is_empty() {
+            return Err(Error::new(
+                ErrorKind::NotFound,
+                "No NSIS language table found",
+            ));
+        }
+        let lang_table_size = lang_block_data.len() / num_tables;
+        lang_block_data
+            .chunks_exact(lang_table_size)
+            .flat_map(Self::ref_from_bytes)
             .find_or_first(|lang_table| lang_table.id == EN_US_LANG_CODE)
             .ok_or_else(|| Error::new(ErrorKind::NotFound, "No NSIS language table found"))
     }

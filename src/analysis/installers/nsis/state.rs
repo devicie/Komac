@@ -22,7 +22,7 @@ use crate::analysis::installers::nsis::{
 pub struct NsisState<'data> {
     pub str_block: &'data [u8],
     entries: &'data [Entry],
-    pub language_table: &'data LanguageTable,
+    pub language_table: Option<&'data LanguageTable>,
     pub stack: Vec<Cow<'data, str>>,
     pub variables: Variables<'data>,
     pub registry: Registry,
@@ -43,7 +43,7 @@ impl<'data> NsisState<'data> {
         let mut state = Self {
             str_block: header.blocks().strings_block(data),
             entries: header.blocks().entries(data)?,
-            language_table: LanguageTable::primary_language(data, header.blocks())?,
+            language_table: LanguageTable::primary_language(data, header.blocks()).ok(),
             stack: Vec::new(),
             variables: Variables::new(),
             registry: Registry::new(),
@@ -110,7 +110,7 @@ impl<'data> NsisState<'data> {
             // A negative offset means it's a language string from the language table
             let Some(offset) = self
                 .language_table
-                .string_offset((relative_offset + 1).unsigned_abs() as usize)
+                .and_then(|lt| lt.string_offset((relative_offset + 1).unsigned_abs() as usize))
             else {
                 return Cow::Borrowed("$ERROR");
             };
@@ -192,7 +192,8 @@ impl<'data> NsisState<'data> {
                         if code.is_var() {
                             NsVar::resolve(&mut buf, index, &self.variables, self.version);
                         } else if code.is_lang()
-                            && let Some(offset) = self.language_table.string_offset(index)
+                            && let Some(offset) =
+                                self.language_table.and_then(|lt| lt.string_offset(index))
                         {
                             buf.push_str(&self.get_string(offset));
                         }
