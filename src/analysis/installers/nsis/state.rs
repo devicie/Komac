@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, mem::size_of};
 
 use encoding_rs::{UTF_16LE, WINDOWS_1252};
 use itertools::Either;
