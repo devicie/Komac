@@ -105,6 +105,10 @@ impl Parser {
 
     fn parse_primary(&mut self) -> Expr {
         match self.peek() {
+            Some(&Token::Number(n)) => {
+                self.advance();
+                Expr::Int(n)
+            }
             Some(Token::LParen) => {
                 self.advance();
                 let expr = self.parse_expr();
@@ -266,6 +270,7 @@ pub enum Literal {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Expr {
     Var(String),
+    Int(u32),
     Eq(String, Literal),
     NotEq(String, Literal),
     EqAnyCase(String, Literal),
@@ -290,6 +295,7 @@ impl Expr {
                     true
                 }
             },
+            Self::Int(n) => *n != 0,
             Self::Eq(name, literal) => match (variables.get(name.as_str()), literal) {
                 (Some(Value::Int(int)), Literal::Int(lit_int)) => int == lit_int,
                 (Some(Value::Str(val)), Literal::Str(lit_str)) => val == lit_str,
