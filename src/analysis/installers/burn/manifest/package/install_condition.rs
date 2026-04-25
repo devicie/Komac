@@ -216,6 +216,18 @@ fn tokenize(input: &str) -> Vec<Token> {
                     tokens.push(Token::EqAnyCase);
                 }
             }
+            '"' => {
+                chars.next();
+                let mut s = String::new();
+                while let Some(&c) = chars.peek() {
+                    chars.next();
+                    if c == '"' {
+                        break;
+                    }
+                    s.push(c);
+                }
+                tokens.push(Token::Ident(s));
+            }
             '0'..='9' => {
                 let mut value = 0;
                 while let Some(digit) = chars.peek().and_then(|char| char.to_digit(10)) {
@@ -227,7 +239,7 @@ fn tokenize(input: &str) -> Vec<Token> {
             _ => {
                 let mut ident = String::new();
                 while let Some(&char) = chars.peek().filter(|char| {
-                    !char.is_whitespace() && !['(', ')', '=', '<', '>'].contains(char)
+                    !char.is_whitespace() && !['(', ')', '=', '<', '>', '~', '"'].contains(char)
                 }) {
                     ident.push(char);
                     chars.next();
