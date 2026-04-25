@@ -287,6 +287,14 @@ impl FileSystem {
 
                 let removed = if node.get().is_directory() {
                     if flags.contains(DelFlags::DIRECTORY) {
+                        if self.current_dir == current
+                            || self
+                                .current_dir
+                                .ancestors(&self.arena)
+                                .any(|id| id == current)
+                        {
+                            self.current_dir = self.root;
+                        }
                         current.remove_subtree(&mut self.arena);
                         true
                     } else {
@@ -315,6 +323,9 @@ impl FileSystem {
                         && parent_name.starts_with('%')
                         && parent_name.ends_with('%')
                     {
+                        if self.current_dir == parent_node_id {
+                            self.current_dir = self.root;
+                        }
                         parent_node_id.remove(&mut self.arena);
                     }
                 }
