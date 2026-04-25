@@ -41,7 +41,10 @@ use super::{
     nsis::{
         entry::{Entry, EntryError},
         file_system::FsEntry,
-        first_header::FirstHeader,
+        first_header::{
+            FirstHeader,
+            HeaderFlags,
+        },
         header::{
             Compression, Decoder, Decompressed, Header, block::BlockHeaders,
             flags::CommonHeaderFlags,
@@ -97,6 +100,14 @@ impl Nsis {
         let data_offset = first_header_offset + size_of::<FirstHeader>() as u64;
 
         debug!(first_header_offset, ?first_header, data_offset);
+
+        // Installers with external data files cannot be analyzed inline
+        if first_header
+            .flags()
+            .intersects(HeaderFlags::BI_EXTERNAL_FILE)
+        {
+            return Err(NsisError::NotNsisFile);
+        }
 
         let Decompressed {
             data: decompressed_data,

@@ -169,7 +169,7 @@ impl Header {
             Compression::None
         } else if let Some(lzma_compression) = is_lzma(&signature) {
             lzma_compression
-        } else if signature.get(3) == Some(&0x80) {
+        } else if (compressed_header_size & IS_COMPRESSED_MASK) != 0 {
             is_solid = false;
             is_lzma(&signature[NON_SOLID_EXTRA_BYTES..]).unwrap_or_else(|| {
                 if is_bzip2(&signature[NON_SOLID_EXTRA_BYTES..]) {
