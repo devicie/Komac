@@ -12,7 +12,7 @@ pub struct Payload {
     #[serde(rename = "@Id")]
     id: String,
     #[serde(rename = "@FilePath")]
-    pub file_path: String,
+    pub file_path: Option<String>,
     #[serde(rename = "@FileSize")]
     pub file_size: String,
     #[serde(rename = "@CertificateRootPublicKeyIdentifier")]
