@@ -104,8 +104,8 @@ struct Identity {
 
 /// <https://learn.microsoft.com/uwp/schemas/bundlemanifestschema/element-packages>
 #[derive(Deserialize)]
-#[serde(rename_all = "PascalCase")]
 struct Packages {
+    #[serde(rename = "$value", default)]
     package: Vec<Package>,
 }
 
