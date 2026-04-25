@@ -187,7 +187,7 @@ impl Nsis {
                     .then_some(Architecture::X64)
             })
             .or_else(|| {
-                let app_name = state.get_string(state.language_table.name_offset()?);
+                let app_name = state.get_string(state.language_table?.name_offset()?);
                 state
                     .file_system
                     .files()
@@ -247,7 +247,7 @@ impl Nsis {
                 .variables
                 .install_dir()
                 .map(Utf8WindowsPath::to_path_buf),
-            primary_language_id: state.language_table.id(),
+            primary_language_id: state.language_table.map_or(0, |lt| lt.id()),
         })
     }
 
