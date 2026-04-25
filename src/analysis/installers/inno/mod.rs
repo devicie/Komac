@@ -160,7 +160,9 @@ impl PrivilegeLevelExt for inno::header::PrivilegeLevel {
         overrides: PrivilegesRequiredOverrides,
     ) -> Option<ElevationRequirement> {
         match self {
-            Self::Admin | Self::PowerUser => Some(ElevationRequirement::ElevatesSelf),
+            Self::Admin | Self::PowerUser | Self::RequireAdmin => {
+                Some(ElevationRequirement::ElevatesSelf)
+            }
             _ if !overrides.is_empty() => Some(ElevationRequirement::ElevatesSelf),
             _ => None,
         }
