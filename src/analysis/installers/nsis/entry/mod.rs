@@ -16,7 +16,6 @@ use std::{
 
 use chrono::DateTime;
 use compact_str::{ToCompactString, format_compact};
-use creation_disposition::CreationDisposition;
 pub use del_flags::DelFlags;
 pub use exec_flag::{ExecFlag, ExecFlags};
 use generic_access_rights::GenericAccessRights;
@@ -326,7 +325,7 @@ pub enum Entry {
     FileOpen {
         name: I32<LE>,
         open_mode: GenericAccessRights,
-        create_mode: CreationDisposition,
+        create_mode: I32<LE>,
         output_handle: I32<LE>,
     } = 55u32.to_le(),
     FileWrite {
@@ -1283,15 +1282,11 @@ impl Entry {
                     .get(&(name.get() as usize))
                     .unwrap_or_default();
                 let output_handle = state.get_string(output_handle.get());
-                let open_option = match (*create_mode, *open_mode) {
-                    (CreationDisposition::OpenExisting, GenericAccessRights::GENERIC_READ) => {
-                        "READ"
-                    }
-                    (CreationDisposition::CreateAlways, GenericAccessRights::GENERIC_WRITE) => {
-                        "WRITE"
-                    }
+                let open_option = match (create_mode.get(), *open_mode) {
+                    (3, GenericAccessRights::GENERIC_READ) => "READ",
+                    (2, GenericAccessRights::GENERIC_WRITE) => "WRITE",
                     (
-                        CreationDisposition::OpenAlways,
+                        4,
                         GenericAccessRights::GENERIC_WRITE | GenericAccessRights::GENERIC_READ,
                     ) => "APPEND",
                     _ => "",

@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, mem::size_of};
 
 use encoding_rs::{UTF_16LE, WINDOWS_1252};
 use itertools::Either;
@@ -21,7 +21,7 @@ use crate::analysis::installers::nsis::{
 
 pub struct NsisState<'data> {
     str_block: &'data [u8],
-    entries: &'data [Entry],
+    entries: Vec<Entry>,
     pub language_table: Option<&'data LanguageTable>,
     pub stack: Vec<Cow<'data, str>>,
     pub variables: Variables<'data>,
