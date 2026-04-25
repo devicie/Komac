@@ -137,4 +137,5 @@ assets = [
 
 [patch.crates-io]
 inno = { path = "vendor/inno/core" }
+msi = { path = "vendor/msi" }
 winget-types = { path = "vendor/winget-types" }
