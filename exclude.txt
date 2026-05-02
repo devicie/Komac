@@ -90,3 +90,21 @@ ArtemChepurnyi.Keyguard
 # TODO benaclejames.VRCFaceTracking
 # TODO analyse https://github.com/chen-qingyu/bf/releases/download/v1.1.1/bf-1.1.1-win64.exe
 # inno v{code:getSetupVersion|1.27.162+3c4d5ceeb3} bcssov.IronyModManager
+
+# Crashes parser
+CerberAuth.jwtop
+CerberAuth.openapi-oathkeeper
+CircleCI.CLI
+
+# Publisher is blank
+ChenQingYu.BF
+
+# didn't detect as prerelease?
+CleverRaven.CataclysmDarkDaysAhead
+
+# Weird version
+arndawg.tmux-windows
+
+# TODO merge
+BytecodeAlliance.Wasmtime.Portable
+amir1376.ABDownloadManager.arm64

@@ -53,27 +53,35 @@ impl TokenManager {
             .default_headers(default_headers(None))
             .build()?;
 
-        let credential = Self::credential()?;
-
         let token_passed = token.is_some();
 
-        let token = if let Some(token) = token {
-            Some(token)
-        } else {
-            match credential.get_password() {
-                Ok(token) => Some(SecretString::new(token.into_boxed_str())),
-                Err(keyring_core::Error::NoEntry) if *CI => return Err(TokenError::NoTokenInCI),
-                Err(keyring_core::Error::NoEntry) => None, // No stored token, must prompt
-                Err(error) => return Err(TokenError::Keyring(error)),
-            }
+        // Short-circuit: if a token was explicitly provided, validate it and return without
+        // touching the keyring. This avoids the DBus/platform credential store on headless
+        // systems (e.g. CI containers) when GITHUB_TOKEN or --token is set.
+        if let Some(token) = token {
+            return match Self::validate(&client, token.expose_secret()).await {
+                Ok(()) => Ok(Self { token }),
+                Err(TokenError::InvalidToken) if token_passed || *CI => {
+                    Err(TokenError::InvalidToken)
+                }
+                Err(err) => Err(err),
+            };
+        }
+
+        // No token provided - fall back to keyring (may require DBus on Linux).
+        let credential = Self::credential()?;
+
+        let token = match credential.get_password() {
+            Ok(token) => Some(SecretString::new(token.into_boxed_str())),
+            Err(keyring_core::Error::NoEntry) if *CI => return Err(TokenError::NoTokenInCI),
+            Err(keyring_core::Error::NoEntry) => None, // No stored token, must prompt
+            Err(error) => return Err(TokenError::Keyring(error)),
         };
 
         if let Some(token) = token {
             match Self::validate(&client, token.expose_secret()).await {
                 Ok(()) => return Ok(Self { token }),
-                Err(TokenError::InvalidToken) if token_passed || *CI => {
-                    return Err(TokenError::InvalidToken);
-                }
+                Err(TokenError::InvalidToken) if *CI => return Err(TokenError::InvalidToken),
                 Err(TokenError::InvalidToken) => {}
                 Err(err) => return Err(err),
             }

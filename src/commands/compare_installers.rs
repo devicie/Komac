@@ -12,6 +12,8 @@ use winget_types::{
     installer::{InstallerType, MinimumOSVersion, NestedInstallerFiles},
 };
 
+use secrecy::SecretString;
+
 use crate::{
     commands::utils::SPINNER_TICK_RATE, download::Downloader, download_file::process_files,
     github::client::GitHub, match_installers::match_installers, token::TokenManager,
@@ -58,7 +60,12 @@ impl CompareInstallers {
             token,
         } = self;
 
-        let token = TokenManager::handle(token.as_deref()).await?;
+        let token = TokenManager::handle(
+            token
+                .as_deref()
+                .map(|t| SecretString::new(t.to_owned().into_boxed_str())),
+        )
+        .await?;
         let github = GitHub::new(&token)?;
 
         let progress = ProgressBar::new_spinner().with_message("Fetching package versions...");

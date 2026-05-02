@@ -23,7 +23,7 @@ impl LanguageTable {
         data: &'data [u8],
         blocks: &BlockHeaders,
     ) -> Result<&'data Self> {
-        let lang_block_data = BlockType::LangTables.get(data, blocks);
+        let lang_block_data = blocks.language_table_block(data);
         let num_tables = blocks[BlockType::LangTables].num() as usize;
         if num_tables == 0 || lang_block_data.is_empty() {
             return Err(Error::new(

@@ -42,12 +42,11 @@ impl<'data> NsisState<'data> {
         manifest: Option<&str>,
     ) -> Result<Self, NsisError> {
         let mut state = Self {
-            str_block: BlockType::Strings.get(data, blocks),
-            entries: BlockType::Entries
-                .get(data, blocks)
-                .chunks_exact(size_of::<Entry>())
-                .map(|chunk| Entry::try_read_from_bytes(chunk).unwrap_or(Entry::Invalid))
-                .collect(),
+            str_block: blocks.strings_block(data),
+            entries: blocks
+                .entries(data)
+                .map(|entries| entries.to_vec())
+                .unwrap_or_default(),
             language_table: LanguageTable::primary_language(data, blocks).ok(),
             stack: Vec::new(),
             variables: Variables::new(),

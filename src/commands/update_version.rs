@@ -187,6 +187,13 @@ impl UpdateVersion {
             .iter_mut()
             .flat_map(|(_url, analyzer)| mem::take(&mut analyzer.installers))
             .collect::<Vec<_>>();
+
+        ensure!(
+            !installer_results.is_empty(),
+            "No installers could be extracted from the downloaded files for {}",
+            self.package_identifier
+        );
+
         let previous_installers = mem::take(&mut manifests.installer.installers)
             .into_iter()
             .map(|mut installer| {
@@ -307,20 +314,21 @@ impl UpdateVersion {
         manifests.version.update(package_version);
 
         let package_path = PackagePath::new(&self.package_identifier, Some(package_version), None);
-        let mut changes = pr_changes()
+        let changes = pr_changes()
             .package_identifier(&self.package_identifier)
             .manifests(&manifests)
             .package_path(&package_path)
             .maybe_created_with(self.created_with.as_deref())
             .create()?;
 
-        let submit_option = SubmitOption::prompt(
-            &mut changes,
-            &self.package_identifier,
-            package_version,
+        let (changes, submit_option) = SubmitOption::prompt_async(
+            changes,
+            self.package_identifier.clone(),
+            package_version.clone(),
             self.submit,
             self.dry_run,
-        )?;
+        )
+        .await?;
 
         if let Some(output) = self
             .output

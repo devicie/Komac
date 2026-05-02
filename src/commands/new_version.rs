@@ -455,20 +455,21 @@ impl NewVersion {
         };
 
         let package_path = PackagePath::new(&package_identifier, Some(&package_version), None);
-        let mut changes = pr_changes()
+        let changes = pr_changes()
             .package_identifier(&package_identifier)
             .manifests(&manifests)
             .package_path(&package_path)
             .maybe_created_with(self.created_with.as_deref())
             .create()?;
 
-        let submit_option = SubmitOption::prompt(
-            &mut changes,
-            &package_identifier,
-            &package_version,
+        let (changes, submit_option) = SubmitOption::prompt_async(
+            changes,
+            package_identifier.clone(),
+            package_version.clone(),
             self.submit,
             self.dry_run,
-        )?;
+        )
+        .await?;
 
         if let Some(output) = self.output.map(|out| out.join(package_path.as_str())) {
             write_changes_to_dir(&changes, output.as_path()).await?;
