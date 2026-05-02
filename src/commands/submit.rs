@@ -143,8 +143,8 @@ impl Submit {
         let github = GitHub::new(token_manager)?;
 
         for mut manifest in manifests {
-            let identifier = &manifest.version.package_identifier;
-            let version = &manifest.version.package_version;
+            let identifier = manifest.version.package_identifier.clone();
+            let version = manifest.version.package_version.clone();
 
             // Reorder the keys in case the manifests weren't created by komac
             manifest.installer.optimize();
@@ -155,26 +155,27 @@ impl Submit {
                 locale_manifest.manifest_version = ManifestVersion::default();
             }
 
-            let package_path = PackagePath::new(identifier, Some(version), None);
-            let mut changes = pr_changes()
-                .package_identifier(identifier)
+            let package_path = PackagePath::new(&identifier, Some(&version), None);
+            let changes = pr_changes()
+                .package_identifier(&identifier)
                 .manifests(&manifest)
                 .package_path(&package_path)
                 .create()?;
 
-            let submit_option = SubmitOption::prompt(
-                &mut changes,
-                identifier,
-                version,
+            let (changes, submit_option) = SubmitOption::prompt_async(
+                changes,
+                identifier.clone(),
+                version.clone(),
                 self.skip_prompt,
                 self.dry_run,
-            )?;
+            )
+            .await?;
 
             if submit_option.is_exit() {
                 continue;
             }
 
-            let versions = github.get_versions(identifier).await.ok();
+            let versions = github.get_versions(&identifier).await.ok();
 
             rate_limit.wait().await;
 
@@ -186,8 +187,8 @@ impl Submit {
 
             let pull_request = github
                 .add_version()
-                .identifier(identifier)
-                .version(version)
+                .identifier(&identifier)
+                .version(&version)
                 .maybe_versions(versions.as_ref())
                 .changes(changes)
                 .issue_resolves(&self.resolves)

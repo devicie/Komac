@@ -81,15 +81,13 @@ impl Downloader {
         I: IntoIterator<Item = D>,
         D: Into<Download>,
     {
-        let multi_progress = MultiProgress::new();
+        let multi_progress = crate::terminal::multi_progress();
 
         let downloaded_files = stream::iter(downloads.into_iter().map(D::into).unique())
-            .map(|download| self.fetch(&self.client, download, &multi_progress))
+            .map(|download| self.fetch(&self.client, download, multi_progress))
             .buffer_unordered(self.concurrent_downloads.get())
             .try_collect::<Vec<_>>()
             .await?;
-
-        multi_progress.clear()?;
 
         Ok(downloaded_files)
     }
@@ -212,7 +210,7 @@ impl Downloader {
             (Err(err), _) => return Err(err.into()),
         };
 
-        progress.finish();
+        progress.finish_and_clear();
 
         Ok(DownloadedFile {
             url: download.into_url(),
