@@ -2,6 +2,7 @@ use std::fmt;
 
 use color_eyre::Result;
 use inquire::Select;
+use tracing_indicatif::suspend_tracing_indicatif;
 use winget_types::{PackageIdentifier, PackageVersion};
 
 use crate::{
@@ -18,7 +19,7 @@ pub enum SubmitOption {
 
 impl SubmitOption {
     pub fn prompt(
-        changes: &mut [(String, String)],
+        changes: &mut Vec<(String, String)>,
         identifier: &PackageIdentifier,
         version: &PackageVersion,
         submit: bool,
@@ -55,6 +56,30 @@ impl SubmitOption {
         }
 
         Ok(submit_option)
+    }
+
+    /// Runs [`Self::prompt`] on a blocking thread so that async tasks can continue making
+    /// progress (e.g. downloading other packages) while waiting for user input.
+    ///
+    /// Both the download [`MultiProgress`](indicatif::MultiProgress) bars and the
+    /// `tracing_indicatif` span bars are suspended for the duration of the prompt so that they
+    /// do not overwrite the interactive UI.
+    pub async fn prompt_async(
+        mut changes: Vec<(String, String)>,
+        identifier: PackageIdentifier,
+        version: PackageVersion,
+        submit: bool,
+        dry_run: bool,
+    ) -> Result<(Vec<(String, String)>, Self)> {
+        tokio::task::spawn_blocking(move || {
+            crate::terminal::multi_progress().suspend(|| {
+                suspend_tracing_indicatif(|| {
+                    Self::prompt(&mut changes, &identifier, &version, submit, dry_run)
+                        .map(|option| (changes, option))
+                })
+            })
+        })
+        .await?
     }
 
     /// Returns `true` if the submit option is submit.

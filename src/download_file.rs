@@ -7,7 +7,7 @@ use std::{
 use camino::Utf8Path;
 use color_eyre::eyre::Result;
 use futures_util::{StreamExt, TryStreamExt, stream};
-use tracing::{debug, warn};
+use tracing::{debug, error, warn};
 use winget_types::{installer::Architecture, url::DecodedUrl};
 
 use crate::{analysis::Analyzer, download::DownloadedFile};
@@ -32,9 +32,10 @@ pub async fn process_files(
                         .unwrap_or_default();
                     if ext.eq_ignore_ascii_case("zip") {
                         warn!(url = %url, error = %err, "Skipping zip with no valid installer files");
-                        return Ok(None);
+                    } else {
+                        error!(url = %url, error = %err, "Failed to analyse installer; skipping");
                     }
-                    return Err(err);
+                    return Ok(None);
                 }
             };
             let architecture = url
