@@ -14,6 +14,8 @@ use tokio::sync::Mutex;
 use tracing::{error, info, warn};
 use winget_types::{PackageIdentifier, PackageVersion, url::DecodedUrl};
 
+use secrecy::SecretString;
+
 use crate::{
     commands::{strategies::AutoUpdateStrategy, update_version::UpdateVersion},
     github::client::GitHub,
@@ -146,6 +148,10 @@ pub struct AutoUpdate {
     #[arg(long, requires = "header")]
     state: Option<String>,
 
+    /// Number of packages to process at the same time in batch mode
+    #[arg(long, default_value_t = NonZeroUsize::new(32).unwrap())]
+    concurrent_packages: NonZeroUsize,
+
     /// Number of installers to download at the same time
     #[arg(long, default_value_t = NonZeroUsize::new(num_cpus::get()).unwrap())]
     concurrent_downloads: NonZeroUsize,
@@ -196,7 +202,7 @@ pub struct AutoUpdate {
 }
 
 impl AutoUpdate {
-    pub async fn run(self) -> Result<()> {
+    pub async fn run(mut self) -> Result<()> {
         let excluded_substrings = read_excluded_substrings(&self.exclude_files).await?;
 
         if !self.exclude_files.is_empty() {
@@ -221,7 +227,12 @@ impl AutoUpdate {
             );
         }
 
-        let token = TokenManager::handle(self.token.as_deref()).await?;
+        let token = TokenManager::handle(
+            self.token
+                .take()
+                .map(|t| SecretString::new(t.into_boxed_str())),
+        )
+        .await?;
         let github = GitHub::new(&token)?;
         let no_strategy_cache = Arc::new(Mutex::new(NoStrategyCache::load().await?));
 
@@ -335,7 +346,7 @@ impl AutoUpdate {
                         (package_identifier, result)
                     },
                 ))
-                .buffer_unordered(2)
+                .buffer_unordered(self.concurrent_packages.get())
                 .collect::<Vec<_>>()
                 .await;
 
@@ -377,10 +388,6 @@ impl AutoUpdate {
             }
 
             info!(succeeded, failed, "Autoupdate recipes summary");
-
-            if failed > 0 {
-                bail!("{failed} auto-update entries failed");
-            }
 
             return Ok(());
         }
@@ -537,7 +544,7 @@ impl AutoUpdate {
                 (package_identifier, result)
             },
         ))
-        .buffer_unordered(2)
+        .buffer_unordered(self.concurrent_packages.get())
         .collect::<Vec<_>>()
         .await;
 
@@ -560,17 +567,13 @@ impl AutoUpdate {
 
         info!(succeeded, failed, "Autoupdate all-packages summary");
 
-        if failed > 0 {
-            bail!("{failed} auto-update entries failed");
-        }
-
         Ok(())
     }
 
     async fn run_entry(
         &self,
         github: &GitHub,
-        token: &str,
+        token: &SecretString,
         no_strategy_cache: Arc<Mutex<NoStrategyCache>>,
         package_identifier: PackageIdentifier,
         latest_version: Option<PackageVersion>,
@@ -769,7 +772,7 @@ impl AutoUpdate {
             dry_run: self.dry_run,
             replace: self.replace.clone(),
             skip_pr_check: self.skip_pr_check,
-            token: Some(token.to_owned()),
+            token: Some(token.clone()),
         }
         .run()
         .await?;
