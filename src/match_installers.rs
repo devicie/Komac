@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 
 use camino::Utf8Path;
-use winget_types::installer::{Architecture, Installer, Scope, VALID_FILE_EXTENSIONS};
+use winget_types::installer::{
+    Architecture, ElevationRequirement, Installer, Scope, VALID_FILE_EXTENSIONS,
+};
 
 fn locale_score(previous_installer: &Installer, new_installer: &Installer) -> f64 {
     let Some(previous_locale) = previous_installer.locale.as_ref() else {
@@ -51,8 +53,40 @@ fn url_similarity_score(previous_url: &str, new_url: &str) -> f64 {
     strsim::jaro_winkler(&previous_url, &new_url) * 3.0
 }
 
+fn duplicate_elevation_scope(installer: &Installer, installers: &[Installer]) -> Option<Scope> {
+    let mut matching_installers = installers.iter().filter(|candidate| {
+        candidate.url == installer.url && candidate.architecture == installer.architecture
+    });
+    let first_installer = matching_installers.next()?;
+    let second_installer = matching_installers.next()?;
+
+    if matching_installers.next().is_some()
+        || first_installer.scope.is_some()
+        || second_installer.scope.is_some()
+    {
+        return None;
+    }
+
+    let elevation_requirements = [
+        first_installer.elevation_requirement,
+        second_installer.elevation_requirement,
+    ];
+
+    if !elevation_requirements.contains(&None)
+        || !elevation_requirements.contains(&Some(ElevationRequirement::ElevationRequired))
+    {
+        return None;
+    }
+
+    match installer.elevation_requirement {
+        None => Some(Scope::User),
+        Some(ElevationRequirement::ElevationRequired) => Some(Scope::Machine),
+        _ => None,
+    }
+}
+
 pub fn match_installers(
-    previous_installers: Vec<Installer>,
+    previous_installers: &[Installer],
     new_installers: &[Installer],
 ) -> HashMap<Installer, Installer> {
     let found_architectures = new_installers
@@ -72,8 +106,14 @@ pub fn match_installers(
         .collect::<HashMap<_, _>>();
 
     previous_installers
-        .into_iter()
-        .map(|previous_installer| {
+        .iter()
+        .cloned()
+        .map(|mut previous_installer| {
+            if previous_installer.scope.is_none() {
+                previous_installer.scope =
+                    duplicate_elevation_scope(&previous_installer, previous_installers);
+            }
+
             let mut max_score = 0.0;
             let mut best_match = None;
 
@@ -140,7 +180,7 @@ mod tests {
 
     use rstest::rstest;
     use winget_types::{
-        installer::{Architecture, Installer, Scope},
+        installer::{Architecture, ElevationRequirement, Installer, Scope},
         url::DecodedUrl,
     };
 
@@ -195,8 +235,61 @@ mod tests {
             (previous_machine_x64, installer_x64),
         ]);
         assert_eq!(
-            match_installers(previous_installers, &new_installers),
+            match_installers(&previous_installers, &new_installers),
             expected
+        );
+    }
+
+    #[rstest]
+    #[case::x64(
+        Architecture::X64,
+        "https://example.com/installer-1.0.exe",
+        "https://example.com/installer-2.0.exe"
+    )]
+    #[case::arm64(
+        Architecture::Arm64,
+        "https://example.com/installer-1.0-arm64.exe",
+        "https://example.com/installer-2.0-arm64.exe"
+    )]
+    fn old_scope_regression_shape_generates_scope_values_after_matching(
+        #[case] architecture: Architecture,
+        #[case] previous_url: &str,
+        #[case] new_url: &str,
+    ) {
+        let previous_url = DecodedUrl::from_str(previous_url).unwrap();
+        let previous_installers = vec![
+            Installer {
+                architecture,
+                url: previous_url.clone(),
+                ..Installer::default()
+            },
+            Installer {
+                architecture,
+                url: previous_url,
+                elevation_requirement: Some(ElevationRequirement::ElevationRequired),
+                ..Installer::default()
+            },
+        ];
+        let new_installers = vec![Installer {
+            architecture,
+            url: DecodedUrl::from_str(new_url).unwrap(),
+            ..Installer::default()
+        }];
+
+        let mut installers = match_installers(&previous_installers, &new_installers)
+            .into_iter()
+            .map(|(previous_installer, new_installer)| {
+                new_installer.clone().merge_with(previous_installer)
+            })
+            .collect::<Vec<_>>();
+        installers.sort_unstable();
+
+        assert_eq!(
+            installers
+                .iter()
+                .map(|installer| installer.scope)
+                .collect::<Vec<_>>(),
+            vec![Some(Scope::User), Some(Scope::Machine)]
         );
     }
 
@@ -259,7 +352,7 @@ mod tests {
 
         assert_eq!(
             match_installers(
-                vec![previous_installer.clone()],
+                std::slice::from_ref(&previous_installer),
                 &[competing_installer, expected_installer.clone()],
             ),
             HashMap::from([(previous_installer, expected_installer)])
@@ -363,7 +456,7 @@ mod tests {
         };
         assert_eq!(
             match_installers(
-                vec![previous_installer.clone()],
+                std::slice::from_ref(&previous_installer),
                 &[competing_installer, expected_installer.clone()],
             ),
             HashMap::from([(previous_installer, expected_installer)])

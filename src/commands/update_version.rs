@@ -180,7 +180,7 @@ impl UpdateVersion {
             .collect::<Vec<_>>();
 
         manifests.default_locale.package_version = self.package_version.clone();
-        let matched_installers = match_installers(previous_installers, &installer_results);
+        let matched_installers = match_installers(&previous_installers, &installer_results);
         let mut installers = matched_installers
             .into_iter()
             .map(|(previous_installer, new_installer)| {
