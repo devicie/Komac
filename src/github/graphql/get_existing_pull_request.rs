@@ -1,11 +1,11 @@
 use chrono::{DateTime, Utc};
-use cynic::{QueryBuilder, http::ReqwestExt};
+use cynic::QueryBuilder;
 use url::Url;
 use winget_types::{PackageIdentifier, PackageVersion};
 
 use super::{
     super::{GitHubError, WINGET_PKGS_FULL_NAME, client::GitHub},
-    GRAPHQL_URL, github_schema as schema,
+    github_schema as schema,
     types::PullRequestState,
 };
 
@@ -141,7 +141,7 @@ impl GitHub {
                         })
                     })
             })
-            .map_err(GitHubError::CynicRequest)
+        }))
     }
 }
 
