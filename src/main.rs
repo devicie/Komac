@@ -13,6 +13,7 @@ use crate::{
         cleanup::Cleanup,
         complete::Complete,
         list_versions::ListVersions,
+        new_locale::NewLocale,
         new_version::NewVersion,
         remove_dead_versions::RemoveDeadVersions,
         remove_version::RemoveVersion,
@@ -50,6 +51,7 @@ async fn main() -> Result<()> {
 
     match Cli::parse().command {
         Commands::New(new_version) => new_version.run().await,
+        Commands::NewLocale(new_locale) => new_locale.run().await,
         Commands::Update(update_version) => update_version.run().await,
         Commands::Cleanup(cleanup) => cleanup.run().await,
         Commands::Remove(remove_version) => remove_version.run().await,
@@ -108,6 +110,7 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     New(Box<NewVersion>),       // Comparatively large so boxed to store on the heap
+    NewLocale(Box<NewLocale>),  // Comparatively large so boxed to store on the heap
     Update(Box<UpdateVersion>), // Comparatively large so boxed to store on the heap
     Remove(RemoveVersion),
     Cleanup(Cleanup),

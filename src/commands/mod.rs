@@ -2,6 +2,7 @@ pub mod analyze;
 pub mod cleanup;
 pub mod complete;
 pub mod list_versions;
+pub mod new_locale;
 pub mod new_version;
 pub mod remove_dead_versions;
 pub mod remove_version;
