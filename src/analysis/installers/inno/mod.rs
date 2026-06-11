@@ -29,12 +29,13 @@ impl Installers for Inno {
     fn installers(&self) -> Vec<Installer> {
         let scope = self.header.privileges_required().to_scope();
 
-        let install_dir = self
-            .header
-            .default_dir_name()
-            .map(str::to_owned)
-            .map(|install_dir| to_relative_install_dir(install_dir, scope))
-            .filter(|dir| !dir.contains(['{', '}']));
+        let install_dir = scope.and_then(|scope| {
+            self.header
+                .default_dir_name()
+                .map(str::to_owned)
+                .map(|install_dir| to_relative_install_dir(install_dir, scope))
+                .filter(|dir| !dir.contains(['{', '}']))
+        });
 
         let product_code = self
             .header
@@ -87,7 +88,7 @@ impl Installers for Inno {
             }),
             architecture: WingetArchitecture::from_inno(self.header.architectures_allowed()),
             r#type: Some(InstallerType::Inno),
-            scope: Some(scope),
+            scope,
             url: DecodedUrl::default(),
             sha_256: Sha256String::default(),
             unsupported_os_architectures: UnsupportedOSArchitecture::from_inno(
@@ -126,6 +127,10 @@ impl Installers for Inno {
         {
             vec![installer]
         } else {
+            let Some(scope) = scope else {
+                return vec![installer];
+            };
+
             let has_scope_switch = self
                 .header
                 .privileges_required_overrides_allowed()
@@ -175,7 +180,7 @@ trait PrivilegeLevelExt {
         overrides: PrivilegesRequiredOverrides,
     ) -> Option<ElevationRequirement>;
 
-    fn to_scope(&self) -> Scope;
+    fn to_scope(&self) -> Option<Scope>;
 }
 
 impl PrivilegeLevelExt for inno::header::PrivilegeLevel {
@@ -184,16 +189,17 @@ impl PrivilegeLevelExt for inno::header::PrivilegeLevel {
         overrides: PrivilegesRequiredOverrides,
     ) -> Option<ElevationRequirement> {
         match self {
-            Self::Admin | Self::PowerUser => Some(ElevationRequirement::ElevatesSelf),
+            Self::None | Self::PowerUser | Self::Admin => Some(ElevationRequirement::ElevatesSelf),
             _ if !overrides.is_empty() => Some(ElevationRequirement::ElevatesSelf),
             _ => None,
         }
     }
 
-    fn to_scope(&self) -> Scope {
+    fn to_scope(&self) -> Option<Scope> {
         match self {
-            Self::Lowest | Self::None => Scope::User,
-            Self::Admin | Self::PowerUser => Scope::Machine,
+            Self::Lowest => Some(Scope::User),
+            Self::PowerUser | Self::Admin => Some(Scope::Machine),
+            Self::None => None,
         }
     }
 }
