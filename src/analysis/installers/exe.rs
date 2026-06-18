@@ -37,7 +37,7 @@ pub enum ExeType {
     AdvancedInstaller(AdvancedInstaller),
     Burn(Box<Burn>),
     Inno(Box<Inno>),
-    InstallShield(InstallShield),
+    InstallShield(Box<InstallShield>),
     Nsis(Nsis),
     Qt(Qt),
     SevenZipSfx(SevenZipSfx),
@@ -109,7 +109,7 @@ impl Exe {
         match InstallShield::new(&mut reader, &pe) {
             Ok(installshield) => {
                 return Ok(Self {
-                    r#type: ExeType::InstallShield(installshield),
+                    r#type: ExeType::InstallShield(Box::new(installshield)),
                     legal_copyright,
                     product_name,
                     company_name,

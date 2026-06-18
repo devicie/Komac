@@ -86,7 +86,7 @@ pub async fn resolve(
         manifests
             .installer
             .release_date
-            .map_or(true, |manifest_release_date| {
+            .is_none_or(|manifest_release_date| {
                 // Manifest release dates are day-granularity; treat same-day Last-Modified as updated.
                 last_modified.date_naive() >= manifest_release_date
             })

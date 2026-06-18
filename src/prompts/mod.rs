@@ -31,10 +31,10 @@ pub fn radio_prompt<T>() -> InquireResult<T>
 where
     T: Name + AllItems<Item = T> + Display,
 {
-    if *CI {
-        if let Some(first) = <T as AllItems>::all().into_iter().next() {
-            return Ok(first);
-        }
+    if *CI
+        && let Some(first) = <T as AllItems>::all().into_iter().next()
+    {
+        return Ok(first);
     }
     Select::new(
         &format!("{}:", <T as Name>::NAME),

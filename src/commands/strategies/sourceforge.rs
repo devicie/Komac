@@ -87,7 +87,7 @@ fn sourceforge_urls(release_url: &DecodedUrl) -> Vec<Url> {
             .unwrap_or_else(|_| unreachable!()),
     )]
     .into_iter()
-    .filter(|url| is_supported_sourceforge_url(url))
+    .filter(is_supported_sourceforge_url)
     .collect::<Vec<_>>();
 
     for replacement in ARCH_MARKERS {

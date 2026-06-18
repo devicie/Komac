@@ -570,6 +570,7 @@ impl AutoUpdate {
         Ok(())
     }
 
+    #[allow(clippy::too_many_arguments)]
     async fn run_entry(
         &self,
         github: &GitHub,

@@ -72,10 +72,11 @@ fn extract_installer_urls(html: &str, base_url: &DecodedUrl) -> Vec<Url> {
             .map(str::to_ascii_lowercase)
             .is_some_and(|ext| VALID_FILE_EXTENSIONS.contains(&ext.as_str()));
 
-        if has_valid_extension && seen.insert(resolved.to_string()) {
-            if let Ok(decoded) = resolved.as_str().parse::<DecodedUrl>() {
-                urls.push(Url::from(decoded));
-            }
+        if has_valid_extension
+            && seen.insert(resolved.to_string())
+            && let Ok(decoded) = resolved.as_str().parse::<DecodedUrl>()
+        {
+            urls.push(Url::from(decoded));
         }
     }
 

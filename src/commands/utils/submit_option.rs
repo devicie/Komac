@@ -19,7 +19,7 @@ pub enum SubmitOption {
 
 impl SubmitOption {
     pub fn prompt(
-        changes: &mut Vec<(String, String)>,
+        changes: &mut [(String, String)],
         identifier: &PackageIdentifier,
         version: &PackageVersion,
         submit: bool,
