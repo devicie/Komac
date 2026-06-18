@@ -14,6 +14,7 @@ use winget_types::{
     installer::{
         AppsAndFeaturesEntries, AppsAndFeaturesEntry, Architecture, InstallationMetadata,
         Installer, InstallerSwitches, InstallerType, Scope,
+        switches::InstallLocationSwitch,
     },
 };
 
@@ -228,19 +229,9 @@ impl Msi {
         self.property_table.get(WIX_UI_INSTALL_DIR)
     }
 
-    fn install_location_switches(&self) -> InstallerSwitches {
+    fn install_location_switch(&self) -> Option<InstallLocationSwitch> {
         self.wix_ui_install_dir()
-            .and_then(|install_dir| {
-                format!(r#"{install_dir}="<INSTALLPATH>""#)
-                    .parse()
-                    .map(|switch| {
-                        InstallerSwitches::builder()
-                            .install_location(switch)
-                            .build()
-                    })
-                    .ok()
-            })
-            .unwrap_or_default()
+            .and_then(|install_dir| format!(r#"{install_dir}="<INSTALLPATH>""#).parse().ok())
     }
 
     fn is_wix(&self) -> bool {
@@ -278,7 +269,6 @@ impl Installers for Msi {
                 InstallerType::Msi
             }),
             scope: self.find_scope(),
-            switches: self.install_location_switches(),
             product_code: product_code.map(str::to_owned),
             apps_and_features_entries: if product_name.is_some()
                 || manufacturer.is_some()
@@ -301,6 +291,7 @@ impl Installers for Msi {
                 ..InstallationMetadata::default()
             },
             switches: InstallerSwitches::builder()
+                .maybe_install_location(self.install_location_switch())
                 .maybe_custom({
                     let mut switches = self
                         .property_table

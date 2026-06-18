@@ -89,10 +89,9 @@ impl TokenManager {
 
         let validated_token = Self::prompt().client(&client).call()?;
 
-        if let Some(credential) = credential
-            && credential
-                .set_password(validated_token.expose_secret())
-                .is_ok()
+        if credential
+            .set_password(validated_token.expose_secret())
+            .is_ok()
         {
             println!("Successfully stored token in platform's secure storage");
         }

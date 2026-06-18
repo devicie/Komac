@@ -45,10 +45,7 @@ use super::{
             FirstHeader,
             HeaderFlags,
         },
-        header::{
-            Compression, Decoder, Decompressed, Header, block::BlockHeaders,
-            flags::CommonHeaderFlags,
-        },
+        header::{Compression, Decoder, Decompressed, Header},
     },
     pe::{PE, utils::machine_from_exe_reader},
     utils::{LzmaStreamHeader, RELATIVE_PROGRAM_FILES_64, RELATIVE_TEMP_FOLDER},
