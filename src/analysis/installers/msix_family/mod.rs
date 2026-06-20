@@ -218,7 +218,7 @@ impl Installers for Msix {
                 .supported_file_types
                 .clone(),
             package_family_name: Some(PackageFamilyName::new(
-                self.manifest.identity.name.clone(),
+                &self.manifest.identity.name,
                 &self.manifest.identity.publisher,
             )),
             capabilities: self.manifest.capabilities.unrestricted.clone(),
