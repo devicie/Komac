@@ -107,6 +107,13 @@ pub fn print_manifest(lock: &mut AutoStream<StdoutLock<'static>>, manifest: &str
     }
 }
 
+pub fn to_yaml_string<T>(value: &T) -> serde_yaml::Result<String>
+where
+    T: Serialize,
+{
+    serde_yaml::to_string(value)
+}
+
 pub fn build_manifest_string<T>(
     manifest: &T,
     created_with: Option<&str>,
@@ -121,7 +128,7 @@ where
     let _ = writeln!(result, "{} v{}", crate_name!(), crate_version!());
     let _ = writeln!(result, "# yaml-language-server: $schema={}", T::SCHEMA);
     let _ = writeln!(result);
-    let _ = write!(result, "{}", serde_yaml::to_string(manifest)?);
+    let _ = write!(result, "{}", to_yaml_string(manifest)?);
     Ok(convert_to_crlf(&result).into_owned())
 }
 

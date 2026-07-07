@@ -34,24 +34,23 @@ use winget_types::{
         AppsAndFeaturesEntries, AppsAndFeaturesEntry, Architecture, InstallationMetadata,
         Installer, InstallerType, Scope,
     },
+    utils::ValidFileExtensions,
 };
+use zerocopy::LE;
 
 use super::{
-    super::extensions::EXE,
     nsis::{
         entry::{Entry, EntryError},
         file_system::FsEntry,
-        first_header::{
-            FirstHeader,
-            HeaderFlags,
-        },
-        header::{Compression, Decoder, Decompressed, Header},
+        first_header::{FirstHeader, HeaderFlags},
+        header::{Compression, Decoder, Decompressed, Header, nsis_bzip2},
     },
     pe::{PE, utils::machine_from_exe_reader},
     utils::{LzmaStreamHeader, RELATIVE_PROGRAM_FILES_64, RELATIVE_TEMP_FOLDER},
 };
 use crate::{
     analysis::Installers,
+    read::ReadBytesExt,
     traits::{FromMachine, IntoWingetArchitecture},
 };
 
@@ -157,6 +156,22 @@ impl Nsis {
 
         architecture = architecture
             .or_else(|| {
+                let mut has_32_bit_section = false;
+                let mut has_64_bit_section = false;
+
+                for section in header.blocks().sections(&decompressed_data) {
+                    let name = state.get_string(section.name_offset());
+                    has_32_bit_section |= name.contains("32Bit") || name.contains("32-bit");
+                    has_64_bit_section |= name.contains("64Bit") || name.contains("64-bit");
+                }
+
+                match (has_32_bit_section, has_64_bit_section) {
+                    (true, true) => Some(Architecture::X86),
+                    (false, true) => Some(Architecture::X64),
+                    _ => None,
+                }
+            })
+            .or_else(|| {
                 state
                     .variables
                     .install_dir()
@@ -169,9 +184,8 @@ impl Nsis {
                     .file_system
                     .files()
                     .filter(|file| {
-                        Utf8Path::new(file.name())
-                            .extension()
-                            .is_some_and(|extension| extension.eq_ignore_ascii_case(EXE))
+                        ValidFileExtensions::from_path(Utf8Path::new(file.name()))
+                            .is_ok_and(|extension| extension == ValidFileExtensions::Exe)
                     })
                     .min_by_key(|file| levenshtein(file.name(), &app_name))
                     .and_then(|file| {
@@ -180,6 +194,22 @@ impl Nsis {
                             position += data_offset
                                 + u64::from(non_solid_start_offset)
                                 + size_of::<u32>() as u64;
+                        }
+
+                        if !is_solid && compression == Compression::BZip2 {
+                            let reader = decoder.into_inner();
+                            reader
+                                .seek(SeekFrom::Start(position - size_of::<u32>() as u64))
+                                .ok()?;
+                            let compressed_size = reader.read_u32::<LE>().ok()? & !0x8000_0000;
+                            let decoder = nsis_bzip2::Decoder::new(
+                                reader,
+                                Some(compressed_size as usize),
+                                1 << 20,
+                            )
+                            .ok()?;
+                            let machine = machine_from_exe_reader(decoder).ok()?;
+                            return Some(Architecture::from_machine(machine));
                         }
 
                         let mut decoder = if is_solid {
@@ -240,6 +270,19 @@ impl Nsis {
 impl Installers for Nsis {
     fn installers(&self) -> Vec<Installer> {
         let product_code = self.registry.product_code();
+        let detected_scope = self.registry.product_code_scope();
+        let install_directory_scope = self
+            .install_directory
+            .as_deref()
+            .and_then(Scope::from_install_directory);
+        let scope = match (detected_scope, install_directory_scope) {
+            (Some(detected_scope), Some(install_directory_scope))
+                if detected_scope != install_directory_scope =>
+            {
+                None
+            }
+            (detected_scope, install_directory_scope) => detected_scope.or(install_directory_scope),
+        };
         let display_name = self.display_name();
         let publisher = self.registry.get_value_by_name("Publisher");
         let display_version = self.registry.get_value_by_name("DisplayVersion");
@@ -255,10 +298,7 @@ impl Installers for Nsis {
             } else {
                 Some(InstallerType::Nullsoft)
             },
-            scope: self
-                .install_directory
-                .as_deref()
-                .and_then(Scope::from_install_directory),
+            scope,
             product_code: product_code.map(str::to_owned),
             apps_and_features_entries: if display_name.is_some()
                 || publisher.is_some()
@@ -292,5 +332,47 @@ impl Installers for Nsis {
         };
 
         vec![installer]
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use registry::RegRoot;
+
+    use super::*;
+
+    const UNINSTALL_KEY: &str = r"Software\Microsoft\Windows\CurrentVersion\Uninstall\Test.App";
+
+    fn nsis_with_scope_signals(root: RegRoot, install_directory: &str) -> Nsis {
+        let mut registry = Registry::new();
+        registry.insert_value(root, UNINSTALL_KEY, "DisplayName", "Test App");
+
+        Nsis {
+            architecture: Architecture::X64,
+            is_portable: false,
+            registry,
+            primary_language_id: 1033,
+            install_directory: Some(Utf8WindowsPathBuf::from(install_directory)),
+        }
+    }
+
+    #[test]
+    fn keeps_nsis_scope_when_detected_scope_matches_install_location_scope() {
+        let installer =
+            nsis_with_scope_signals(RegRoot::HKEY_LOCAL_MACHINE, r"%ProgramFiles%\Test App")
+                .installers()
+                .remove(0);
+
+        assert_eq!(installer.scope, Some(Scope::Machine));
+    }
+
+    #[test]
+    fn does_not_set_nsis_scope_when_detected_scope_conflicts_with_install_location_scope() {
+        let installer =
+            nsis_with_scope_signals(RegRoot::HKEY_CURRENT_USER, r"%ProgramFiles%\Test App")
+                .installers()
+                .remove(0);
+
+        assert_eq!(installer.scope, None);
     }
 }

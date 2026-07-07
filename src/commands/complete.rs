@@ -1,8 +1,6 @@
-use clap::{CommandFactory, Parser};
-use clap_complete::{Shell, generate};
+use clap::Parser;
+use clap_complete::Shell;
 use color_eyre::{Result, Section, eyre::eyre};
-
-use crate::Cli;
 
 /// Outputs an autocompletion script for the given shell. Example usage:
 ///
@@ -22,7 +20,15 @@ pub struct Complete {
 }
 
 impl Complete {
-    pub fn run(self) -> Result<()> {
+    /// Generate shell completions.
+    ///
+    /// When invoked from the binary, the caller should provide a closure that
+    /// generates completions for the given shell (since the `Cli` type is only
+    /// available in `main.rs`).
+    pub fn run_with<F>(self, generate_fn: F) -> Result<()>
+    where
+        F: FnOnce(Shell),
+    {
         let Some(shell) = self.shell.or_else(Shell::from_env) else {
             return Err(
                 eyre!("Unable to determine the current shell from the environment")
@@ -30,10 +36,14 @@ impl Complete {
             );
         };
 
-        let mut command = Cli::command();
-        let command_name = command.get_name().to_owned();
-        generate(shell, &mut command, command_name, &mut anstream::stdout());
-
+        generate_fn(shell);
         Ok(())
+    }
+
+    #[allow(dead_code)]
+    pub fn run() -> Result<()> {
+        Err(eyre!(
+            "Completion generation is not available in library mode"
+        ))
     }
 }

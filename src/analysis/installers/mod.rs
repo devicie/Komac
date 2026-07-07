@@ -1,6 +1,7 @@
 mod advanced;
 pub mod burn;
 mod exe;
+pub mod font;
 pub mod inno;
 mod installshield;
 mod msi;
@@ -16,6 +17,7 @@ mod zip;
 pub use advanced::AdvancedInstaller;
 pub use burn::Burn;
 pub use exe::Exe;
+pub use font::Font;
 pub use installshield::InstallShield;
 pub use msi::Msi;
 pub use nsis::Nsis;

@@ -597,7 +597,7 @@ impl AutoUpdate {
         let latest_version = if let Some(version) = latest_version {
             version
         } else {
-            let versions = github.get_versions(&package_identifier).await?;
+            let (versions, _) = github.get_versions(&package_identifier, None).await?;
             versions.last().cloned().unwrap_or_else(|| unreachable!())
         };
 
@@ -773,6 +773,7 @@ impl AutoUpdate {
             dry_run: self.dry_run,
             replace: self.replace.clone(),
             skip_pr_check: self.skip_pr_check,
+            font: false,
             token: Some(token.clone()),
         }
         .run()
@@ -896,7 +897,7 @@ async fn latest_version_from_manifest(
     github: &GitHub,
     package_identifier: &PackageIdentifier,
 ) -> Result<PackageVersion> {
-    let versions = github.get_versions(package_identifier).await?;
+    let (versions, _) = github.get_versions(package_identifier, None).await?;
     Ok(versions.last().cloned().unwrap_or_else(|| unreachable!()))
 }
 
@@ -906,7 +907,7 @@ async fn sources_from_manifest_for_version(
     latest_version: &PackageVersion,
 ) -> Result<Vec<RecipeSource>> {
     let manifests = github
-        .get_manifests(package_identifier, latest_version)
+        .get_manifests(package_identifier, latest_version, false)
         .await?;
 
     let mut seen = HashSet::new();

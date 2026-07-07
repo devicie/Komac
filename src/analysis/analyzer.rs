@@ -4,18 +4,19 @@ use std::{
 };
 
 use camino::Utf8Path;
-use color_eyre::eyre::{Result, bail};
+use color_eyre::eyre::Result;
 use winget_types::{
     PackageVersion,
     installer::{Architecture, Installer},
     locale::{Copyright, PackageName, Publisher},
+    utils::ValidFileExtensions,
 };
 
-use super::extensions::{APPX, APPX_BUNDLE, EXE, MSI, MSIX, MSIX_BUNDLE, ZIP};
+use super::PeInfo;
 use crate::analysis::{
     Installers,
     installers::{
-        Exe, Msi, Zip,
+        Exe, Font, Msi, Zip,
         msix_family::{Msix, bundle::MsixBundle},
     },
 };
@@ -26,22 +27,28 @@ pub struct Analyzer<'reader, R: Read + Seek> {
     pub package_name: Option<PackageName>,
     pub package_version: Option<PackageVersion>,
     pub publisher: Option<Publisher>,
+    #[allow(dead_code)]
+    pub file_version: Option<String>,
+    #[allow(dead_code)]
+    pub product_version: Option<String>,
+    pub pe_info: Option<PeInfo>,
     pub installers: Vec<Installer>,
     pub zip: Option<Zip<&'reader mut R>>,
 }
 
 impl<'reader, R: Read + Seek> Analyzer<'reader, R> {
     pub fn new(reader: &'reader mut R, file_name: &str) -> Result<Self> {
-        let extension = Utf8Path::new(file_name)
-            .extension()
-            .unwrap_or_default()
-            .to_ascii_lowercase();
+        let extension = ValidFileExtensions::from_path(Utf8Path::new(file_name))?;
 
-        let installers = match extension.as_str() {
-            MSI => Msi::new(reader)?.installers(),
-            MSIX | APPX => Msix::new(reader)?.installers(),
-            MSIX_BUNDLE | APPX_BUNDLE => MsixBundle::new(reader)?.installers(),
-            ZIP => {
+        let installers = match extension {
+            ValidFileExtensions::Msi => Msi::new(reader)?.installers(),
+            ValidFileExtensions::Msix | ValidFileExtensions::Appx => {
+                Msix::new(reader)?.installers()
+            }
+            ValidFileExtensions::MsixBundle | ValidFileExtensions::AppxBundle => {
+                MsixBundle::new(reader)?.installers()
+            }
+            ValidFileExtensions::Zip => {
                 let mut scoped_zip = Zip::new(reader)?;
                 let installers = mem::take(&mut scoped_zip.installers);
                 return Ok(Self {
@@ -50,7 +57,7 @@ impl<'reader, R: Read + Seek> Analyzer<'reader, R> {
                     ..Self::default()
                 });
             }
-            EXE => {
+            ValidFileExtensions::Exe => {
                 let mut exe = Exe::new(reader)?;
                 let file_name_lower = file_name.to_lowercase();
                 let installers = exe
@@ -85,10 +92,17 @@ impl<'reader, R: Read + Seek> Analyzer<'reader, R> {
                         .company_name
                         .take()
                         .and_then(|company_name| Publisher::new(company_name).ok()),
+                    file_version: exe.file_version.take(),
+                    product_version: exe.product_version.take(),
+                    pe_info: exe.pe_info.take(),
                     ..Self::default()
                 });
             }
-            _ => bail!(r#"Unsupported file extension: "{extension}""#),
+            ValidFileExtensions::Fnt
+            | ValidFileExtensions::Otc
+            | ValidFileExtensions::Otf
+            | ValidFileExtensions::Ttc
+            | ValidFileExtensions::Ttf => Font::new(reader, file_name)?.installers(),
         };
         Ok(Self {
             installers,
@@ -105,6 +119,9 @@ impl<R: Read + Seek> Default for Analyzer<'_, R> {
             package_name: None,
             package_version: None,
             publisher: None,
+            file_version: None,
+            product_version: None,
+            pe_info: None,
             installers: Vec::default(),
             zip: None,
         }

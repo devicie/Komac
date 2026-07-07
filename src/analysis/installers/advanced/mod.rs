@@ -15,7 +15,7 @@ use sevenz_rust2::{ArchiveReader, Password};
 use thiserror::Error;
 use tracing::{debug, warn};
 use winget_types::installer::{
-    AppsAndFeaturesEntry, ExpectedReturnCodes, Installer, InstallerReturnCode, InstallerSwitches,
+    AppsAndFeaturesEntry, ExpectedReturnCode, Installer, InstallerReturnCode, InstallerSwitches,
     InstallerType, ReturnResponse,
 };
 use zerocopy::IntoBytes;
@@ -110,7 +110,7 @@ impl Installers for AdvancedInstaller {
             .iter()
             .map(|msi| {
                 let mut installer = msi.installers().into_iter().next().unwrap_or_default();
-                installer.r#type = Some(InstallerType::Exe);
+                installer.r#type = Some(InstallerType::AdvancedInstaller);
 
                 // https://www.advancedinstaller.com/user-guide/exe-setup-file.html#proprietary-command-line-switches-for-the-exe-setup
                 installer.switches = InstallerSwitches::builder()
@@ -158,7 +158,7 @@ impl Installers for AdvancedInstaller {
     }
 }
 
-fn expected_return_codes() -> BTreeSet<ExpectedReturnCodes> {
+fn expected_return_codes() -> BTreeSet<ExpectedReturnCode> {
     use ReturnResponse::{
         AlreadyInstalled, BlockedByPolicy, CancelledByUser, ContactSupport, InstallInProgress,
         InvalidParameter, RebootInitiated, RebootRequiredToFinish, SystemNotSupported,
@@ -187,10 +187,8 @@ fn expected_return_codes() -> BTreeSet<ExpectedReturnCodes> {
         (3010, RebootRequiredToFinish),
     ]
     .into_iter()
-    .map(|(code, response)| ExpectedReturnCodes {
-        installer_return_code: InstallerReturnCode::new(code),
-        return_response: response,
-        return_response_url: None,
+    .map(|(code, response)| {
+        ExpectedReturnCode::new(InstallerReturnCode::new(code).unwrap(), response)
     })
     .collect()
 }

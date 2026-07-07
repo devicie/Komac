@@ -15,14 +15,12 @@ use winget_types::{
         Installer, InstallerType, MinimumOSVersion, PackageFamilyName, Platform,
         RestrictedCapability, UpgradeBehavior,
     },
+    utils::ValidFileExtensions,
 };
 use zip::ZipArchive;
 
 use super::msix_family::utils::{get_install_location, hash_signature, read_manifest};
-use crate::{
-    analysis::{Installers, extensions::MSIX},
-    traits::AsciiExt,
-};
+use crate::{analysis::Installers, traits::AsciiExt};
 
 pub struct Msix {
     appx_manifest: String,
@@ -182,7 +180,9 @@ impl Installers for Msix {
             .target_device_family
             .iter()
             .all(|target_device_family| target_device_family.min_version < MSIX_MIN_VERSION)
-            && !self.appx_manifest.contains_ignore_ascii_case(MSIX);
+            && !self
+                .appx_manifest
+                .contains_ignore_ascii_case(ValidFileExtensions::Msix.as_str());
 
         vec![Installer {
             platform: self
@@ -218,7 +218,7 @@ impl Installers for Msix {
                 .supported_file_types
                 .clone(),
             package_family_name: Some(PackageFamilyName::new(
-                self.manifest.identity.name.clone(),
+                &self.manifest.identity.name,
                 &self.manifest.identity.publisher,
             )),
             capabilities: self.manifest.capabilities.unrestricted.clone(),

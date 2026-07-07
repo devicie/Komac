@@ -5,7 +5,7 @@ use color_eyre::eyre::Result;
 use regex::Regex;
 use reqwest::Client;
 use thiserror::Error;
-use winget_types::{PackageVersion, installer::VALID_FILE_EXTENSIONS, url::DecodedUrl};
+use winget_types::{PackageVersion, url::DecodedUrl, utils::ValidFileExtensions};
 
 use super::UpdateVersionStrategyResult;
 use crate::manifests::Url;
@@ -70,7 +70,7 @@ fn extract_installer_urls(html: &str, base_url: &DecodedUrl) -> Vec<Url> {
             .filter(|name| !name.is_empty())
             .and_then(|name| Utf8Path::new(name).extension())
             .map(str::to_ascii_lowercase)
-            .is_some_and(|ext| VALID_FILE_EXTENSIONS.contains(&ext.as_str()));
+            .is_some_and(|ext| ext.as_str().parse::<ValidFileExtensions>().is_ok());
 
         if has_valid_extension
             && seen.insert(resolved.to_string())

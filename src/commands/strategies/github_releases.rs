@@ -11,8 +11,8 @@ use tokio::sync::Mutex;
 use tracing::debug;
 use winget_types::{
     PackageIdentifier, PackageVersion,
-    installer::VALID_FILE_EXTENSIONS,
     url::{DecodedUrl, ReleaseNotesUrl},
+    utils::ValidFileExtensions,
 };
 
 use super::UpdateVersionStrategyResult;
@@ -360,7 +360,7 @@ pub async fn resolve(
                 let file_name_lower = file_name.to_ascii_lowercase();
 
                 // TODO We should also check for valid portables, but this skips downloading
-                let is_valid = VALID_FILE_EXTENSIONS.contains(&extension.as_str())
+                let is_valid = extension.as_str().parse::<ValidFileExtensions>().is_ok()
                     && !file_name_lower.contains("darwin")
                     && !file_name_lower.contains("linux")
                     && !file_name_lower.contains("mac")

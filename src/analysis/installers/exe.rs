@@ -9,15 +9,18 @@ use super::{
     super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Qt, SevenZipSfx, Squirrel,
 };
 use crate::{
-    analysis::installers::{
-        advanced::AdvancedInstallerError,
-        burn::BurnError,
-        installshield::InstallShieldError,
-        nsis::NsisError,
-        pe::{PE, VSVersionInfo},
-        qt::QtError,
-        sevenzip_sfx::SevenZipSfxError,
-        squirrel::SquirrelError,
+    analysis::{
+        PeInfo,
+        installers::{
+            advanced::AdvancedInstallerError,
+            burn::BurnError,
+            installshield::InstallShieldError,
+            nsis::NsisError,
+            pe::{PE, VSVersionInfo},
+            qt::QtError,
+            sevenzip_sfx::SevenZipSfxError,
+            squirrel::SquirrelError,
+        },
     },
     traits::IntoWingetArchitecture,
 };
@@ -31,6 +34,9 @@ pub struct Exe {
     pub legal_copyright: Option<String>,
     pub product_name: Option<String>,
     pub company_name: Option<String>,
+    pub file_version: Option<String>,
+    pub product_version: Option<String>,
+    pub pe_info: Option<PeInfo>,
 }
 
 pub enum ExeType {
@@ -53,6 +59,7 @@ impl Exe {
         let vs_version_info = vs_version_info_bytes
             .as_deref()
             .and_then(|version_info_bytes| VSVersionInfo::read_from(version_info_bytes).ok());
+        let pe_info = vs_version_info.as_ref().map(PeInfo::from_version_info);
         let mut string_table = vs_version_info.as_ref().map(VSVersionInfo::string_table);
         let legal_copyright = string_table
             .as_mut()
@@ -66,6 +73,14 @@ impl Exe {
             .as_mut()
             .and_then(|table| table.swap_remove("CompanyName"))
             .map(str::to_owned);
+        let file_version = pe_info
+            .as_ref()
+            .and_then(PeInfo::file_version)
+            .map(str::to_owned);
+        let product_version = pe_info
+            .as_ref()
+            .and_then(PeInfo::product_version)
+            .map(str::to_owned);
 
         match AdvancedInstaller::new(&mut reader) {
             Ok(advanced) => {
@@ -74,6 +89,9 @@ impl Exe {
                     legal_copyright,
                     product_name,
                     company_name,
+                    file_version,
+                    product_version,
+                    pe_info,
                 });
             }
             Err(AdvancedInstallerError::NotAdvancedInstallerFile) => {}
@@ -87,6 +105,9 @@ impl Exe {
                     legal_copyright,
                     product_name,
                     company_name,
+                    file_version,
+                    product_version,
+                    pe_info,
                 });
             }
             Err(BurnError::NotBurnFile) => {}
@@ -100,6 +121,9 @@ impl Exe {
                     legal_copyright,
                     product_name,
                     company_name,
+                    file_version,
+                    product_version,
+                    pe_info,
                 });
             }
             Err(InnoError::NotInnoFile) => {}
@@ -113,6 +137,9 @@ impl Exe {
                     legal_copyright,
                     product_name,
                     company_name,
+                    file_version,
+                    product_version,
+                    pe_info,
                 });
             }
             Err(InstallShieldError::NotInstallShieldFile) => {}
@@ -126,6 +153,9 @@ impl Exe {
                     legal_copyright,
                     product_name,
                     company_name,
+                    file_version,
+                    product_version,
+                    pe_info,
                 });
             }
             Err(NsisError::NotNsisFile) => {}
@@ -139,6 +169,9 @@ impl Exe {
                     legal_copyright,
                     product_name,
                     company_name,
+                    file_version,
+                    product_version,
+                    pe_info,
                 });
             }
             Err(QtError::NotQtFile) => {}
@@ -152,6 +185,9 @@ impl Exe {
                     legal_copyright,
                     product_name,
                     company_name,
+                    file_version,
+                    product_version,
+                    pe_info,
                 });
             }
             Err(SevenZipSfxError::NotSevenZipSfx) => {}
@@ -166,6 +202,9 @@ impl Exe {
                     legal_copyright,
                     product_name,
                     company_name,
+                    file_version,
+                    product_version,
+                    pe_info,
                 });
             }
             Err(SquirrelError::NotSquirrelFile) => {}
@@ -220,6 +259,9 @@ impl Exe {
             legal_copyright,
             product_name,
             company_name,
+            file_version,
+            product_version,
+            pe_info,
         })
     }
 }

@@ -2,10 +2,13 @@ use anstream::println;
 use clap::Parser;
 use color_eyre::eyre::Result;
 use owo_colors::OwoColorize;
-use reqwest::Client;
+use reqwest::Client as ReqwestClient;
 use secrecy::{ExposeSecret, SecretString};
 
-use crate::token::{TokenManager, default_headers};
+use crate::{
+    github::retry::client as retrying_client,
+    token::{TokenManager, default_headers},
+};
 
 /// Update the stored token
 #[derive(Parser)]
@@ -20,9 +23,11 @@ impl UpdateToken {
     pub async fn run(self) -> Result<()> {
         let credential = TokenManager::credential()?;
 
-        let client = Client::builder()
-            .default_headers(default_headers(None))
-            .build()?;
+        let client = retrying_client(
+            ReqwestClient::builder()
+                .default_headers(default_headers(None))
+                .build()?,
+        );
 
         let token = match self.token {
             Some(token) => {

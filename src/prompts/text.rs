@@ -100,10 +100,36 @@ where
     <T as FromStr>::Err: Display + Debug + Sync + Send + 'static,
     U: AsRef<str>,
 {
+    let default = default.as_ref().map(U::as_ref);
+    optional_prompt_inner(parameter, default, None)
+}
+
+pub fn optional_prompt_with_help<T, U>(
+    parameter: Option<T>,
+    help_message: Option<U>,
+) -> InquireResult<Option<T>>
+where
+    T: FromStr + TextPrompt,
+    <T as FromStr>::Err: Display + Debug + Sync + Send + 'static,
+    U: AsRef<str>,
+{
+    let help_message = help_message.as_ref().map(U::as_ref);
+    optional_prompt_inner(parameter, None, help_message)
+}
+
+fn optional_prompt_inner<T>(
+    parameter: Option<T>,
+    default: Option<&str>,
+    help_message: Option<&str>,
+) -> InquireResult<Option<T>>
+where
+    T: FromStr + TextPrompt,
+    <T as FromStr>::Err: Display + Debug + Sync + Send + 'static,
+{
     if let Some(value) = parameter {
         Ok(Some(value))
     } else if *CI {
-        Ok(default.as_ref().and_then(|d| d.as_ref().parse::<T>().ok()))
+        Ok(default.and_then(|d| d.parse::<T>().ok()))
     } else {
         let message = format!("{}:", <T as Name>::NAME);
         let mut prompt = Text::new(&message).with_validator(|input: &str| {
@@ -116,13 +142,12 @@ where
                 }
             }
         });
-        if let Some(help_message) = T::HELP_MESSAGE {
+        if let Some(help_message) = help_message.or(T::HELP_MESSAGE) {
             prompt = prompt.with_help_message(help_message);
         }
         if let Some(placeholder) = T::PLACEHOLDER {
             prompt = prompt.with_placeholder(placeholder);
         }
-        let default = default.as_ref().map(U::as_ref);
         if let Some(default) = default {
             prompt = prompt.with_default(default);
         }
