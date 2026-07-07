@@ -6,7 +6,8 @@ use tracing::debug;
 use winget_types::installer::{Installer, InstallerSwitches, InstallerType};
 
 use super::{
-    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Qt, SevenZipSfx, Squirrel,
+    super::Installers, AdvancedInstaller, Burn, InstallShield, Nsis, Qt, SetupFactory, SevenZipSfx,
+    Squirrel,
 };
 use crate::{
     analysis::installers::{
@@ -16,6 +17,7 @@ use crate::{
         nsis::NsisError,
         pe::{PE, VSVersionInfo},
         qt::QtError,
+        setup_factory::SetupFactoryError,
         sevenzip_sfx::SevenZipSfxError,
         squirrel::SquirrelError,
     },
@@ -40,6 +42,7 @@ pub enum ExeType {
     InstallShield(Box<InstallShield>),
     Nsis(Nsis),
     Qt(Qt),
+    SetupFactory(SetupFactory),
     SevenZipSfx(SevenZipSfx),
     Squirrel(Squirrel),
     Generic(Box<Installer>),
@@ -172,6 +175,19 @@ impl Exe {
             Err(error) => return Err(error.into()),
         }
 
+        match SetupFactory::new(&mut reader, &pe) {
+            Ok(setup_factory) => {
+                return Ok(Self {
+                    r#type: ExeType::SetupFactory(setup_factory),
+                    legal_copyright,
+                    product_name,
+                    company_name,
+                });
+            }
+            Err(SetupFactoryError::NotSetupFactoryFile) => {}
+            Err(error) => return Err(error.into()),
+        }
+
         let internal_name = string_table
             .as_ref()
             .and_then(|table| table.get("InternalName").copied())
@@ -233,6 +249,7 @@ impl Installers for Exe {
             ExeType::InstallShield(installshield) => installshield.installers(),
             ExeType::Nsis(nsis) => nsis.installers(),
             ExeType::Qt(qt) => qt.installers(),
+            ExeType::SetupFactory(setup_factory) => setup_factory.installers(),
             ExeType::SevenZipSfx(sfx) => sfx.installers(),
             ExeType::Squirrel(squirrel) => squirrel.installers(),
             ExeType::Generic(installer) => vec![*installer.clone()],
