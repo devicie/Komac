@@ -41,13 +41,13 @@ const FILENAME_LENGTH: usize = 264;
 /// Name of the compiled setup script within the archive.
 const SCRIPT_NAME: &[u8] = b"irsetup.dat";
 
-/// A file count above this is treated as an embedded `lua5.1.dll` special file rather than a real
-/// count, matching `sfextract`'s heuristic.
+/// After `irsetup.exe`, Setup Factory 9 stubs embed a second special file (`lua5.1.dll`) before the
+/// file table, but older layouts do not. The two are told apart by reading a `u32`: a real file
+/// count is small, whereas the low half of `lua5.1.dll`'s ~350 KB `u64` size is far larger. A value
+/// above this threshold is therefore the DLL's size rather than a count. Every installer tested so
+/// far (DIALux evo, LDraw AIOI, gloCOM, Communicator and the Locklizard Safeguard family, all Setup
+/// Factory 9.5) embeds the DLL and takes this path.
 const MAX_PLAUSIBLE_FILE_COUNT: u32 = 1000;
-
-/// Upper bound on the decompressed script size we are willing to buffer (scripts are well under a
-/// megabyte; this guards against a malformed size field).
-const MAX_SCRIPT_SIZE: i64 = 64 << 20;
 
 /// Reads and decompresses the `irsetup.dat` script from the archive at `overlay_start`.
 ///
@@ -84,11 +84,9 @@ pub fn read_script<R: Read + Seek>(
         reader.seek(SeekFrom::Current(size_of::<u32>() as i64))?; // unknown
 
         if name.eq_ignore_ascii_case(SCRIPT_NAME) {
-            if size > MAX_SCRIPT_SIZE {
-                return Ok(None);
-            }
-            let mut data = vec![0; usize::try_from(size).unwrap_or(0)];
-            reader.read_exact(&mut data)?;
+            // Bounded read that grows with the data rather than pre-allocating from the size field.
+            let mut data = Vec::new();
+            reader.take(size.unsigned_abs()).read_to_end(&mut data)?;
             return Ok(decompress(&data));
         }
 

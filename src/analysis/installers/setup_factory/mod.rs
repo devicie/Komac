@@ -15,18 +15,9 @@ use winget_types::{
 };
 
 use crate::{
-    analysis::{
-        Installers,
-        installers::pe::{PE, VSVersionInfo},
-    },
+    analysis::{Installers, installers::pe::PE},
     traits::FromMachine,
 };
-
-/// Description embedded in the assembly manifest of the Setup Factory run-time (`irsetup.exe`).
-const RUNTIME_DESCRIPTION: &str = "Setup Factory Run-time";
-
-/// Marker found in the `Comments` version-info field, e.g. `Created with Setup Factory 9.7`.
-const COMMENTS_MARKER: &str = "Setup Factory";
 
 #[derive(Error, Debug)]
 pub enum SetupFactoryError {
@@ -42,32 +33,27 @@ pub struct SetupFactory {
 }
 
 impl SetupFactory {
-    // Detects Indigo Rose Setup Factory installers. The setup stub embeds `irsetup.exe`, whose
-    // assembly manifest carries `<description>Setup Factory Run-time</description>`, and the builder
-    // stamps `Created with Setup Factory <version>` into the `Comments` version-info field.
-    //
-    // Rather than guess the packaged application's details from the stub's version info (which
-    // describes the run-time, and is often left at Setup Factory's defaults), the Setup Factory 8/9
-    // archive in the PE overlay is walked to recover the compiled setup script and its session
-    // variable table - the real product name, publisher and version the author entered.
+    // Detects Indigo Rose Setup Factory installers from the Setup Factory 8/9 signature at the start
+    // of the PE overlay, then walks the overlay archive to recover the compiled setup script and its
+    // session variable table - the real product name, publisher and version the author entered.
+    // (The stub's own version info describes the run-time, not the packaged application, and is often
+    // left at Setup Factory's defaults, so it is not used.)
     pub fn new<R: Read + Seek>(mut reader: R, pe: &PE) -> Result<Self, SetupFactoryError> {
-        let overlay_start = pe.overlay_offset();
+        let overlay_start = pe
+            .overlay_offset()
+            .ok_or(SetupFactoryError::NotSetupFactoryFile)?;
 
-        let has_archive =
-            overlay_start.is_some_and(|start| has_archive_signature(&mut reader, start));
-
-        // The overlay signature is the definitive marker, but fall back to the run-time manifest and
-        // version-info comments so older (Setup Factory 7) or repacked stubs are still recognised.
-        if !has_archive
-            && !is_runtime_manifest(pe, &mut reader)
-            && !has_setup_factory_comments(pe, &mut reader)
+        let mut signature = [0; archive::SIGNATURE.len()];
+        if reader.seek(SeekFrom::Start(overlay_start)).is_err()
+            || reader.read_exact(&mut signature).is_err()
+            || signature != archive::SIGNATURE
         {
             return Err(SetupFactoryError::NotSetupFactoryFile);
         }
 
-        let metadata = overlay_start
-            .filter(|_| has_archive)
-            .and_then(|start| archive::read_script(&mut reader, start).ok().flatten())
+        let metadata = archive::read_script(&mut reader, overlay_start)
+            .ok()
+            .flatten()
             .map(|script| ScriptMetadata::parse(&script))
             .unwrap_or_default();
 
@@ -78,29 +64,6 @@ impl SetupFactory {
             metadata,
         })
     }
-}
-
-fn has_archive_signature<R: Read + Seek>(reader: &mut R, overlay_start: u64) -> bool {
-    if reader.seek(SeekFrom::Start(overlay_start)).is_err() {
-        return false;
-    }
-    let mut signature = [0; archive::SIGNATURE.len()];
-    reader.read_exact(&mut signature).is_ok() && signature == archive::SIGNATURE
-}
-
-fn is_runtime_manifest<R: Read + Seek>(pe: &PE, reader: &mut R) -> bool {
-    pe.manifest(reader)
-        .is_ok_and(|manifest| manifest.contains(RUNTIME_DESCRIPTION))
-}
-
-fn has_setup_factory_comments<R: Read + Seek>(pe: &PE, reader: &mut R) -> bool {
-    pe.vs_version_info(reader).ok().is_some_and(|bytes| {
-        VSVersionInfo::read_from(&bytes).is_ok_and(|info| {
-            info.string_table()
-                .get("Comments")
-                .is_some_and(|comments| comments.contains(COMMENTS_MARKER))
-        })
-    })
 }
 
 impl Installers for SetupFactory {
