@@ -3,7 +3,7 @@ use std::{fmt, num::NonZeroUsize};
 use chrono::DateTime;
 use color_eyre::{Result, eyre::bail};
 use futures_util::{StreamExt, TryStreamExt, stream};
-use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
+use indicatif::{MultiProgress, ProgressBar, ProgressDrawTarget, ProgressStyle};
 use itertools::{Itertools, Position};
 use reqwest::{
     Client,
@@ -26,6 +26,7 @@ use super::{Download, DownloadedFile};
 pub struct Downloader {
     client: Client,
     concurrent_downloads: NonZeroUsize,
+    show_progress: bool,
 }
 
 impl Downloader {
@@ -67,12 +68,29 @@ impl Downloader {
     ///
     /// [`ClientBuilder::build`]: reqwest::ClientBuilder::build
     pub fn new_with_concurrent(concurrent_downloads: NonZeroUsize) -> reqwest::Result<Self> {
+        Self::new_with_concurrent_and_progress(concurrent_downloads, true)
+    }
+
+    /// Creates a new Downloader with a specified number of maximum concurrent downloads and
+    /// optional progress rendering.
+    ///
+    /// # Errors
+    ///
+    /// Propagates the error from [`ClientBuilder::build`] which fails if a TLS backend cannot be
+    /// initialized, or the resolver cannot load the system configuration.
+    ///
+    /// [`ClientBuilder::build`]: reqwest::ClientBuilder::build
+    pub fn new_with_concurrent_and_progress(
+        concurrent_downloads: NonZeroUsize,
+        show_progress: bool,
+    ) -> reqwest::Result<Self> {
         Ok(Self {
             client: Client::builder()
                 .default_headers(Self::headers())
                 .referer(false)
                 .build()?,
             concurrent_downloads,
+            show_progress,
         })
     }
 
@@ -81,13 +99,19 @@ impl Downloader {
         I: IntoIterator<Item = D>,
         D: Into<Download>,
     {
-        let multi_progress = crate::terminal::multi_progress();
+        let multi_progress = if self.show_progress {
+            MultiProgress::new()
+        } else {
+            MultiProgress::with_draw_target(ProgressDrawTarget::hidden())
+        };
 
         let downloaded_files = stream::iter(downloads.into_iter().map(D::into).unique())
-            .map(|download| self.fetch(&self.client, download, multi_progress))
+            .map(|download| self.fetch(&self.client, download, &multi_progress))
             .buffer_unordered(self.concurrent_downloads.get())
             .try_collect::<Vec<_>>()
             .await?;
+
+        multi_progress.clear()?;
 
         Ok(downloaded_files)
     }
@@ -108,12 +132,15 @@ impl Downloader {
         download: &Download,
         content_types: GetAll<HeaderValue>,
     ) -> Result<(), ContentTypeError> {
-        if content_types.iter().all(|content_type| {
-            content_type != Self::OCTET_STREAM
-                && !content_type
-                    .as_bytes()
-                    .starts_with(Self::APPLICATION.as_bytes())
-        }) {
+        // Some download servers omit Content-Type, so only reject explicitly invalid values.
+        if content_types.iter().next().is_some()
+            && content_types.iter().all(|content_type| {
+                content_type != Self::OCTET_STREAM
+                    && !content_type
+                        .as_bytes()
+                        .starts_with(Self::APPLICATION.as_bytes())
+            })
+        {
             return Err(ContentTypeError::new(download.clone(), content_types));
         }
 
@@ -263,5 +290,32 @@ impl fmt::Display for ContentTypeError {
             application = Downloader::APPLICATION,
             octet_stream = Downloader::OCTET_STREAM
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use rstest::rstest;
+
+    use super::*;
+    use crate::manifests::Url;
+
+    #[rstest]
+    #[case::missing(&[], true)]
+    #[case::application(&["application/octet-stream"], true)]
+    #[case::binary_octet_stream(&["binary/octet-stream"], true)]
+    #[case::non_application(&["text/html"], false)]
+    #[case::one_valid(&["text/html", "application/octet-stream"], true)]
+    fn checks_content_types(#[case] content_types: &[&str], #[case] expected: bool) {
+        let download = Download::new("https://example.com/installer.exe".parse::<Url>().unwrap());
+        let mut headers = HeaderMap::new();
+        for content_type in content_types {
+            headers.append(CONTENT_TYPE, content_type.parse().unwrap());
+        }
+
+        assert_eq!(
+            Downloader::check_content_types(&download, headers.get_all(CONTENT_TYPE)).is_ok(),
+            expected
+        );
     }
 }

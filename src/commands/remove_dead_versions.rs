@@ -60,6 +60,10 @@ pub struct RemoveDeadVersions {
     #[arg(short = 'r', long = "reason")]
     deletion_reason: Option<String>,
 
+    /// Look for the package under fonts instead of probing manifests first
+    #[arg(long)]
+    font: bool,
+
     /// Number of versions to check concurrently
     #[arg(short, long, default_value_t = NonZeroUsize::new(num_cpus::get()).unwrap())]
     concurrent: NonZeroUsize,
@@ -74,12 +78,12 @@ impl RemoveDeadVersions {
         let token_manager = TokenManager::handle(self.token).await?;
         let github = GitHub::new(token_manager)?;
 
-        let (fork, winget_pkgs, versions) = try_join!(
+        let (fork, winget_pkgs, (versions, font)) = try_join!(
             github
                 .get_username()
                 .and_then(|current_user| github.get_winget_pkgs().owner(current_user).send()),
             github.get_winget_pkgs().send(),
-            github.get_versions(&self.package_identifier)
+            github.get_versions(&self.package_identifier, self.font.then_some(true))
         )?;
 
         let client = Client::builder()
@@ -159,6 +163,7 @@ impl RemoveDeadVersions {
                         .reason(&deletion_reason)
                         .fork(&fork)
                         .winget_pkgs(&winget_pkgs)
+                        .font(font)
                         .send()
                         .await?;
 
@@ -199,6 +204,7 @@ impl RemoveDeadVersions {
                                 package_identifier,
                                 &version,
                                 ManifestTypeWithLocale::Installer,
+                                font,
                             )
                             .await?
                             .installers
@@ -281,7 +287,7 @@ async fn confirm_removal(
     remove_all: bool,
 ) -> Result<bool> {
     if let Some(pull_request) = github
-        .get_existing_pull_request(identifier, version)
+        .get_existing_pull_request(identifier, version, false)
         .await?
         && pull_request.is_open()
     {

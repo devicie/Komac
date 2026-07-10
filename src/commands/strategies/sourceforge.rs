@@ -11,8 +11,8 @@ use thiserror::Error;
 use tokio::{sync::Mutex, time::sleep};
 use winget_types::{
     PackageIdentifier, PackageVersion,
-    installer::VALID_FILE_EXTENSIONS,
     url::{DecodedUrl, ReleaseNotesUrl},
+    utils::ValidFileExtensions,
 };
 
 use super::UpdateVersionStrategyResult;
@@ -129,7 +129,7 @@ fn is_supported_sourceforge_url(url: &Url) -> bool {
         return false;
     };
 
-    VALID_FILE_EXTENSIONS.contains(&extension.as_str())
+    extension.as_str().parse::<ValidFileExtensions>().is_ok()
 }
 
 fn package_version_from_release_filename(filename: &str) -> Option<PackageVersion> {
@@ -269,7 +269,7 @@ pub async fn resolve(
         .date();
 
     let manifests = github
-        .get_manifests(package_identifier, latest_version)
+        .get_manifests(package_identifier, latest_version, false)
         .await?;
 
     let should_update = match manifests.installer.release_date {
