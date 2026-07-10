@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use winget_types::installer::{ExpectedReturnCodes, InstallerReturnCode, ReturnResponse};
+use winget_types::installer::{ExpectedReturnCode, InstallerReturnCode, ReturnResponse};
 
 const COMMON_CODES: &[(i32, ReturnResponse)] = {
     use ReturnResponse::*;
@@ -36,7 +36,7 @@ const MSI_CODES: &[(i32, ReturnResponse)] = {
     ]
 };
 
-pub fn expected_return_codes(msi_based: bool) -> BTreeSet<ExpectedReturnCodes> {
+pub fn expected_return_codes(msi_based: bool) -> BTreeSet<ExpectedReturnCode> {
     let codes: Box<dyn Iterator<Item = &(i32, ReturnResponse)>> = if msi_based {
         Box::new(COMMON_CODES.iter().chain(MSI_CODES))
     } else {
@@ -44,10 +44,8 @@ pub fn expected_return_codes(msi_based: bool) -> BTreeSet<ExpectedReturnCodes> {
     };
 
     codes
-        .map(|&(code, response)| ExpectedReturnCodes {
-            installer_return_code: InstallerReturnCode::new(code),
-            return_response: response,
-            return_response_url: None,
+        .filter_map(|&(code, response)| {
+            Some(ExpectedReturnCode::new(InstallerReturnCode::new(code)?, response))
         })
         .collect()
 }

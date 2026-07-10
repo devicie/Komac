@@ -11,6 +11,7 @@ use msi::{Language, Package, Select};
 use property_table::PropertyTable;
 use winget_types::{
     LanguageTag,
+    icu_locale::langid,
     installer::{
         AppsAndFeaturesEntries, AppsAndFeaturesEntry, Architecture, InstallationMetadata,
         Installer, InstallerSwitches, InstallerType, Scope,
@@ -221,6 +222,7 @@ impl Msi {
             .tag()
             .parse::<LanguageTag>()
             .ok()
+            .filter(|language_tag| language_tag != &LanguageTag::new(langid!("und")))
     }
 
     fn wix_ui_install_dir(&self) -> Option<&str> {
@@ -268,7 +270,9 @@ impl Installers for Msi {
             } else {
                 InstallerType::Msi
             }),
-            scope: self.find_scope(),
+            // User scope should not be set for MSI installers until the below issue is fixed
+            // https://github.com/microsoft/winget-cli/issues/3011
+            scope: self.find_scope().filter(|scope| !scope.is_user()),
             product_code: product_code.map(str::to_owned),
             apps_and_features_entries: if product_name.is_some()
                 || manufacturer.is_some()

@@ -3,7 +3,11 @@ use color_eyre::Result;
 use secrecy::SecretString;
 use winget_types::{PackageIdentifier, PackageVersion};
 
-use crate::{github::client::GitHub, manifests::print_changes, token::TokenManager};
+use crate::{
+    github::client::GitHub,
+    manifests::{print_changes, to_yaml_string},
+    token::TokenManager,
+};
 
 /// Output the manifests for a given package and version
 #[expect(clippy::struct_excessive_bools)]
@@ -33,6 +37,10 @@ pub struct ShowVersion {
     #[arg(long)]
     version_manifest: bool,
 
+    /// Look for the package under fonts instead of probing manifests first
+    #[arg(long)]
+    font: bool,
+
     /// GitHub personal access token with the `public_repo` scope
     #[arg(short, long, env = "GITHUB_TOKEN", hide_env_values = true)]
     token: Option<SecretString>,
@@ -44,7 +52,9 @@ impl ShowVersion {
         let github = GitHub::new(&token_manager)?;
 
         // Get a list of all versions for the given package
-        let mut versions = github.get_versions(&self.package_identifier).await?;
+        let (mut versions, font) = github
+            .get_versions(&self.package_identifier, self.font.then_some(true))
+            .await?;
 
         // Get the manifests for the latest or specified version
         let manifests = github
@@ -53,6 +63,7 @@ impl ShowVersion {
                 &self
                     .package_version
                     .unwrap_or_else(|| versions.pop_last().unwrap_or_else(|| unreachable!())),
+                font,
             )
             .await?;
 
@@ -67,22 +78,20 @@ impl ShowVersion {
         );
 
         let mut contents = Vec::new();
+
         if all || self.installer_manifest {
-            contents.push(serde_yaml::to_string(&manifests.installer)?);
+            contents.push(to_yaml_string(&manifests.installer)?);
         }
         if all || self.default_locale_manifest {
-            contents.push(serde_yaml::to_string(&manifests.default_locale)?);
+            contents.push(to_yaml_string(&manifests.default_locale)?);
         }
         if all || self.locale_manifests {
-            contents.extend(
-                manifests
-                    .locales
-                    .into_iter()
-                    .flat_map(|locale_manifest| serde_yaml::to_string(&locale_manifest)),
-            );
+            for locale_manifest in &manifests.locales {
+                contents.push(to_yaml_string(locale_manifest)?);
+            }
         }
         if all || self.version_manifest {
-            contents.push(serde_yaml::to_string(&manifests.version)?);
+            contents.push(to_yaml_string(&manifests.version)?);
         }
 
         print_changes(contents);

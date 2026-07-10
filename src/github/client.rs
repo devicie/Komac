@@ -2,12 +2,13 @@ use std::{borrow::Cow, collections::BTreeSet, num::NonZeroU32, str::FromStr};
 
 use bon::bon;
 use color_eyre::eyre::eyre;
-use cynic::{GraphQlResponse, Id, MutationBuilder, QueryBuilder, http::ReqwestExt};
+use cynic::{GraphQlResponse, Id, MutationBuilder, QueryBuilder};
 use futures_util::future::OptionFuture;
 use indexmap::IndexMap;
 use indicatif::ProgressBar;
 use itertools::Itertools;
 use reqwest::Client;
+use reqwest_middleware::ClientWithMiddleware;
 use secrecy::SecretString;
 use serde::de::DeserializeOwned;
 use url::Url;
@@ -25,7 +26,6 @@ use crate::{
     github::{
         MICROSOFT, WINGET_PKGS, WINGET_PKGS_FULL_NAME,
         graphql::{
-            GRAPHQL_URL,
             create_commit::{FileAddition, FileDeletion},
             create_ref::{CreateRef, CreateRefVariables, Ref as CreateBranchRef},
             get_all_values::{GetAllValues, GetAllValuesGitObject, GetAllValuesVariables, Tree},
@@ -49,7 +49,7 @@ use crate::{
 
 #[derive(Clone)]
 #[repr(transparent)]
-pub struct GitHub(pub(super) Client);
+pub struct GitHub(pub(super) ClientWithMiddleware);
 
 #[bon]
 impl GitHub {
@@ -57,19 +57,20 @@ impl GitHub {
     where
         T: AsRef<SecretString>,
     {
-        Ok(Self(
+        Ok(Self(super::retry::client(
             Client::builder()
                 .default_headers(default_headers(Some(token.as_ref())))
                 .build()?,
-        ))
+        )))
     }
 
     pub async fn get_manifests(
         &self,
         identifier: &PackageIdentifier,
         latest_version: &PackageVersion,
+        font: bool,
     ) -> Result<Manifests, GitHubError> {
-        let full_package_path = PackagePath::new(identifier, Some(latest_version), None);
+        let full_package_path = PackagePath::new(identifier, Some(latest_version), None, font);
         let content = self
             .get_directory_content_with_text(MICROSOFT, WINGET_PKGS, &full_package_path)
             .await?
@@ -94,7 +95,7 @@ impl GitHub {
                 )
             })
             .map(|file| serde_yaml::from_str::<LocaleManifest>(&file.text))
-            .collect::<serde_yaml::Result<_>>()?;
+            .collect::<Result<_, _>>()?;
 
         let default_locale_manifest = content
             .iter()
@@ -134,11 +135,10 @@ impl GitHub {
         repo: &str,
         path: &PackagePath,
     ) -> Result<impl Iterator<Item = GitHubFile>, GitHubError> {
+        let expression = format!("HEAD:{path}");
         let GraphQlResponse { data, errors } = self
-            .0
-            .post(GRAPHQL_URL)
-            .run_graphql(GetDirectoryContentWithText::build(
-                GetDirectoryContentVariables::new(&owner, &repo, &format!("HEAD:{path}")),
+            .run_graphql_with_retry(&GetDirectoryContentWithText::build(
+                GetDirectoryContentVariables::new(&owner, &repo, &expression),
             ))
             .await?;
 
@@ -162,8 +162,9 @@ impl GitHub {
         identifier: &PackageIdentifier,
         version: &PackageVersion,
         manifest_type: ManifestTypeWithLocale,
+        font: bool,
     ) -> Result<T, GitHubError> {
-        let path = PackagePath::new(identifier, Some(version), Some(&manifest_type));
+        let path = PackagePath::new(identifier, Some(version), Some(&manifest_type), font);
         let content = self.get_file_content(MICROSOFT, WINGET_PKGS, &path).await?;
         let manifest = serde_yaml::from_str::<T>(&content)?;
         Ok(manifest)
@@ -184,9 +185,7 @@ impl GitHub {
         name: &str,
     ) -> Result<RepositoryData, GitHubError> {
         let GraphQlResponse { data, errors } = self
-            .0
-            .post(GRAPHQL_URL)
-            .run_graphql(GetRepositoryInfo::build(RepositoryVariables::new(
+            .run_graphql_with_retry(&GetRepositoryInfo::build(RepositoryVariables::new(
                 owner, name,
             )))
             .await?;
@@ -231,12 +230,11 @@ impl GitHub {
         branch_name: &str,
         oid: GitObjectId,
     ) -> Result<CreateBranchRef, GitHubError> {
+        let ref_name = format!("refs/heads/{branch_name}");
         let GraphQlResponse { data, errors } = self
-            .0
-            .post(GRAPHQL_URL)
-            .run_graphql(CreateRef::build(
+            .run_graphql_with_retry(&CreateRef::build(
                 CreateRefVariables::builder()
-                    .name(&format!("refs/heads/{branch_name}"))
+                    .name(&ref_name)
                     .oid(oid)
                     .repository_id(fork_id)
                     .build(),
@@ -260,9 +258,7 @@ impl GitHub {
 
         loop {
             let GraphQlResponse { data, errors } = self
-                .0
-                .post(GRAPHQL_URL)
-                .run_graphql(GetBranches::build(GetBranchesVariables {
+                .run_graphql_with_retry(&GetBranches::build(GetBranchesVariables {
                     owner: user,
                     name: WINGET_PKGS,
                     cursor: cursor.as_deref(),
@@ -289,14 +285,10 @@ impl GitHub {
 
             for branch in branches.into_iter().filter(|branch| {
                 branch.name != default_branch.name
-                    && branch
-                        .associated_pull_requests
-                        .pull_requests
-                        .iter()
-                        .all(|pull_request| !pull_request.state.is_open())
+                    && branch.open_pull_requests.pull_requests.is_empty()
             }) {
                 if let Some(pull_request) = branch
-                    .associated_pull_requests
+                    .closed_or_merged_pull_requests
                     .pull_requests
                     .into_iter()
                     .filter(|pull_request| match merge_state {
@@ -330,9 +322,7 @@ impl GitHub {
         T: Into<String>,
     {
         let GraphQlResponse { data, errors } = self
-            .0
-            .post(GRAPHQL_URL)
-            .run_graphql(UpdateRefs::build(UpdateRefsInput::new(
+            .run_graphql_with_retry(&UpdateRefs::build(UpdateRefsInput::new(
                 RefUpdate::delete_branches(branch_names),
                 repository_id,
             )))
@@ -374,9 +364,7 @@ impl GitHub {
         #[builder(into)] tag_name: Cow<'a, str>,
     ) -> Result<GitHubValues, GitHubError> {
         let GraphQlResponse { data, errors } = self
-            .0
-            .post(GRAPHQL_URL)
-            .run_graphql(GetAllValues::build(GetAllValuesVariables {
+            .run_graphql_with_retry(&GetAllValues::build(GetAllValuesVariables {
                 name: &repo,
                 owner: &owner,
                 tag_name: &tag_name,
@@ -462,6 +450,7 @@ impl GitHub {
         reason: &str,
         fork: &RepositoryData,
         winget_pkgs: &RepositoryData,
+        font: bool,
         #[builder(default)] issue_resolves: &[NonZeroU32],
     ) -> Result<create_pull_request::PullRequest, GitHubError> {
         // Create an indeterminate progress bar to show as a pull request is being created
@@ -483,7 +472,7 @@ impl GitHub {
             .get_directory_content()
             .owner(&fork.owner)
             .branch_name(&branch_name)
-            .path(&PackagePath::new(identifier, Some(version), None))
+            .path(&PackagePath::new(identifier, Some(version), None, font))
             .call()
             .await?
             .map(FileDeletion::new)
@@ -529,6 +518,7 @@ impl GitHub {
         created_with: Option<&str>,
         created_with_url: Option<&DecodedUrl>,
     ) -> Result<create_pull_request::PullRequest, GitHubError> {
+        let font = changes.iter().any(|(path, _)| path.starts_with("fonts/"));
         let (current_user, winget_pkgs) =
             tokio::try_join!(self.get_username(), self.get_winget_pkgs().send())?;
         let fork = self.get_winget_pkgs().owner(&current_user).send().await?;
@@ -545,7 +535,7 @@ impl GitHub {
             self.get_directory_content()
                 .owner(&current_user)
                 .branch_name(&branch_name)
-                .path(&PackagePath::new(identifier, replace_version, None))
+                .path(&PackagePath::new(identifier, replace_version, None, font))
                 .call()
                 .await?
                 .map(FileDeletion::new)

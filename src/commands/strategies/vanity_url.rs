@@ -80,7 +80,7 @@ pub async fn resolve(
             .ok_or_else(|| VanityUrlError::MissingLastModified(source_url.clone()))?;
 
         let manifests = github
-            .get_manifests(package_identifier, latest_version)
+            .get_manifests(package_identifier, latest_version, false)
             .await?;
 
         manifests

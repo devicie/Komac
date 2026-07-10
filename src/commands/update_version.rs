@@ -40,7 +40,10 @@ use crate::{
     match_installers::match_installers,
     prompts::text::optional_prompt,
     token::TokenManager,
-    traits::{LocaleExt, path::NormalizePath},
+    traits::{
+        LocaleExt,
+        path::{LowercaseExtension, NormalizePath},
+    },
 };
 
 /// Add a version to a pre-existing package
@@ -107,6 +110,10 @@ pub struct UpdateVersion {
     #[arg(long, env)]
     pub(super) skip_pr_check: bool,
 
+    /// Look for the package under fonts instead of probing manifests first
+    #[arg(long)]
+    pub(super) font: bool,
+
     /// GitHub personal access token with the `public_repo` scope
     #[arg(short, long, env = "GITHUB_TOKEN", hide_env_values = true)]
     pub(super) token: Option<SecretString>,
@@ -125,7 +132,9 @@ impl UpdateVersion {
             );
         }
 
-        let versions = github.get_versions(&self.package_identifier).await?;
+        let (versions, font) = github
+            .get_versions(&self.package_identifier, self.font.then_some(true))
+            .await?;
 
         let latest_version = versions.last().unwrap_or_else(|| unreachable!());
         println!(
@@ -146,7 +155,7 @@ impl UpdateVersion {
 
         let (mut manifests, mut github_values, mut files) = try_join!(
             github
-                .get_manifests(&self.package_identifier, latest_version)
+                .get_manifests(&self.package_identifier, latest_version, font)
                 .map_err(Error::new),
             self.fetch_github_values(&github).map_err(Error::new),
             async {
@@ -209,6 +218,7 @@ impl UpdateVersion {
                 installer
             })
             .collect::<Vec<_>>();
+        manifests.installer.installers.clear();
 
         let duplicate_urls = previous_installers
             .iter()
@@ -217,7 +227,7 @@ impl UpdateVersion {
             .collect::<Vec<_>>();
 
         manifests.default_locale.package_version = self.package_version.as_ref().unwrap().clone();
-        let matched_installers = match_installers(previous_installers, &installer_results);
+        let matched_installers = match_installers(&previous_installers, &installer_results);
         let mut installers = matched_installers
             .into_iter()
             .map(|(previous_installer, new_installer)| {
@@ -274,6 +284,18 @@ impl UpdateVersion {
                 .filter(|installer| !matched_urls.contains(&installer.url)),
         );
 
+        if installers
+            .iter()
+            .flat_map(|installer| &installer.locale)
+            .all_equal()
+        {
+            for installer in &mut installers {
+                installer.locale = None;
+            }
+        }
+
+        manifests.installer.locale = None;
+
         manifests.installer.package_version = package_version.clone();
         manifests.installer.minimum_os_version = manifests
             .installer
@@ -313,7 +335,8 @@ impl UpdateVersion {
 
         manifests.version.update(package_version);
 
-        let package_path = PackagePath::new(&self.package_identifier, Some(package_version), None);
+        let package_path =
+            PackagePath::new(&self.package_identifier, Some(package_version), None, font);
         let changes = pr_changes()
             .package_identifier(&self.package_identifier)
             .manifests(&manifests)
@@ -413,7 +436,7 @@ impl UpdateVersion {
         package_version: &PackageVersion,
     ) -> Result<bool> {
         if let Some(ref pull_request) = github
-            .get_existing_pull_request(&self.package_identifier, package_version)
+            .get_existing_pull_request(&self.package_identifier, package_version, false)
             .await?
             && !self.skip_pr_check
             && !self.dry_run
@@ -509,7 +532,7 @@ fn fix_relative_paths<R: Read + Seek>(
                         )
                     })
                     .map(|path| NestedInstallerFiles {
-                        relative_file_path: path.to_path_buf(),
+                        relative_file_path: path.lowercase_extension(),
                         ..nested_installer_files
                     })
             }

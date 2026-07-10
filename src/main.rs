@@ -15,6 +15,7 @@ use crate::{
         compare_installers::CompareInstallers,
         complete::Complete,
         list_versions::ListVersions,
+        new_locale::NewLocale,
         new_version::NewVersion,
         remove_dead_versions::RemoveDeadVersions,
         remove_version::RemoveVersion,
@@ -52,6 +53,7 @@ async fn main() -> Result<()> {
 
     match Cli::parse().command {
         Commands::New(new_version) => new_version.run().await,
+        Commands::NewLocale(new_locale) => new_locale.run().await,
         Commands::Update(update_version) => update_version.run().await,
         Commands::AutoUpdate(autoupdate) => autoupdate.run().await,
         Commands::Cleanup(cleanup) => cleanup.run().await,
@@ -63,7 +65,13 @@ async fn main() -> Result<()> {
         Commands::List(list_versions) => list_versions.run().await,
         Commands::Show(show_version) => show_version.run().await,
         Commands::Sync(sync_fork) => sync_fork.run().await,
-        Commands::Complete(complete) => complete.run(),
+        Commands::Complete(complete) => complete.run_with(|shell| {
+            use clap::CommandFactory;
+            use clap_complete::generate;
+            let mut command = Cli::command();
+            let command_name = command.get_name().to_owned();
+            generate(shell, &mut command, command_name, &mut anstream::stdout());
+        }),
         Commands::Analyze(analyse) => analyse.run(),
         Commands::CompareInstallers(compare) => compare.run().await,
         Commands::RemoveDeadVersions(remove_dead_versions) => remove_dead_versions.run().await,
@@ -113,6 +121,7 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     New(Box<NewVersion>),       // Comparatively large so boxed to store on the heap
+    NewLocale(Box<NewLocale>),  // Comparatively large so boxed to store on the heap
     Update(Box<UpdateVersion>), // Comparatively large so boxed to store on the heap
     AutoUpdate(AutoUpdate),
     Remove(RemoveVersion),

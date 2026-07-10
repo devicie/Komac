@@ -14,6 +14,7 @@ use tokio::try_join;
 use winget_types::{PackageIdentifier, PackageVersion};
 
 use crate::{
+    commands::utils::should_abort_for_existing_pr,
     github::{WINGET_PKGS_FULL_NAME, client::GitHub},
     prompts::{handle_inquire_error, text::confirm_prompt},
     token::TokenManager,
@@ -50,6 +51,10 @@ pub struct RemoveVersion {
     #[arg(long, env = "OPEN_PR")]
     open_pr: bool,
 
+    /// Look for the package under fonts instead of probing manifests first
+    #[arg(long)]
+    font: bool,
+
     /// GitHub personal access token with the `public_repo` scope
     #[arg(short, long, env = "GITHUB_TOKEN", hide_env_values = true)]
     token: Option<SecretString>,
@@ -71,12 +76,12 @@ impl RemoveVersion {
 
         let github = GitHub::new(&token_manager)?;
 
-        let (fork, winget_pkgs, versions) = try_join!(
+        let (fork, winget_pkgs, (versions, font)) = try_join!(
             github
                 .get_username()
                 .and_then(|current_user| github.get_winget_pkgs().owner(current_user).send()),
             github.get_winget_pkgs().send(),
-            github.get_versions(&self.package_identifier)
+            github.get_versions(&self.package_identifier, self.font.then_some(true))
         )?;
 
         if !versions.contains(&self.package_version) {
@@ -92,6 +97,22 @@ impl RemoveVersion {
             "Latest version of {}: {latest_version}",
             &self.package_identifier
         );
+
+        let existing_pr = github
+            .get_existing_pull_request(&self.package_identifier, &self.package_version, false)
+            .await?
+            .filter(|pull_request| pull_request.is_open());
+
+        if should_abort_for_existing_pr(
+            &self.package_identifier,
+            &self.package_version,
+            existing_pr,
+            false,
+            false,
+        )? {
+            return Ok(());
+        }
+
         let deletion_reason = match self.deletion_reason {
             Some(reason) => reason,
             None => Text::new(&format!(
@@ -120,6 +141,7 @@ impl RemoveVersion {
             .reason(&deletion_reason)
             .fork(&fork)
             .winget_pkgs(&winget_pkgs)
+            .font(font)
             .issue_resolves(&self.resolves)
             .send()
             .await?;

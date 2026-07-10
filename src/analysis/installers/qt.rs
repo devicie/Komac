@@ -8,7 +8,7 @@ use thiserror::Error;
 use winget_types::{
     Version,
     installer::{
-        AppsAndFeaturesEntries, AppsAndFeaturesEntry, Architecture, ExpectedReturnCodes,
+        AppsAndFeaturesEntries, AppsAndFeaturesEntry, Architecture, ExpectedReturnCode,
         InstallModes, Installer, InstallerReturnCode, InstallerSwitches, InstallerType,
         ReturnResponse,
     },
@@ -143,17 +143,15 @@ impl Installers for Qt {
 }
 
 // https://doc.qt.io/qtinstallerframework/qinstaller-packagemanagercore.html#Status-enum
-fn expected_return_codes() -> BTreeSet<ExpectedReturnCodes> {
+fn expected_return_codes() -> BTreeSet<ExpectedReturnCode> {
     [
         (1, ReturnResponse::ContactSupport),
         (2, ReturnResponse::InstallInProgress),
         (3, ReturnResponse::CancelledByUser),
     ]
     .into_iter()
-    .map(|(code, response)| ExpectedReturnCodes {
-        installer_return_code: InstallerReturnCode::new(code),
-        return_response: response,
-        return_response_url: None,
+    .filter_map(|(code, response)| {
+        Some(ExpectedReturnCode::new(InstallerReturnCode::new(code)?, response))
     })
     .collect()
 }

@@ -71,8 +71,8 @@ impl CompareInstallers {
         let progress = ProgressBar::new_spinner().with_message("Fetching package versions...");
         progress.enable_steady_tick(SPINNER_TICK_RATE);
 
-        let versions = match github.get_versions(&package_identifier).await {
-            Ok(v) => v,
+        let versions = match github.get_versions(&package_identifier, None).await {
+            Ok((v, _)) => v,
             Err(err) => {
                 progress.finish_and_clear();
                 println!(
@@ -151,7 +151,7 @@ impl CompareInstallers {
         identifier: &PackageIdentifier,
         version: &PackageVersion,
     ) -> Result<Option<String>> {
-        let mut manifests = github.get_manifests(identifier, version).await?;
+        let mut manifests = github.get_manifests(identifier, version, false).await?;
         let original_yaml = serde_yaml::to_string(&manifests.installer)?;
         let urls: Vec<_> = manifests
             .installer
@@ -190,7 +190,7 @@ impl CompareInstallers {
             })
             .collect::<Vec<_>>();
 
-        let matched_installers = match_installers(previous_installers, &installer_results);
+        let matched_installers = match_installers(&previous_installers, &installer_results);
         let installers = matched_installers
             .into_iter()
             .map(|(previous_installer, new_installer)| {
