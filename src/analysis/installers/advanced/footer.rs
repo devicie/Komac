@@ -121,8 +121,6 @@ impl fmt::Debug for Footer {
 
 #[cfg(test)]
 mod tests {
-    use std::mem::offset_of;
-
     use super::Footer;
 
     #[test]

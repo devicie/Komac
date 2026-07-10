@@ -371,7 +371,7 @@ mod tests {
     fn selected_nested_files_reject_invalid_file_with_valid_extension() -> Result<()> {
         let zip_bytes = zip_with_files(&[("valid.ttf", &TTF_SIGNATURE), ("invalid.ttf", b"nope")])?;
         let mut zip = Zip::new(Cursor::new(zip_bytes))?;
-        let selected_files = vec![
+        let selected_files = [
             Utf8PathBuf::from("valid.ttf"),
             Utf8PathBuf::from("invalid.ttf"),
         ];
