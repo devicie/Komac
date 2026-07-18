@@ -461,5 +461,8 @@ fn read_utf16le_strz<R: Read>(reader: &mut R) -> Result<String, std::io::Error> 
         }
         buf.extend_from_slice(&code_unit.to_le_bytes());
     }
+    // TODO: once `str_from_utf16_endian` stabilises, decode the UTF-16LE bytes
+    // directly with `String::from_utf16le_lossy(&buf)` instead of `encoding_rs`.
+    // https://github.com/rust-lang/rust/issues/116258
     Ok(UTF_16LE.decode(&buf).0.into_owned())
 }
